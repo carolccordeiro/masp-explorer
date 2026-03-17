@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Calendar, HelpCircle, Info, Coffee, Mic } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Calendar, HelpCircle, Info, Coffee, Sparkles } from 'lucide-react';
 import { CouponModal } from '@/components/CouponModal';
 import { VoiceButton } from '@/components/VoiceButton';
+import { WelcomeScreen } from '@/components/WelcomeScreen';
 
 const menuItems = [
   {
@@ -11,6 +12,13 @@ const menuItems = [
     description: 'Monte seu roteiro ideal',
     icon: Calendar,
     path: '/planejar',
+    color: 'bg-primary',
+  },
+  {
+    title: 'Assistente IA',
+    description: 'Pergunte sobre o MASP',
+    icon: Sparkles,
+    path: '/assistente',
     color: 'bg-primary',
   },
   {
@@ -25,7 +33,7 @@ const menuItems = [
     description: 'Saiba tudo sobre o MASP',
     icon: Info,
     path: '/informacoes',
-    color: 'bg-primary',
+    color: 'bg-masp-black',
   },
 ];
 
@@ -42,6 +50,7 @@ const item = {
 export default function Index() {
   const navigate = useNavigate();
   const [couponOpen, setCouponOpen] = useState(false);
+  const [started, setStarted] = useState(false);
 
   const handleVoice = (text: string) => {
     const lower = text.toLowerCase();
@@ -53,11 +62,18 @@ export default function Index() {
       navigate('/informacoes');
     } else if (lower.includes('café') || lower.includes('cupom') || lower.includes('desconto')) {
       setCouponOpen(true);
+    } else if (lower.includes('assistente') || lower.includes('ia') || lower.includes('chat') || lower.includes('pergun')) {
+      navigate('/assistente');
     }
   };
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      {/* Welcome Screen */}
+      <AnimatePresence>
+        {!started && <WelcomeScreen onStart={() => setStarted(true)} />}
+      </AnimatePresence>
+
       {/* Hero */}
       <div className="bg-primary px-6 pt-12 pb-10 text-center">
         <motion.h1
@@ -89,7 +105,7 @@ export default function Index() {
       <div className="px-6 py-8 text-center">
         <h2 className="text-2xl font-black text-foreground mb-2">Bem-vindo ao MASP!</h2>
         <p className="text-muted-foreground text-sm max-w-md mx-auto">
-          Explore as exposições, planeje sua visita ou teste seus conhecimentos sobre arte.
+          Explore as exposições, planeje sua visita, converse com nossa IA ou teste seus conhecimentos sobre arte.
         </p>
       </div>
 
@@ -98,7 +114,7 @@ export default function Index() {
         variants={container}
         initial="hidden"
         animate="show"
-        className="px-6 flex-1 space-y-4"
+        className="px-6 flex-1 grid grid-cols-1 md:grid-cols-2 gap-4"
       >
         {menuItems.map((mi) => (
           <motion.button
@@ -142,7 +158,7 @@ export default function Index() {
           <VoiceButton onTranscript={handleVoice} />
         </div>
         <p className="text-center text-xs text-muted-foreground">
-          Diga "Planejar visita", "Quiz" ou "Informações"
+          Diga "Planejar visita", "Quiz", "Assistente" ou "Informações"
         </p>
       </div>
 

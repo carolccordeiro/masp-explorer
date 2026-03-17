@@ -1,0 +1,4 @@
+project_id = "jxerjwamhahfbhrruwad"
+
+[functions.masp-chat]
+verify_jwt = false
