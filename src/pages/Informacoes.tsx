@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Clock, MapPin, Ticket, Phone, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
+import { Clock, MapPin, Ticket, Phone, ChevronDown, ChevronUp, ExternalLink, Train, Car, Accessibility, Baby } from 'lucide-react';
 import { MaspHeader } from '@/components/MaspHeader';
 import { exhibitions } from '@/data/exhibitions';
 
@@ -45,9 +45,10 @@ export default function Informacoes() {
               diálogos entre passado e presente, culturas e territórios, a partir das artes visuais.
             </p>
           </div>
-          <p className="text-xs text-muted-foreground">
-            📍 Av. Paulista, 1578 – CEP 01310-200 – São Paulo, SP, Brasil
-          </p>
+          <div className="flex items-start gap-2 text-xs text-muted-foreground">
+            <MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+            <span>Av. Paulista, 1578 – CEP 01310-200 – São Paulo, SP, Brasil</span>
+          </div>
         </div>
       ),
     },
@@ -87,7 +88,7 @@ export default function Informacoes() {
             </div>
             <div className="flex justify-between">
               <span className="text-foreground">Gratuito</span>
-              <span className="text-xs text-muted-foreground">Amigo MASP, crianças ≤10 anos, PcD</span>
+              <span className="text-xs text-muted-foreground">Amigo MASP, crianças até 10 anos, PcD</span>
             </div>
           </div>
           <div className="p-3 bg-primary/5 border border-primary/20">
@@ -177,27 +178,44 @@ export default function Informacoes() {
               <p>Terça a Sexta: 11h30 às 15h</p>
               <p>Sábado e Domingo: 11h30 às 16h</p>
               <p>Segunda: Fechado</p>
-              <p>📍 Av. Paulista, 1500 – Ed. Pietro Maria Bardi (Piso Térreo)</p>
+              <div className="flex items-start gap-1.5 mt-1">
+                <MapPin className="w-3 h-3 shrink-0 mt-0.5" />
+                <span>Av. Paulista, 1500 – Ed. Pietro Maria Bardi (Piso Térreo)</span>
+              </div>
             </div>
           </div>
           <div>
             <p className="font-bold text-foreground mb-2">Como chegar</p>
-            <div className="text-muted-foreground space-y-1 text-xs">
-              <p>🚇 <strong>Metrô:</strong> Linha Verde, estação Trianon-MASP</p>
-              <p>🚗 <strong>Estacionamento:</strong> Car Park – Al. Casa Branca, 41 – R$25 (até 12h com carimbo)</p>
+            <div className="text-muted-foreground space-y-1.5 text-xs">
+              <div className="flex items-start gap-1.5">
+                <Train className="w-3 h-3 shrink-0 mt-0.5" />
+                <span><strong>Metrô:</strong> Linha Verde, estação Trianon-MASP</span>
+              </div>
+              <div className="flex items-start gap-1.5">
+                <Car className="w-3 h-3 shrink-0 mt-0.5" />
+                <span><strong>Estacionamento:</strong> Car Park – Al. Casa Branca, 41 – R$25 (até 12h com carimbo)</span>
+              </div>
             </div>
           </div>
           <div>
             <p className="font-bold text-foreground mb-2">Contato</p>
-            <p className="text-xs text-muted-foreground">📞 +55 11 3149 5959</p>
-            <p className="text-xs text-muted-foreground">📧 bilheteria@masp.org.br</p>
+            <p className="text-xs text-muted-foreground">Tel: +55 11 3149 5959</p>
+            <p className="text-xs text-muted-foreground">E-mail: bilheteria@masp.org.br</p>
           </div>
           <div>
             <p className="font-bold text-foreground mb-2">Acessibilidade</p>
-            <div className="text-xs text-muted-foreground space-y-1">
-              <p>♿ Entrada gratuita para pessoas com deficiência e acompanhante</p>
-              <p>🐕 Cães-guia permitidos</p>
-              <p>👶 Menores de 14 anos: entrada acompanhados</p>
+            <div className="text-xs text-muted-foreground space-y-1.5">
+              <div className="flex items-start gap-1.5">
+                <Accessibility className="w-3 h-3 shrink-0 mt-0.5" />
+                <span>Entrada gratuita para pessoas com deficiência e acompanhante</span>
+              </div>
+              <div className="flex items-start gap-1.5">
+                <span className="text-xs shrink-0">Cães-guia permitidos</span>
+              </div>
+              <div className="flex items-start gap-1.5">
+                <Baby className="w-3 h-3 shrink-0 mt-0.5" />
+                <span>Menores de 14 anos: entrada acompanhados</span>
+              </div>
             </div>
           </div>
         </div>

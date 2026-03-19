@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, HelpCircle, Info, Coffee, Sparkles } from 'lucide-react';
+import { Calendar, HelpCircle, Info, Coffee, Sparkles, Map, Heart, Shield } from 'lucide-react';
 import { CouponModal } from '@/components/CouponModal';
 import { VoiceButton } from '@/components/VoiceButton';
 import { WelcomeScreen } from '@/components/WelcomeScreen';
+import { MaspHeader } from '@/components/MaspHeader';
 
 const menuItems = [
   {
@@ -22,6 +23,20 @@ const menuItems = [
     color: 'bg-primary',
   },
   {
+    title: 'Mapa Interativo',
+    description: 'Explore cada andar',
+    icon: Map,
+    path: '/mapa',
+    color: 'bg-primary',
+  },
+  {
+    title: 'Minha Coleção',
+    description: 'Suas obras favoritas',
+    icon: Heart,
+    path: '/colecao',
+    color: 'bg-primary',
+  },
+  {
     title: 'Quiz Educativo',
     description: 'Teste seus conhecimentos',
     icon: HelpCircle,
@@ -35,11 +50,18 @@ const menuItems = [
     path: '/informacoes',
     color: 'bg-masp-black',
   },
+  {
+    title: 'Dados de Uso',
+    description: 'Transparência dos seus dados',
+    icon: Shield,
+    path: '/dados',
+    color: 'bg-masp-black',
+  },
 ];
 
 const container = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.1 } },
+  show: { transition: { staggerChildren: 0.08 } },
 };
 
 const item = {
@@ -64,7 +86,17 @@ export default function Index() {
       setCouponOpen(true);
     } else if (lower.includes('assistente') || lower.includes('ia') || lower.includes('chat') || lower.includes('pergun')) {
       navigate('/assistente');
+    } else if (lower.includes('mapa') || lower.includes('andar') || lower.includes('prédio')) {
+      navigate('/mapa');
+    } else if (lower.includes('coleção') || lower.includes('favorit') || lower.includes('salv')) {
+      navigate('/colecao');
+    } else if (lower.includes('dado') || lower.includes('privacidade') || lower.includes('lgpd')) {
+      navigate('/dados');
     }
+  };
+
+  const handleEndSession = () => {
+    setStarted(false);
   };
 
   return (
@@ -74,32 +106,8 @@ export default function Index() {
         {!started && <WelcomeScreen onStart={() => setStarted(true)} />}
       </AnimatePresence>
 
-      {/* Hero */}
-      <div className="bg-primary px-6 pt-12 pb-10 text-center">
-        <motion.h1
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-5xl md:text-7xl font-black text-primary-foreground tracking-tighter mb-2"
-        >
-          MASP
-        </motion.h1>
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="text-primary-foreground/80 text-sm font-medium tracking-wide uppercase"
-        >
-          Museu de Arte de São Paulo
-        </motion.p>
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="text-primary-foreground/60 text-xs mt-1"
-        >
-          Totem Interativo
-        </motion.p>
-      </div>
+      {/* Header with end session */}
+      <MaspHeader onEndSession={handleEndSession} />
 
       {/* Welcome */}
       <div className="px-6 py-8 text-center">
@@ -114,7 +122,7 @@ export default function Index() {
         variants={container}
         initial="hidden"
         animate="show"
-        className="px-6 flex-1 grid grid-cols-1 md:grid-cols-2 gap-4"
+        className="px-6 flex-1 grid grid-cols-1 md:grid-cols-2 gap-3"
       >
         {menuItems.map((mi) => (
           <motion.button
@@ -122,21 +130,21 @@ export default function Index() {
             variants={item}
             whileTap={{ scale: 0.98 }}
             onClick={() => navigate(mi.path)}
-            className="w-full flex items-center gap-5 p-5 bg-background border border-border hover:border-primary transition-colors text-left group"
+            className="w-full flex items-center gap-4 p-4 bg-background border border-border hover:border-primary transition-colors text-left group"
           >
-            <div className={`w-14 h-14 ${mi.color} flex items-center justify-center shrink-0`}>
-              <mi.icon className="w-7 h-7 text-primary-foreground" />
+            <div className={`w-12 h-12 ${mi.color} flex items-center justify-center shrink-0`}>
+              <mi.icon className="w-6 h-6 text-primary-foreground" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">{mi.title}</h3>
-              <p className="text-sm text-muted-foreground">{mi.description}</p>
+              <h3 className="text-base font-bold text-foreground group-hover:text-primary transition-colors">{mi.title}</h3>
+              <p className="text-xs text-muted-foreground">{mi.description}</p>
             </div>
           </motion.button>
         ))}
       </motion.div>
 
       {/* Bottom section */}
-      <div className="px-6 py-8 space-y-4">
+      <div className="px-6 py-6 space-y-4">
         {/* Coupon CTA */}
         <motion.button
           initial={{ opacity: 0 }}
@@ -158,7 +166,7 @@ export default function Index() {
           <VoiceButton onTranscript={handleVoice} />
         </div>
         <p className="text-center text-xs text-muted-foreground">
-          Diga "Planejar visita", "Quiz", "Assistente" ou "Informações"
+          Diga "Planejar visita", "Quiz", "Mapa", "Assistente" ou "Informações"
         </p>
       </div>
 

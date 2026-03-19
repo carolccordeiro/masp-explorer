@@ -16,16 +16,35 @@ export default function PlanejarVisita() {
 
   const suggestExhibitions = (minutes: number) => {
     setSelectedTime(minutes);
-    const shuffled = [...exhibitions].sort(() => Math.random() - 0.5);
+
+    // For 30 min, always include the main exhibition
+    if (minutes === 30) {
+      const main = exhibitions.find((e) => e.isMainExhibition);
+      if (main && main.duration <= minutes) {
+        setSuggested([main]);
+        speak(`Para 30 minutos, sugerimos a exposição principal: ${main.artist} - ${main.title}.`);
+        return;
+      }
+    }
+
+    // For other durations, prioritize main exhibition then fill randomly
+    const main = exhibitions.find((e) => e.isMainExhibition);
+    const others = exhibitions.filter((e) => !e.isMainExhibition).sort(() => Math.random() - 0.5);
     let total = 0;
     const result: Exhibition[] = [];
-    for (const expo of shuffled) {
+
+    if (main && main.duration <= minutes) {
+      result.push(main);
+      total += main.duration;
+    }
+
+    for (const expo of others) {
       if (total + expo.duration <= minutes) {
         result.push(expo);
         total += expo.duration;
       }
     }
-    // Sort by floor for a logical path
+
     result.sort((a, b) => a.floor.localeCompare(b.floor));
     setSuggested(result);
 
@@ -95,7 +114,7 @@ export default function PlanejarVisita() {
                 <div>
                   <h2 className="text-xl font-black text-foreground">Seu Roteiro</h2>
                   <p className="text-sm text-muted-foreground">
-                    {suggested.length} exposições · ~{totalDuration} minutos
+                    {suggested.length} {suggested.length === 1 ? 'exposição' : 'exposições'} | aprox. {totalDuration} minutos
                   </p>
                 </div>
                 <button onClick={() => suggestExhibitions(selectedTime!)} className="text-primary">
@@ -116,16 +135,19 @@ export default function PlanejarVisita() {
                     <div className="w-8 h-8 bg-primary flex items-center justify-center shrink-0">
                       <span className="text-sm font-bold text-primary-foreground">{i + 1}</span>
                     </div>
-                    <img
-                      src={expo.image}
-                      alt={expo.title}
-                      className="w-16 h-16 object-cover shrink-0"
-                    />
+                    <img src={expo.image} alt={expo.title} className="w-16 h-16 object-cover shrink-0" />
                     <div className="flex-1 min-w-0">
-                      <p className="font-bold text-foreground truncate group-hover:text-primary transition-colors">
-                        {expo.artist}: {expo.title}
-                      </p>
-                      <p className="text-xs text-muted-foreground">{expo.floor} · ~{expo.duration} min</p>
+                      <div className="flex items-center gap-2">
+                        <p className="font-bold text-foreground truncate group-hover:text-primary transition-colors">
+                          {expo.artist}: {expo.title}
+                        </p>
+                        {expo.isMainExhibition && (
+                          <span className="shrink-0 text-[10px] font-bold uppercase bg-primary text-primary-foreground px-1.5 py-0.5">
+                            Principal
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground">{expo.floor} | aprox. {expo.duration} min</p>
                     </div>
                     <ChevronRight className="w-5 h-5 text-muted-foreground shrink-0" />
                   </motion.button>
@@ -159,8 +181,8 @@ export default function PlanejarVisita() {
                   <h3 className="text-2xl font-black text-foreground mt-1">{selectedExpo.artist}</h3>
                   <h4 className="text-lg font-bold text-muted-foreground mb-4">{selectedExpo.title}</h4>
                   <div className="flex gap-4 mb-4 text-sm text-muted-foreground">
-                    <span>📍 {selectedExpo.floor}</span>
-                    <span>⏱ ~{selectedExpo.duration} min</span>
+                    <span>{selectedExpo.floor}</span>
+                    <span>Aprox. {selectedExpo.duration} min</span>
                   </div>
                   <p className="text-foreground leading-relaxed">{selectedExpo.description}</p>
                   <button

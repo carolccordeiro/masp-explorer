@@ -1,9 +1,17 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Check, X, RotateCcw } from 'lucide-react';
+import { ArrowRight, Check, X, RotateCcw, Landmark, Palette, Frame, Scissors, BookOpen } from 'lucide-react';
 import { MaspHeader } from '@/components/MaspHeader';
 import { quizCategories, QuizCategory, QuizQuestion } from '@/data/quizzes';
 import { useVoice } from '@/hooks/useVoice';
+
+const iconMap: Record<string, React.ReactNode> = {
+  landmark: <Landmark className="w-7 h-7" />,
+  palette: <Palette className="w-7 h-7" />,
+  frame: <Frame className="w-7 h-7" />,
+  scissors: <Scissors className="w-7 h-7" />,
+  'book-open': <BookOpen className="w-7 h-7" />,
+};
 
 export default function QuizEducativo() {
   const [selectedCategory, setSelectedCategory] = useState<QuizCategory | null>(null);
@@ -84,10 +92,12 @@ export default function QuizEducativo() {
                   onClick={() => startQuiz(cat)}
                   className="w-full flex items-center gap-4 p-5 border border-border hover:border-primary transition-colors text-left group"
                 >
-                  <span className="text-3xl">{cat.icon}</span>
+                  <div className="w-12 h-12 bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                    {iconMap[cat.iconName]}
+                  </div>
                   <div className="flex-1">
                     <h3 className="font-bold text-foreground group-hover:text-primary transition-colors">{cat.title}</h3>
-                    <p className="text-xs text-muted-foreground">{cat.description} · {cat.questions.length} perguntas</p>
+                    <p className="text-xs text-muted-foreground">{cat.description} | {cat.questions.length} perguntas</p>
                   </div>
                   <ArrowRight className="w-5 h-5 text-muted-foreground" />
                 </motion.button>
@@ -104,7 +114,6 @@ export default function QuizEducativo() {
               exit={{ opacity: 0, x: -30 }}
               className="space-y-6"
             >
-              {/* Progress */}
               <div className="flex items-center gap-2">
                 <div className="flex-1 h-1 bg-muted">
                   <div
@@ -185,10 +194,10 @@ export default function QuizEducativo() {
               </div>
               <h2 className="text-2xl font-black text-foreground mb-2">
                 {score === selectedCategory.questions.length
-                  ? 'Parabéns! 🎉'
+                  ? 'Excelente!'
                   : score >= selectedCategory.questions.length / 2
-                  ? 'Muito bem! 👏'
-                  : 'Continue aprendendo! 📚'}
+                  ? 'Muito bem!'
+                  : 'Continue aprendendo!'}
               </h2>
               <p className="text-muted-foreground mb-8">
                 Você acertou {score} de {selectedCategory.questions.length} perguntas

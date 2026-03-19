@@ -1,8 +1,12 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, LogOut } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-export function MaspHeader() {
+interface MaspHeaderProps {
+  onEndSession?: () => void;
+}
+
+export function MaspHeader({ onEndSession }: MaspHeaderProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const isHome = location.pathname === '/';
@@ -13,7 +17,12 @@ export function MaspHeader() {
         {!isHome ? (
           <button onClick={() => navigate('/')} className="flex items-center gap-2 text-foreground hover:text-primary transition-colors">
             <ArrowLeft className="w-5 h-5" />
-            <span className="text-sm font-medium">Voltar</span>
+            <span className="text-sm font-medium">Menu</span>
+          </button>
+        ) : onEndSession ? (
+          <button onClick={onEndSession} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+            <LogOut className="w-4 h-4" />
+            <span className="text-xs font-medium">Encerrar</span>
           </button>
         ) : (
           <div />

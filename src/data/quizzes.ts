@@ -1,3 +1,5 @@
+import { Landmark, Palette, Frame, Scissors, BookOpen } from 'lucide-react';
+
 export interface QuizQuestion {
   question: string;
   options: string[];
@@ -9,7 +11,7 @@ export interface QuizCategory {
   id: string;
   title: string;
   description: string;
-  icon: string;
+  iconName: 'landmark' | 'palette' | 'frame' | 'scissors' | 'book-open';
   questions: QuizQuestion[];
 }
 
@@ -18,7 +20,7 @@ export const quizCategories: QuizCategory[] = [
     id: 'masp',
     title: 'Sobre o MASP',
     description: 'Teste seus conhecimentos sobre a história do museu',
-    icon: '🏛️',
+    iconName: 'landmark',
     questions: [
       {
         question: 'Em que ano o MASP foi fundado?',
@@ -56,7 +58,7 @@ export const quizCategories: QuizCategory[] = [
     id: 'expo-chola',
     title: 'La Chola Poblete',
     description: 'Pop andino - Arte e identidade',
-    icon: '🎨',
+    iconName: 'palette',
     questions: [
       {
         question: 'De qual região é a cultura andina explorada por La Chola Poblete?',
@@ -82,7 +84,7 @@ export const quizCategories: QuizCategory[] = [
     id: 'expo-gamarra',
     title: 'Sandra Gamarra Heshiki',
     description: 'Réplica - Questionando a história da arte',
-    icon: '🖼️',
+    iconName: 'frame',
     questions: [
       {
         question: 'Qual é a técnica principal utilizada por Sandra Gamarra Heshiki?',
@@ -102,7 +104,7 @@ export const quizCategories: QuizCategory[] = [
     id: 'expo-alarcon',
     title: 'Claudia Alarcón & Silät',
     description: 'Viver tecendo - Tradição têxtil Wichí',
-    icon: '🧶',
+    iconName: 'scissors',
     questions: [
       {
         question: 'O coletivo Silät pertence a qual povo indígena?',
@@ -122,7 +124,7 @@ export const quizCategories: QuizCategory[] = [
     id: 'acervo',
     title: 'Sobre o Acervo',
     description: 'Grandes obras e artistas do MASP',
-    icon: '🎭',
+    iconName: 'book-open',
     questions: [
       {
         question: 'Qual destes artistas europeus tem obra no acervo do MASP?',
@@ -152,7 +154,7 @@ export const quizCategories: QuizCategory[] = [
         question: 'Quem foi o primeiro diretor artístico do MASP?',
         options: ['Assis Chateaubriand', 'Pietro Maria Bardi', 'Lina Bo Bardi', 'Adriano Pedrosa'],
         correctIndex: 1,
-        explanation: 'Pietro Maria Bardi (1900–1999) foi o primeiro diretor artístico do MASP.',
+        explanation: 'Pietro Maria Bardi (1900-1999) foi o primeiro diretor artístico do MASP.',
       },
     ],
   },
