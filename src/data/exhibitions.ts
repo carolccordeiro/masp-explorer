@@ -1,12 +1,23 @@
+export interface Artwork {
+  id: string;
+  title: string;
+  artist: string;
+  year?: string;
+  image: string;
+  description: string;
+}
+
 export interface Exhibition {
   id: string;
   title: string;
   artist: string;
   description: string;
-  duration: number; // estimated minutes
+  duration: number;
   floor: string;
   image: string;
   category: string;
+  isMainExhibition?: boolean;
+  artworks?: Artwork[];
 }
 
 export const exhibitions: Exhibition[] = [
@@ -19,6 +30,11 @@ export const exhibitions: Exhibition[] = [
     floor: '1º Subsolo',
     image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/69aae22b861cf27ea79234cc_1XGXWFIRwoiOOU0zUTNu-Ojik4VH6cZWtTFTJBpKt%20(1).jpg',
     category: 'Arte Contemporânea',
+    isMainExhibition: true,
+    artworks: [
+      { id: '1-1', title: 'Virgem do Cerro', artist: 'La Chola Poblete', year: '2023', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/69aae22b861cf27ea79234cc_1XGXWFIRwoiOOU0zUTNu-Ojik4VH6cZWtTFTJBpKt%20(1).jpg', description: 'Pintura que reinterpreta iconografia andina com estética pop' },
+      { id: '1-2', title: 'Chola Power', artist: 'La Chola Poblete', year: '2022', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/69aae22b861cf27ea79234cc_1XGXWFIRwoiOOU0zUTNu-Ojik4VH6cZWtTFTJBpKt%20(1).jpg', description: 'Série de retratos que celebram a identidade chola' },
+    ],
   },
   {
     id: '2',
@@ -29,6 +45,9 @@ export const exhibitions: Exhibition[] = [
     floor: '1º Subsolo',
     image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/69aae1742e4f18d134b0a6a9_j8wDMCouaIgUhcak21ZG-xEWgQ2DgKFdsLFb9uETI.jpg',
     category: 'Pintura',
+    artworks: [
+      { id: '2-1', title: 'Museu do Esquecimento', artist: 'Sandra Gamarra Heshiki', year: '2023', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/69aae1742e4f18d134b0a6a9_j8wDMCouaIgUhcak21ZG-xEWgQ2DgKFdsLFb9uETI.jpg', description: 'Pintura que replica obras de museus europeus para questionar a propriedade cultural' },
+    ],
   },
   {
     id: '3',
@@ -39,6 +58,9 @@ export const exhibitions: Exhibition[] = [
     floor: '1º Subsolo',
     image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/69aae173ea428cf79c31a06b_p1eX1K7OuzyUpTN7uhoh-HQmymEGGYfLm7RPxaIRY.jpg',
     category: 'Têxtil',
+    artworks: [
+      { id: '3-1', title: 'Mapa do Território Wichí', artist: 'Silät', year: '2024', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/69aae173ea428cf79c31a06b_p1eX1K7OuzyUpTN7uhoh-HQmymEGGYfLm7RPxaIRY.jpg', description: 'Tecido monumental que mapeia o território ancestral Wichí' },
+    ],
   },
   {
     id: '4',
@@ -59,6 +81,9 @@ export const exhibitions: Exhibition[] = [
     floor: '1º Subsolo',
     image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/69370f02beead80798cd47a1_Site_banner_MC_01.png',
     category: 'Instalação',
+    artworks: [
+      { id: '5-1', title: 'Del Montte', artist: 'Minerva Cuevas', year: '2023', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/69370f02beead80798cd47a1_Site_banner_MC_01.png', description: 'Instalação que questiona o monopólio de corporações na agricultura' },
+    ],
   },
   {
     id: '6',
@@ -69,6 +94,9 @@ export const exhibitions: Exhibition[] = [
     floor: '2º Subsolo',
     image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/693c5cef57a818c2e90bdc48__MG_1816-copy%20copy.jpg',
     category: 'Desenho',
+    artworks: [
+      { id: '6-1', title: 'Xapiri', artist: 'André Taniki Yanomami', year: '2024', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/693c5cef57a818c2e90bdc48__MG_1816-copy%20copy.jpg', description: 'Desenho que representa os espíritos xapiri da cosmologia Yanomami' },
+    ],
   },
   {
     id: '7',
@@ -79,6 +107,9 @@ export const exhibitions: Exhibition[] = [
     floor: '2º Subsolo',
     image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/68ff6b07eeee7c1739d94aef_C%C3%B3pia%20de%20Abel%20Rodri%CC%81guez.jpg',
     category: 'Pintura',
+    artworks: [
+      { id: '7-1', title: 'Ciclo Anual da Floresta', artist: 'Abel Rodríguez', year: '2020', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/68ff6b07eeee7c1739d94aef_C%C3%B3pia%20de%20Abel%20Rodri%CC%81guez.jpg', description: 'Pintura detalhada do ciclo das árvores na floresta amazônica' },
+    ],
   },
   {
     id: '8',
@@ -89,6 +120,9 @@ export const exhibitions: Exhibition[] = [
     floor: '1º Subsolo',
     image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/68877d1f22041eb041e9f2e5__DSC5111%20(1).jpg',
     category: 'Instalação',
+    artworks: [
+      { id: '8-1', title: 'Monumento ao Esquecido', artist: 'Iván Argote', year: '2023', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/68877d1f22041eb041e9f2e5__DSC5111%20(1).jpg', description: 'Escultura que questiona monumentos coloniais' },
+    ],
   },
   {
     id: '9',
@@ -99,6 +133,16 @@ export const exhibitions: Exhibition[] = [
     floor: '2º Andar',
     image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/695d09e3fe6fd822b917a0a7__DSC4877-Pano-Edit-2.jpg',
     category: 'Acervo',
+    artworks: [
+      { id: '9-1', title: 'A Estudante', artist: 'Amedeo Modigliani', year: '1918', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/695d09e3fe6fd822b917a0a7__DSC4877-Pano-Edit-2.jpg', description: 'Retrato característico do estilo de Modigliani com pescoço alongado' },
+      { id: '9-2', title: 'Rosa e Azul', artist: 'Pierre-Auguste Renoir', year: '1881', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/695d09e3fe6fd822b917a0a7__DSC4877-Pano-Edit-2.jpg', description: 'Retrato das filhas do banqueiro Cahen, uma das obras mais conhecidas do MASP' },
+      { id: '9-3', title: 'O Escolar', artist: 'Vincent van Gogh', year: '1888', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/695d09e3fe6fd822b917a0a7__DSC4877-Pano-Edit-2.jpg', description: 'Retrato de um jovem estudante pintado durante o período em Arles' },
+      { id: '9-4', title: 'Ressurreição de Cristo', artist: 'Rafael Sanzio', year: '1502', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/695d09e3fe6fd822b917a0a7__DSC4877-Pano-Edit-2.jpg', description: 'Obra renascentista de Rafael, parte do acervo desde a fundação do museu' },
+      { id: '9-5', title: 'Cinco Moças de Guaratinguetá', artist: 'Emiliano Di Cavalcanti', year: '1930', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/695d09e3fe6fd822b917a0a7__DSC4877-Pano-Edit-2.jpg', description: 'Uma das obras mais emblemáticas do modernismo brasileiro' },
+      { id: '9-6', title: 'A Negra', artist: 'Tarsila do Amaral', year: '1923', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/695d09e3fe6fd822b917a0a7__DSC4877-Pano-Edit-2.jpg', description: 'Obra icônica do modernismo brasileiro que retrata a herança africana' },
+      { id: '9-7', title: 'Abaporu', artist: 'Tarsila do Amaral', year: '1928', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/695d09e3fe6fd822b917a0a7__DSC4877-Pano-Edit-2.jpg', description: 'A obra mais valiosa da arte brasileira, marco do Movimento Antropofágico' },
+      { id: '9-8', title: 'Natureza morta com maçãs', artist: 'Paul Cézanne', year: '1895', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/695d09e3fe6fd822b917a0a7__DSC4877-Pano-Edit-2.jpg', description: 'Natureza morta do pós-impressionista francês' },
+    ],
   },
   {
     id: '10',
@@ -109,5 +153,12 @@ export const exhibitions: Exhibition[] = [
     floor: '1º Subsolo',
     image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/67d078a508438d83117a472a_Sala-de-Video--Janaina-Wagner-.jpg',
     category: 'Videoarte',
+    artworks: [
+      { id: '10-1', title: 'Corpo Político', artist: 'Diversos', year: '2024', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/67d078a508438d83117a472a_Sala-de-Video--Janaina-Wagner-.jpg', description: 'Videoinstalação sobre identidades e corpos dissidentes' },
+    ],
   },
 ];
+
+export const allArtworks: Artwork[] = exhibitions.flatMap(
+  (expo) => (expo.artworks || []).map((art) => ({ ...art, exhibition: expo.title }))
+);

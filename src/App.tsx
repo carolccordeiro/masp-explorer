@@ -8,6 +8,9 @@ import PlanejarVisita from "./pages/PlanejarVisita.tsx";
 import QuizEducativo from "./pages/QuizEducativo.tsx";
 import Informacoes from "./pages/Informacoes.tsx";
 import AssistenteIA from "./pages/AssistenteIA.tsx";
+import MapaInterativo from "./pages/MapaInterativo.tsx";
+import MinhaColecao from "./pages/MinhaColecao.tsx";
+import DadosDeUso from "./pages/DadosDeUso.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -24,6 +27,9 @@ const App = () => (
           <Route path="/quiz" element={<QuizEducativo />} />
           <Route path="/informacoes" element={<Informacoes />} />
           <Route path="/assistente" element={<AssistenteIA />} />
+          <Route path="/mapa" element={<MapaInterativo />} />
+          <Route path="/colecao" element={<MinhaColecao />} />
+          <Route path="/dados" element={<DadosDeUso />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
