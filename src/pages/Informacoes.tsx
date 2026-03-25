@@ -173,15 +173,26 @@ export default function Informacoes() {
       content: (
         <div className="space-y-4 text-sm">
           <div>
-            <p className="font-bold text-foreground mb-2">Restaurante – MASP A Baianeira</p>
+            <p className="font-bold text-foreground mb-2">Restaurante - MASP A Baianeira</p>
             <div className="text-muted-foreground space-y-1 text-xs">
-              <p>Terça a Sexta: 11h30 às 15h</p>
-              <p>Sábado e Domingo: 11h30 às 16h</p>
+              <p>Terca a Sexta: 11h30 as 15h</p>
+              <p>Sabado e Domingo: 11h30 as 16h</p>
               <p>Segunda: Fechado</p>
               <div className="flex items-start gap-1.5 mt-1">
                 <MapPin className="w-3 h-3 shrink-0 mt-0.5" />
-                <span>Av. Paulista, 1500 – Ed. Pietro Maria Bardi (Piso Térreo)</span>
+                <span>Av. Paulista, 1500 - Ed. Pietro Maria Bardi (Piso Terreo)</span>
               </div>
+              <p className="mt-1">Ha delivery via iFood. Cardapio completo em @abaianeira</p>
+            </div>
+          </div>
+          <div>
+            <p className="font-bold text-foreground mb-2">Cafe MASP</p>
+            <div className="text-muted-foreground space-y-1 text-xs">
+              <p>Inaugurado em 2022, parceria entre MASP e A Baianeira, sob direcao da chef Manuelle Ferraz.</p>
+              <p>Terca, Sexta e Sabado: 10h as 22h</p>
+              <p>Quarta, Quinta e Domingo: 10h as 18h</p>
+              <p>Fechado as segundas-feiras</p>
+              <p>Edificio Lina: 1o andar e 1o subsolo | Edificio Pietro: Terreo</p>
             </div>
           </div>
           <div>
@@ -189,12 +200,13 @@ export default function Informacoes() {
             <div className="text-muted-foreground space-y-1.5 text-xs">
               <div className="flex items-start gap-1.5">
                 <Train className="w-3 h-3 shrink-0 mt-0.5" />
-                <span><strong>Metrô:</strong> Linha Verde, estação Trianon-MASP</span>
+                <span><strong>Metro:</strong> Linha Verde, estacao Trianon-MASP</span>
               </div>
               <div className="flex items-start gap-1.5">
                 <Car className="w-3 h-3 shrink-0 mt-0.5" />
-                <span><strong>Estacionamento:</strong> Car Park – Al. Casa Branca, 41 – R$25 (até 12h com carimbo)</span>
+                <span><strong>Estacionamento conveniado:</strong> Car Park - Al. Casa Branca, 41 - R$25 (ate 12h com carimbo na recepcao do MASP). Funcionamento 24h.</span>
               </div>
+              <p><strong>Outros estacionamentos:</strong> Progress Park Paulista (Av. Paulista, 1636) | Multipark Wall Street (Rua Itapeva, 636)</p>
             </div>
           </div>
           <div>
@@ -207,15 +219,22 @@ export default function Informacoes() {
             <div className="text-xs text-muted-foreground space-y-1.5">
               <div className="flex items-start gap-1.5">
                 <Accessibility className="w-3 h-3 shrink-0 mt-0.5" />
-                <span>Entrada gratuita para pessoas com deficiência e acompanhante</span>
+                <span>Entrada gratuita para pessoas com deficiencia e acompanhante</span>
               </div>
-              <div className="flex items-start gap-1.5">
-                <span className="text-xs shrink-0">Cães-guia permitidos</span>
-              </div>
+              <p>Caes-guia permitidos (Lei 11.126/2005)</p>
               <div className="flex items-start gap-1.5">
                 <Baby className="w-3 h-3 shrink-0 mt-0.5" />
                 <span>Menores de 14 anos: entrada acompanhados</span>
               </div>
+            </div>
+          </div>
+          <div>
+            <p className="font-bold text-foreground mb-2">Informacoes adicionais</p>
+            <div className="text-xs text-muted-foreground space-y-1">
+              <p>O ingresso da direito a visitar todas as exposicoes em cartaz no dia da visita.</p>
+              <p>O MASP aceita Pix e todos os cartoes de credito e debito.</p>
+              <p>Agendamento online obrigatorio, inclusive para dias gratuitos.</p>
+              <p>Bilheteria fisica: Terca 10h-19h | Sexta 10h-20h | Quarta a Domingo 10h-17h</p>
             </div>
           </div>
         </div>

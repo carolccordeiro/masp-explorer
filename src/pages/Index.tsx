@@ -72,7 +72,14 @@ const item = {
 export default function Index() {
   const navigate = useNavigate();
   const [couponOpen, setCouponOpen] = useState(false);
-  const [started, setStarted] = useState(false);
+  const [started, setStarted] = useState(() => {
+    return sessionStorage.getItem('masp-started') === 'true';
+  });
+
+  const handleStart = () => {
+    setStarted(true);
+    sessionStorage.setItem('masp-started', 'true');
+  };
 
   const handleVoice = (text: string) => {
     const lower = text.toLowerCase();
@@ -97,13 +104,14 @@ export default function Index() {
 
   const handleEndSession = () => {
     setStarted(false);
+    sessionStorage.removeItem('masp-started');
   };
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Welcome Screen */}
       <AnimatePresence>
-        {!started && <WelcomeScreen onStart={() => setStarted(true)} />}
+        {!started && <WelcomeScreen onStart={handleStart} />}
       </AnimatePresence>
 
       {/* Header with end session */}
