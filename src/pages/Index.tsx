@@ -104,6 +104,7 @@ export default function Index() {
 
   const handleEndSession = () => {
     setStarted(false);
+    sessionStorage.removeItem('masp-started');
   };
 
   return (
