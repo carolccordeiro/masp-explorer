@@ -111,7 +111,7 @@ export default function Index() {
     <div className="min-h-screen bg-background flex flex-col">
       {/* Welcome Screen */}
       <AnimatePresence>
-        {!started && <WelcomeScreen onStart={() => setStarted(true)} />}
+        {!started && <WelcomeScreen onStart={handleStart} />}
       </AnimatePresence>
 
       {/* Header with end session */}
