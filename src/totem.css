@@ -1,0 +1,87 @@
+/* ============================================================
+   MASP Explorer — Otimizações para Totem Touchscreen
+   Raspberry Pi 3 · Modo Quiosque · Tela Touch
+   ============================================================ */
+
+/* Desabilita seleção de texto e cursor padrão em toda a UI */
+* {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: default !important;
+}
+
+/* Permite seleção apenas em campos de input */
+input,
+textarea {
+  -webkit-user-select: text;
+  user-select: text;
+  cursor: text !important;
+}
+
+/* Esconde a barra de rolagem mas mantém o scroll funcional */
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+/* Garante que o app ocupe 100% da tela sem overflow */
+html,
+body,
+#root {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+
+/* Área de scroll interna das páginas */
+.totem-scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  height: 100%;
+}
+
+/* Aumenta alvos de toque para acessibilidade em totem */
+button,
+a,
+[role="button"] {
+  min-height: 48px;
+  min-width: 48px;
+}
+
+/* Fonte ligeiramente maior para leitura a distância */
+body {
+  font-size: 16px;
+}
+
+/* Previne zoom acidental por pinça */
+html {
+  touch-action: manipulation;
+}
+
+/* Animação de idle — pisca suavemente quando inativo */
+@keyframes idlePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.idle-pulse {
+  animation: idlePulse 3s ease-in-out infinite;
+}
+
+/* Overlay de inatividade */
+.idle-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: hsl(0, 0%, 8%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
