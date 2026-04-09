@@ -43,7 +43,7 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps) {
         transition={{ delay: 0.5 }}
         className="relative z-10 text-primary-foreground/60 text-sm text-center mb-12 max-w-sm"
       >
-        Totem Interativo com Inteligência Artificial
+        Totem Interativo Inteligente · Powered by KORA · Flexmedia
       </motion.p>
 
       {/* Consent checkbox */}

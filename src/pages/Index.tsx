@@ -10,14 +10,14 @@ import { MaspHeader } from '@/components/MaspHeader';
 const menuItems = [
   {
     title: 'Planejar Visita',
-    description: 'Monte seu roteiro ideal',
+    description: 'Roteiro personalizado em segundos',
     icon: Calendar,
     path: '/planejar',
     color: 'bg-primary',
   },
   {
     title: 'Assistente IA',
-    description: 'Pergunte sobre o MASP',
+    description: 'Converse com nossa IA sobre arte',
     icon: Sparkles,
     path: '/assistente',
     color: 'bg-primary',
@@ -31,14 +31,14 @@ const menuItems = [
   },
   {
     title: 'Minha Coleção',
-    description: 'Suas obras favoritas',
+    description: 'Salve obras e exposições favoritas',
     icon: Heart,
     path: '/colecao',
     color: 'bg-primary',
   },
   {
     title: 'Quiz Educativo',
-    description: 'Teste seus conhecimentos',
+    description: 'Quiz e caça ao tesouro nas exposições',
     icon: HelpCircle,
     path: '/quiz',
     color: 'bg-masp-black',
@@ -121,7 +121,7 @@ export default function Index() {
       <div className="px-6 py-8 text-center">
         <h2 className="text-2xl font-black text-foreground mb-2">Bem-vindo ao MASP!</h2>
         <p className="text-muted-foreground text-sm max-w-md mx-auto">
-          Explore as exposições, planeje sua visita, converse com nossa IA ou teste seus conhecimentos sobre arte.
+          Sou o <span className="text-primary font-bold">KORA</span>, seu guia interativo. Diga quanto tempo você tem e eu crio um roteiro personalizado só para você.
         </p>
       </div>
 

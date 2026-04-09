@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Clock, ChevronRight, RotateCcw } from 'lucide-react';
+import { Clock, ChevronRight, RotateCcw, Users, Palette } from 'lucide-react';
 import { MaspHeader } from '@/components/MaspHeader';
 import { VoiceButton } from '@/components/VoiceButton';
 import { exhibitions, Exhibition } from '@/data/exhibitions';
@@ -8,28 +8,91 @@ import { useVoice } from '@/hooks/useVoice';
 
 const timeOptions = [30, 60, 90, 120, 180];
 
+const profileOptions = [
+  { id: 'solo', label: 'Sozinho(a)', emoji: '🧍' },
+  { id: 'casal', label: 'Casal', emoji: '👫' },
+  { id: 'familia', label: 'Família com crianças', emoji: '👨‍👩‍👧' },
+  { id: 'grupo', label: 'Grupo / Turma', emoji: '👥' },
+];
+
+const themeOptions = [
+  { id: 'arte-moderna', label: 'Arte Moderna' },
+  { id: 'historia-brasil', label: 'História do Brasil' },
+  { id: 'arte-contemporanea', label: 'Arte Contemporânea' },
+  { id: 'arte-europeia', label: 'Arte Europeia' },
+  { id: 'identidade-cultura', label: 'Identidade & Cultura' },
+  { id: 'arte-indigena', label: 'Arte Indígena' },
+];
+
+// Map theme IDs to exhibition categories for filtering
+const themeToCategoryMap: Record<string, string[]> = {
+  'arte-moderna': ['Arte Moderna', 'Modernismo'],
+  'historia-brasil': ['Arte Brasileira', 'História'],
+  'arte-contemporanea': ['Arte Contemporânea', 'Contemporâneo'],
+  'arte-europeia': ['Arte Europeia', 'Europeu'],
+  'identidade-cultura': ['Identidade', 'Cultura', 'Pop Andino'],
+  'arte-indigena': ['Arte Indígena', 'Indígena', 'Têxtil'],
+};
+
+type Step = 'time' | 'profile' | 'themes' | 'result';
+
 export default function PlanejarVisita() {
+  const [step, setStep] = useState<Step>('time');
   const [selectedTime, setSelectedTime] = useState<number | null>(null);
+  const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
+  const [selectedThemes, setSelectedThemes] = useState<string[]>([]);
   const [suggested, setSuggested] = useState<Exhibition[]>([]);
   const [selectedExpo, setSelectedExpo] = useState<Exhibition | null>(null);
   const { speak } = useVoice();
 
-  const suggestExhibitions = (minutes: number) => {
+  const handleSelectTime = (minutes: number) => {
     setSelectedTime(minutes);
+    speak(`Ótimo! Você tem ${minutes >= 60 ? `${minutes / 60} hora${minutes > 60 ? 's' : ''}` : `${minutes} minutos`}. Agora me diga: quem está visitando com você?`);
+    setStep('profile');
+  };
 
-    // For 30 min, always include the main exhibition
-    if (minutes === 30) {
-      const main = exhibitions.find((e) => e.isMainExhibition);
-      if (main && main.duration <= minutes) {
-        setSuggested([main]);
-        speak(`Para 30 minutos, sugerimos a exposição principal: ${main.artist} - ${main.title}.`);
-        return;
-      }
+  const handleSelectProfile = (profileId: string) => {
+    setSelectedProfile(profileId);
+    const profile = profileOptions.find(p => p.id === profileId);
+    speak(`Perfeito! ${profile?.label}. Agora selecione os temas que mais interessam a vocês.`);
+    setStep('themes');
+  };
+
+  const toggleTheme = (themeId: string) => {
+    setSelectedThemes(prev =>
+      prev.includes(themeId) ? prev.filter(t => t !== themeId) : [...prev, themeId]
+    );
+  };
+
+  const generateRoute = () => {
+    if (!selectedTime) return;
+
+    const minutes = selectedTime;
+    const preferredCategories = selectedThemes.flatMap(t => themeToCategoryMap[t] || []);
+
+    // Prioritize main exhibition
+    const main = exhibitions.find((e) => e.isMainExhibition);
+    let others = exhibitions.filter((e) => !e.isMainExhibition);
+
+    // Sort: preferred themes first, then random
+    if (preferredCategories.length > 0) {
+      others = others.sort((a, b) => {
+        const aMatch = preferredCategories.some(cat =>
+          a.category?.toLowerCase().includes(cat.toLowerCase()) ||
+          a.title?.toLowerCase().includes(cat.toLowerCase())
+        );
+        const bMatch = preferredCategories.some(cat =>
+          b.category?.toLowerCase().includes(cat.toLowerCase()) ||
+          b.title?.toLowerCase().includes(cat.toLowerCase())
+        );
+        if (aMatch && !bMatch) return -1;
+        if (!aMatch && bMatch) return 1;
+        return Math.random() - 0.5;
+      });
+    } else {
+      others = others.sort(() => Math.random() - 0.5);
     }
 
-    // For other durations, prioritize main exhibition then fill randomly
-    const main = exhibitions.find((e) => e.isMainExhibition);
-    const others = exhibitions.filter((e) => !e.isMainExhibition).sort(() => Math.random() - 0.5);
     let total = 0;
     const result: Exhibition[] = [];
 
@@ -49,18 +112,43 @@ export default function PlanejarVisita() {
     setSuggested(result);
 
     const totalTime = result.reduce((sum, e) => sum + e.duration, 0);
-    speak(`Para ${minutes} minutos, sugerimos ${result.length} exposições com duração total de ${totalTime} minutos.`);
+    const profileLabel = profileOptions.find(p => p.id === selectedProfile)?.label || 'vocês';
+
+    speak(
+      `Excelente! Preparamos um roteiro de ${totalTime} minutos para ${profileLabel}. ` +
+      `Sugerimos ${result.length} ${result.length === 1 ? 'exposição' : 'exposições'}. ` +
+      (result[0] ? `Começaremos por ${result[0].artist} — ${result[0].title}.` : '')
+    );
+
+    setStep('result');
+  };
+
+  const handleReset = () => {
+    setStep('time');
+    setSelectedTime(null);
+    setSelectedProfile(null);
+    setSelectedThemes([]);
+    setSuggested([]);
   };
 
   const handleVoice = (text: string) => {
-    const match = text.match(/(\d+)/);
-    if (match) {
-      const mins = parseInt(match[1]);
-      if (mins >= 20) suggestExhibitions(mins);
+    if (step === 'time') {
+      const match = text.match(/(\d+)/);
+      if (match) {
+        const mins = parseInt(match[1]);
+        if (mins >= 20) handleSelectTime(mins);
+      }
     }
   };
 
   const totalDuration = useMemo(() => suggested.reduce((s, e) => s + e.duration, 0), [suggested]);
+
+  const stepLabels: Record<Step, string> = {
+    time: '1. Tempo disponível',
+    profile: '2. Quem está visitando',
+    themes: '3. Temas de interesse',
+    result: 'Seu roteiro personalizado',
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -68,57 +156,156 @@ export default function PlanejarVisita() {
 
       <div className="px-6 py-8">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-3xl font-black text-foreground mb-2">Planejar Visita</h1>
-          <p className="text-muted-foreground text-sm mb-8">
-            Quanto tempo você tem disponível? Sugerimos um roteiro personalizado!
+          <h1 className="text-3xl font-black text-foreground mb-1">Planejar Visita</h1>
+          <p className="text-primary text-xs font-semibold uppercase tracking-widest mb-6">
+            {stepLabels[step]}
           </p>
         </motion.div>
 
-        {/* Time selector */}
-        <div className="space-y-3 mb-6">
-          <p className="text-xs font-semibold uppercase text-muted-foreground tracking-wider">Tempo disponível</p>
-          <div className="grid grid-cols-3 gap-3">
-            {timeOptions.map((t) => (
-              <motion.button
-                key={t}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => suggestExhibitions(t)}
-                className={`p-4 border text-center transition-colors ${
-                  selectedTime === t
-                    ? 'border-primary bg-primary text-primary-foreground'
-                    : 'border-border bg-background text-foreground hover:border-primary'
-                }`}
-              >
-                <Clock className="w-5 h-5 mx-auto mb-1" />
-                <span className="text-lg font-bold">{t >= 60 ? `${t / 60}h` : `${t}min`}</span>
-              </motion.button>
-            ))}
-          </div>
-          <div className="flex justify-center">
-            <VoiceButton onTranscript={handleVoice} />
-          </div>
-          <p className="text-center text-xs text-muted-foreground">Ou diga o tempo em minutos</p>
-        </div>
-
-        {/* Suggested exhibitions */}
+        {/* STEP 1 — Tempo */}
         <AnimatePresence mode="wait">
-          {suggested.length > 0 && (
+          {step === 'time' && (
             <motion.div
-              key={selectedTime}
+              key="step-time"
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -30 }}
+              className="space-y-4"
+            >
+              <p className="text-sm text-muted-foreground mb-4">
+                Quanto tempo você tem disponível para a visita hoje?
+              </p>
+              <div className="grid grid-cols-3 gap-3">
+                {timeOptions.map((t) => (
+                  <motion.button
+                    key={t}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => handleSelectTime(t)}
+                    className="p-4 border border-border bg-background text-foreground hover:border-primary hover:text-primary transition-colors text-center"
+                  >
+                    <Clock className="w-5 h-5 mx-auto mb-1" />
+                    <span className="text-lg font-bold">{t >= 60 ? `${t / 60}h` : `${t}min`}</span>
+                  </motion.button>
+                ))}
+              </div>
+              <div className="flex justify-center pt-2">
+                <VoiceButton onTranscript={handleVoice} />
+              </div>
+              <p className="text-center text-xs text-muted-foreground">Ou diga o tempo em minutos</p>
+            </motion.div>
+          )}
+
+          {/* STEP 2 — Perfil */}
+          {step === 'profile' && (
+            <motion.div
+              key="step-profile"
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -30 }}
+              className="space-y-4"
+            >
+              <p className="text-sm text-muted-foreground mb-4">
+                Quem está visitando o MASP com você hoje?
+              </p>
+              <div className="grid grid-cols-2 gap-3">
+                {profileOptions.map((p) => (
+                  <motion.button
+                    key={p.id}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => handleSelectProfile(p.id)}
+                    className="p-5 border border-border bg-background text-foreground hover:border-primary hover:text-primary transition-colors text-center"
+                  >
+                    <span className="text-3xl block mb-2">{p.emoji}</span>
+                    <span className="text-sm font-bold">{p.label}</span>
+                  </motion.button>
+                ))}
+              </div>
+              <button
+                onClick={() => setStep('time')}
+                className="text-xs text-muted-foreground underline mt-2 block mx-auto"
+              >
+                ← Voltar
+              </button>
+            </motion.div>
+          )}
+
+          {/* STEP 3 — Temas */}
+          {step === 'themes' && (
+            <motion.div
+              key="step-themes"
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -30 }}
+              className="space-y-4"
+            >
+              <p className="text-sm text-muted-foreground mb-4">
+                Quais temas mais interessam a vocês? (Selecione um ou mais)
+              </p>
+              <div className="grid grid-cols-2 gap-3">
+                {themeOptions.map((theme) => {
+                  const selected = selectedThemes.includes(theme.id);
+                  return (
+                    <motion.button
+                      key={theme.id}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => toggleTheme(theme.id)}
+                      className={`p-4 border text-sm font-bold text-center transition-colors ${
+                        selected
+                          ? 'border-primary bg-primary text-primary-foreground'
+                          : 'border-border bg-background text-foreground hover:border-primary'
+                      }`}
+                    >
+                      <Palette className="w-4 h-4 mx-auto mb-1" />
+                      {theme.label}
+                    </motion.button>
+                  );
+                })}
+              </div>
+              <motion.button
+                whileTap={{ scale: 0.98 }}
+                onClick={generateRoute}
+                className="w-full py-4 bg-primary text-primary-foreground font-black text-base mt-4 hover:bg-primary/90 transition-colors"
+              >
+                Gerar Meu Roteiro →
+              </motion.button>
+              <button
+                onClick={() => setStep('profile')}
+                className="text-xs text-muted-foreground underline block mx-auto"
+              >
+                ← Voltar
+              </button>
+            </motion.div>
+          )}
+
+          {/* STEP 4 — Resultado */}
+          {step === 'result' && suggested.length > 0 && (
+            <motion.div
+              key="step-result"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               className="space-y-4"
             >
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-xl font-black text-foreground">Seu Roteiro</h2>
-                  <p className="text-sm text-muted-foreground">
-                    {suggested.length} {suggested.length === 1 ? 'exposição' : 'exposições'} | aprox. {totalDuration} minutos
+              {/* Summary card */}
+              <div className="bg-primary/10 border border-primary p-4 mb-2">
+                <p className="text-xs font-semibold uppercase text-primary tracking-wider mb-1">Roteiro Personalizado</p>
+                <p className="text-foreground text-sm">
+                  <span className="font-bold">{suggested.length} {suggested.length === 1 ? 'exposição' : 'exposições'}</span> ·{' '}
+                  aprox. <span className="font-bold">{totalDuration} minutos</span> ·{' '}
+                  {profileOptions.find(p => p.id === selectedProfile)?.emoji}{' '}
+                  {profileOptions.find(p => p.id === selectedProfile)?.label}
+                </p>
+                {selectedThemes.length > 0 && (
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Temas: {selectedThemes.map(t => themeOptions.find(o => o.id === t)?.label).join(', ')}
                   </p>
-                </div>
-                <button onClick={() => suggestExhibitions(selectedTime!)} className="text-primary">
-                  <RotateCcw className="w-5 h-5" />
+                )}
+              </div>
+
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="text-xl font-black text-foreground">Seu Roteiro</h2>
+                <button onClick={handleReset} className="flex items-center gap-1 text-primary text-xs font-semibold">
+                  <RotateCcw className="w-4 h-4" /> Recomeçar
                 </button>
               </div>
 
