@@ -125,3 +125,6 @@ O nome **KORA** remete a conceitos de origem, essência e núcleo criativo. Repr
 ---
 
 **FIAP 2025 · Equipe KORA · Projeto Flexmedia – Caso de Uso MASP**
+
+
+https://lovable.dev/projects/0f6364eb-b1fd-4dcc-87c6-91a14cb82685?magic_link=mc_e7fc206c-decb-4eca-a358-1063bf836666
