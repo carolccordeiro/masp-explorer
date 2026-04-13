@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Check, X, RotateCcw, Landmark, Palette, Frame, Scissors, BookOpen } from 'lucide-react';
+import { ArrowRight, Check, X, RotateCcw, Landmark, Palette, Frame, Scissors, BookOpen, Coffee } from 'lucide-react';
 import { MaspHeader } from '@/components/MaspHeader';
 import { quizCategories, QuizCategory, QuizQuestion } from '@/data/quizzes';
 import { useVoice } from '@/hooks/useVoice';
+import { CouponModal } from '@/components/CouponModal';
 
 const iconMap: Record<string, React.ReactNode> = {
   landmark: <Landmark className="w-7 h-7" />,
@@ -19,6 +20,7 @@ export default function QuizEducativo() {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
+  const [showCoupon, setShowCoupon] = useState(false);
   const { speak } = useVoice();
 
   const startQuiz = (cat: QuizCategory) => {
@@ -220,6 +222,8 @@ export default function QuizEducativo() {
           )}
         </AnimatePresence>
       </div>
+
+      <CouponModal isOpen={showCoupon} onClose={() => setShowCoupon(false)} />
     </div>
   );
 }
