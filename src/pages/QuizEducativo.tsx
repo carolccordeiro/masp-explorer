@@ -202,8 +202,32 @@ export default function QuizEducativo() {
                   : 'Continue aprendendo!'}
               </h2>
               <p className="text-muted-foreground mb-8">
-                Você acertou {score} de {selectedCategory.questions.length} perguntas
+                Voce acertou {score} de {selectedCategory.questions.length} perguntas
               </p>
+
+              {score >= Math.ceil(selectedCategory.questions.length * 0.8) && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="mb-6 p-5 border-2 border-dashed border-primary bg-primary/5"
+                >
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <Coffee className="w-5 h-5 text-primary" />
+                    <span className="font-black text-foreground">Parabens! Voce ganhou um premio</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    15% de desconto no Cafe e Loja MASP
+                  </p>
+                  <button
+                    onClick={() => setShowCoupon(true)}
+                    className="w-full py-3 bg-primary text-primary-foreground font-bold"
+                  >
+                    Resgatar cupom
+                  </button>
+                </motion.div>
+              )}
+
               <div className="space-y-3">
                 <button
                   onClick={() => startQuiz(selectedCategory)}
