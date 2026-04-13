@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Check, X, RotateCcw, Landmark, Palette, Frame, Scissors, BookOpen } from 'lucide-react';
+import { ArrowRight, Check, X, RotateCcw, Landmark, Palette, Frame, Scissors, BookOpen, Coffee } from 'lucide-react';
 import { MaspHeader } from '@/components/MaspHeader';
 import { quizCategories, QuizCategory, QuizQuestion } from '@/data/quizzes';
 import { useVoice } from '@/hooks/useVoice';
+import { CouponModal } from '@/components/CouponModal';
 
 const iconMap: Record<string, React.ReactNode> = {
   landmark: <Landmark className="w-7 h-7" />,
@@ -19,6 +20,7 @@ export default function QuizEducativo() {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
+  const [showCoupon, setShowCoupon] = useState(false);
   const { speak } = useVoice();
 
   const startQuiz = (cat: QuizCategory) => {
@@ -200,8 +202,32 @@ export default function QuizEducativo() {
                   : 'Continue aprendendo!'}
               </h2>
               <p className="text-muted-foreground mb-8">
-                Você acertou {score} de {selectedCategory.questions.length} perguntas
+                Voce acertou {score} de {selectedCategory.questions.length} perguntas
               </p>
+
+              {score >= Math.ceil(selectedCategory.questions.length * 0.8) && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="mb-6 p-5 border-2 border-dashed border-primary bg-primary/5"
+                >
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <Coffee className="w-5 h-5 text-primary" />
+                    <span className="font-black text-foreground">Parabens! Voce ganhou um premio</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    15% de desconto no Cafe e Loja MASP
+                  </p>
+                  <button
+                    onClick={() => setShowCoupon(true)}
+                    className="w-full py-3 bg-primary text-primary-foreground font-bold"
+                  >
+                    Resgatar cupom
+                  </button>
+                </motion.div>
+              )}
+
               <div className="space-y-3">
                 <button
                   onClick={() => startQuiz(selectedCategory)}
@@ -220,6 +246,8 @@ export default function QuizEducativo() {
           )}
         </AnimatePresence>
       </div>
+
+      <CouponModal isOpen={showCoupon} onClose={() => setShowCoupon(false)} />
     </div>
   );
 }
