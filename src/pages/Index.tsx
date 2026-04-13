@@ -121,7 +121,7 @@ export default function Index() {
       <div className="px-6 py-8 text-center">
         <h2 className="text-2xl font-black text-foreground mb-2">Bem-vindo ao MASP!</h2>
         <p className="text-muted-foreground text-sm max-w-md mx-auto">
-          Sou o <span className="text-primary font-bold">KORA</span>, seu guia interativo. Diga quanto tempo você tem e eu crio um roteiro personalizado só para você.
+          Sou a <span className="text-primary font-bold">KORA</span>, sua guia interativa. Diga quanto tempo você tem e eu crio um roteiro personalizado só para você.
         </p>
       </div>
 
