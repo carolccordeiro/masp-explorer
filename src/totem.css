@@ -27,13 +27,21 @@ textarea {
 
 /* Garante que o app ocupe 100% da tela sem overflow */
 html,
-body,
-#root {
+body {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
   overscroll-behavior: none;
   touch-action: manipulation;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Área de scroll interna das páginas */

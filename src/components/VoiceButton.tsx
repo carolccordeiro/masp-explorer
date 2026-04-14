@@ -1,6 +1,7 @@
 import { Mic, MicOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useVoice } from '@/hooks/useVoice';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface VoiceButtonProps {
   onTranscript: (text: string) => void;
@@ -9,6 +10,7 @@ interface VoiceButtonProps {
 
 export function VoiceButton({ onTranscript, className = '' }: VoiceButtonProps) {
   const { isListening, transcript, startListening, stopListening } = useVoice();
+  const { t } = useLanguage();
 
   const handleToggle = () => {
     if (isListening) {
@@ -48,7 +50,7 @@ export function VoiceButton({ onTranscript, className = '' }: VoiceButtonProps) 
         )}
       </motion.button>
       <span className="text-xs text-muted-foreground">
-        {isListening ? 'Ouvindo...' : 'Falar'}
+        {isListening ? t('common.ouvindo') : t('common.falar')}
       </span>
     </div>
   );

@@ -4,12 +4,14 @@ import { Heart, X, ChevronDown, ChevronUp } from 'lucide-react';
 import { MaspHeader } from '@/components/MaspHeader';
 import { exhibitions, Artwork } from '@/data/exhibitions';
 import { useCollection } from '@/hooks/useCollection';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function MinhaColecao() {
   const { saved, toggle, isSaved } = useCollection();
   const [expandedExpo, setExpandedExpo] = useState<string | null>(null);
   const [selectedArtwork, setSelectedArtwork] = useState<(Artwork & { expoTitle: string }) | null>(null);
   const [tab, setTab] = useState<'explorar' | 'salvos'>('explorar');
+  const { t } = useLanguage();
 
   const allArtworks = exhibitions.flatMap((expo) =>
     (expo.artworks || []).map((art) => ({ ...art, expoTitle: expo.title }))
@@ -24,9 +26,9 @@ export default function MinhaColecao() {
 
       <div className="px-6 py-8">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-3xl font-black text-foreground mb-2">Minha Colecao</h1>
+          <h1 className="text-3xl font-black text-foreground mb-2">{t('colecao.titulo')}</h1>
           <p className="text-muted-foreground text-sm mb-6">
-            Explore as obras e salve suas favoritas
+            {t('colecao.subtitulo')}
           </p>
         </motion.div>
 
@@ -38,7 +40,7 @@ export default function MinhaColecao() {
               tab === 'explorar' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground'
             }`}
           >
-            Explorar Obras
+            {t('colecao.explorar')}
           </button>
           <button
             onClick={() => setTab('salvos')}
@@ -46,7 +48,7 @@ export default function MinhaColecao() {
               tab === 'salvos' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground'
             }`}
           >
-            Salvos ({saved.length})
+            {t('colecao.salvos')} ({saved.length})
           </button>
         </div>
 
@@ -117,9 +119,9 @@ export default function MinhaColecao() {
                 <div className="w-20 h-20 bg-muted mx-auto flex items-center justify-center mb-6">
                   <Heart className="w-10 h-10 text-muted-foreground" />
                 </div>
-                <h2 className="text-xl font-black text-foreground mb-2">Nenhuma obra salva</h2>
+                <h2 className="text-xl font-black text-foreground mb-2">{t('colecao.nenhuma')}</h2>
                 <p className="text-sm text-muted-foreground max-w-xs mx-auto">
-                  Explore as exposicoes na aba "Explorar Obras" e toque no coracao para salvar.
+                  {t('colecao.explore')}
                 </p>
               </motion.div>
             ) : (
@@ -190,13 +192,13 @@ export default function MinhaColecao() {
                       }`}
                     >
                       <Heart className={`w-4 h-4 ${isSaved(selectedArtwork.id) ? 'fill-primary-foreground' : ''}`} />
-                      {isSaved(selectedArtwork.id) ? 'Salvo' : 'Salvar'}
+                      {isSaved(selectedArtwork.id) ? t('common.salvo') : t('common.salvar')}
                     </button>
                     <button
                       onClick={() => setSelectedArtwork(null)}
                       className="flex-1 py-3 border border-border text-foreground font-bold text-center"
                     >
-                      Fechar
+                      {t('common.fechar')}
                     </button>
                   </div>
                 </div>

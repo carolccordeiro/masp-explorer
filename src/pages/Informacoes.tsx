@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Clock, MapPin, Ticket, Phone, ChevronDown, ChevronUp, ExternalLink, Train, Car, Accessibility, Baby } from 'lucide-react';
 import { MaspHeader } from '@/components/MaspHeader';
 import { exhibitions } from '@/data/exhibitions';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface InfoSection {
   id: string;
@@ -14,6 +15,7 @@ interface InfoSection {
 export default function Informacoes() {
   const [openSection, setOpenSection] = useState<string | null>('sobre');
   const [selectedExpoId, setSelectedExpoId] = useState<string | null>(null);
+  const { t } = useLanguage();
 
   const toggle = (id: string) => setOpenSection(openSection === id ? null : id);
 
@@ -175,24 +177,24 @@ export default function Informacoes() {
           <div>
             <p className="font-bold text-foreground mb-2">Restaurante - MASP A Baianeira</p>
             <div className="text-muted-foreground space-y-1 text-xs">
-              <p>Terca a Sexta: 11h30 as 15h</p>
-              <p>Sabado e Domingo: 11h30 as 16h</p>
+              <p>Terça a Sexta: 11h30 às 15h</p>
+              <p>Sábado e Domingo: 11h30 às 16h</p>
               <p>Segunda: Fechado</p>
               <div className="flex items-start gap-1.5 mt-1">
                 <MapPin className="w-3 h-3 shrink-0 mt-0.5" />
-                <span>Av. Paulista, 1500 - Ed. Pietro Maria Bardi (Piso Terreo)</span>
+                <span>Av. Paulista, 1500 - Ed. Pietro Maria Bardi (Piso Térreo)</span>
               </div>
-              <p className="mt-1">Ha delivery via iFood. Cardapio completo em @abaianeira</p>
+              <p className="mt-1">Há delivery via iFood. Cardápio completo em @abaianeira</p>
             </div>
           </div>
           <div>
-            <p className="font-bold text-foreground mb-2">Cafe MASP</p>
+            <p className="font-bold text-foreground mb-2">Café MASP</p>
             <div className="text-muted-foreground space-y-1 text-xs">
-              <p>Inaugurado em 2022, parceria entre MASP e A Baianeira, sob direcao da chef Manuelle Ferraz.</p>
-              <p>Terca, Sexta e Sabado: 10h as 22h</p>
-              <p>Quarta, Quinta e Domingo: 10h as 18h</p>
-              <p>Fechado as segundas-feiras</p>
-              <p>Edificio Lina: 1o andar e 1o subsolo | Edificio Pietro: Terreo</p>
+              <p>Inaugurado em 2022, parceria entre MASP e A Baianeira, sob direção da chef Manuelle Ferraz.</p>
+              <p>Terça, Sexta e Sábado: 10h às 22h</p>
+              <p>Quarta, Quinta e Domingo: 10h às 18h</p>
+              <p>Fechado às segundas-feiras</p>
+              <p>Edifício Lina: 1º andar e 1º subsolo | Edifício Pietro: Térreo</p>
             </div>
           </div>
           <div>
@@ -200,11 +202,11 @@ export default function Informacoes() {
             <div className="text-muted-foreground space-y-1.5 text-xs">
               <div className="flex items-start gap-1.5">
                 <Train className="w-3 h-3 shrink-0 mt-0.5" />
-                <span><strong>Metro:</strong> Linha Verde, estacao Trianon-MASP</span>
+                <span><strong>Metrô:</strong> Linha Verde, estação Trianon-MASP</span>
               </div>
               <div className="flex items-start gap-1.5">
                 <Car className="w-3 h-3 shrink-0 mt-0.5" />
-                <span><strong>Estacionamento conveniado:</strong> Car Park - Al. Casa Branca, 41 - R$25 (ate 12h com carimbo na recepcao do MASP). Funcionamento 24h.</span>
+                <span><strong>Estacionamento conveniado:</strong> Car Park - Al. Casa Branca, 41 - R$25 (até 12h com carimbo na recepção do MASP). Funcionamento 24h.</span>
               </div>
               <p><strong>Outros estacionamentos:</strong> Progress Park Paulista (Av. Paulista, 1636) | Multipark Wall Street (Rua Itapeva, 636)</p>
             </div>
@@ -219,9 +221,9 @@ export default function Informacoes() {
             <div className="text-xs text-muted-foreground space-y-1.5">
               <div className="flex items-start gap-1.5">
                 <Accessibility className="w-3 h-3 shrink-0 mt-0.5" />
-                <span>Entrada gratuita para pessoas com deficiencia e acompanhante</span>
+                <span>Entrada gratuita para pessoas com deficiência e acompanhante</span>
               </div>
-              <p>Caes-guia permitidos (Lei 11.126/2005)</p>
+              <p>Cães-guia permitidos (Lei 11.126/2005)</p>
               <div className="flex items-start gap-1.5">
                 <Baby className="w-3 h-3 shrink-0 mt-0.5" />
                 <span>Menores de 14 anos: entrada acompanhados</span>
@@ -229,12 +231,12 @@ export default function Informacoes() {
             </div>
           </div>
           <div>
-            <p className="font-bold text-foreground mb-2">Informacoes adicionais</p>
+            <p className="font-bold text-foreground mb-2">Informações adicionais</p>
             <div className="text-xs text-muted-foreground space-y-1">
-              <p>O ingresso da direito a visitar todas as exposicoes em cartaz no dia da visita.</p>
-              <p>O MASP aceita Pix e todos os cartoes de credito e debito.</p>
-              <p>Agendamento online obrigatorio, inclusive para dias gratuitos.</p>
-              <p>Bilheteria fisica: Terca 10h-19h | Sexta 10h-20h | Quarta a Domingo 10h-17h</p>
+              <p>O ingresso dá direito a visitar todas as exposições em cartaz no dia da visita.</p>
+              <p>O MASP aceita Pix e todos os cartões de crédito e débito.</p>
+              <p>Agendamento online obrigatório, inclusive para dias gratuitos.</p>
+              <p>Bilheteria física: Terça 10h-19h | Sexta 10h-20h | Quarta a Domingo 10h-17h</p>
             </div>
           </div>
         </div>
@@ -248,8 +250,8 @@ export default function Informacoes() {
 
       <div className="px-6 py-8">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-3xl font-black text-foreground mb-2">Informações</h1>
-          <p className="text-muted-foreground text-sm mb-8">Tudo sobre o MASP</p>
+          <h1 className="text-3xl font-black text-foreground mb-2">{t('info.titulo')}</h1>
+          <p className="text-muted-foreground text-sm mb-8">{t('info.subtitulo')}</p>
         </motion.div>
 
         <div className="space-y-2">

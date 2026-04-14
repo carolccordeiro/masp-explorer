@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Coffee, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface CouponModalProps {
   isOpen: boolean;
@@ -14,6 +15,7 @@ export function CouponModal({ isOpen, onClose }: CouponModalProps) {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const couponCode = 'MASP15CAFE';
+  const { t } = useLanguage();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,16 +59,16 @@ export function CouponModal({ isOpen, onClose }: CouponModalProps) {
                     <Coffee className="w-6 h-6 text-primary-foreground" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-black text-foreground">15% OFF no Café</h3>
-                    <p className="text-sm text-muted-foreground">MASP A Baianeira</p>
+                    <h3 className="text-xl font-black text-foreground">{t('cupom.titulo')}</h3>
+                    <p className="text-sm text-muted-foreground">{t('cupom.subtitulo')}</p>
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground mb-6">
-                  Preencha seus dados e ganhe um cupom de 15% de desconto no café do MASP!
+                  {t('cupom.descricao')}
                 </p>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <Input
-                    placeholder="Seu nome"
+                    placeholder={t('cupom.nome')}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
@@ -74,14 +76,14 @@ export function CouponModal({ isOpen, onClose }: CouponModalProps) {
                   />
                   <Input
                     type="email"
-                    placeholder="Seu e-mail"
+                    placeholder={t('cupom.email')}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     className="border-border focus:ring-primary"
                   />
                   <Button type="submit" className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-base py-6">
-                    Ganhar cupom
+                    {t('cupom.ganhar')}
                   </Button>
                 </form>
               </>
@@ -90,16 +92,16 @@ export function CouponModal({ isOpen, onClose }: CouponModalProps) {
                 <div className="w-16 h-16 bg-primary mx-auto flex items-center justify-center mb-4">
                   <Check className="w-8 h-8 text-primary-foreground" />
                 </div>
-                <h3 className="text-xl font-black mb-2 text-foreground">Cupom gerado!</h3>
+                <h3 className="text-xl font-black mb-2 text-foreground">{t('cupom.gerado')}</h3>
                 <div className="bg-masp-light border-2 border-dashed border-primary p-4 my-4">
-                  <p className="text-xs text-muted-foreground mb-1">Seu código:</p>
+                  <p className="text-xs text-muted-foreground mb-1">{t('cupom.codigo')}</p>
                   <p className="text-2xl font-black text-primary tracking-wider">{couponCode}</p>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Apresente este código no <strong>MASP A Baianeira</strong> e ganhe 15% de desconto!
+                  {t('cupom.apresente')}
                 </p>
                 <p className="text-xs text-muted-foreground mt-4">
-                  Ter a Sex: 11h30–15h · Sáb e Dom: 11h30–16h
+                  Terça a Sexta: 11h30–15h · Sábado e Domingo: 11h30–16h
                 </p>
               </div>
             )}
