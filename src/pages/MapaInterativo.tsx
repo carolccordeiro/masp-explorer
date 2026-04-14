@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import { MaspHeader } from '@/components/MaspHeader';
 import { exhibitions } from '@/data/exhibitions';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface FloorInfo {
   id: string;
@@ -67,6 +68,7 @@ const floors: FloorInfo[] = [
 export default function MapaInterativo() {
   const [selectedFloor, setSelectedFloor] = useState<FloorInfo | null>(null);
   const [activeBuilding, setActiveBuilding] = useState<string>('Edifício Lina Bo Bardi');
+  const { t } = useLanguage();
 
   const buildings = ['Edifício Lina Bo Bardi', 'Edifício Pietro Maria Bardi'];
   const filteredFloors = floors.filter((f) => f.building === activeBuilding);
@@ -80,8 +82,8 @@ export default function MapaInterativo() {
 
       <div className="px-6 py-8">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-3xl font-black text-foreground mb-2">Mapa Interativo</h1>
-          <p className="text-muted-foreground text-sm mb-8">Explore cada andar do MASP</p>
+          <h1 className="text-3xl font-black text-foreground mb-2">{t('mapa.titulo')}</h1>
+          <p className="text-muted-foreground text-sm mb-8">{t('mapa.subtitulo')}</p>
         </motion.div>
 
         {/* Building selector */}
@@ -121,7 +123,6 @@ export default function MapaInterativo() {
                   }`}
                 >
                   <div className="flex items-center gap-4 p-4">
-                    {/* Floor visual indicator */}
                     <div className={`w-16 h-16 flex items-center justify-center border-2 shrink-0 ${
                       isSelected ? 'border-primary bg-primary text-primary-foreground' : 'border-border text-foreground'
                     }`}>
@@ -140,7 +141,6 @@ export default function MapaInterativo() {
                   </div>
                 </button>
 
-                {/* Floor detail */}
                 <AnimatePresence>
                   {isSelected && (
                     <motion.div
@@ -151,7 +151,7 @@ export default function MapaInterativo() {
                     >
                       <div className="p-4 space-y-4">
                         <div>
-                          <p className="text-xs font-semibold uppercase text-muted-foreground tracking-wider mb-2">Destaques</p>
+                          <p className="text-xs font-semibold uppercase text-muted-foreground tracking-wider mb-2">{t('mapa.destaques')}</p>
                           <div className="flex flex-wrap gap-2">
                             {floor.highlights.map((h) => (
                               <span key={h} className="text-xs px-2 py-1 bg-muted text-foreground">
@@ -163,7 +163,7 @@ export default function MapaInterativo() {
 
                         {expos.length > 0 && (
                           <div>
-                            <p className="text-xs font-semibold uppercase text-muted-foreground tracking-wider mb-2">Exposições neste andar</p>
+                            <p className="text-xs font-semibold uppercase text-muted-foreground tracking-wider mb-2">{t('mapa.exposicoes')}</p>
                             <div className="space-y-2">
                               {expos.map((expo) => (
                                 <div key={expo.id} className="flex items-center gap-3 p-2 bg-muted">

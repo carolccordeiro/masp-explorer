@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { IdleOverlay } from "@/components/IdleOverlay";
 import { useIdleTimer } from "@/hooks/useIdleTimer";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import "./totem.css";
 
 import Index from "./pages/Index.tsx";
@@ -17,19 +18,13 @@ import AssistenteIA from "./pages/AssistenteIA.tsx";
 import MapaInterativo from "./pages/MapaInterativo.tsx";
 import MinhaColecao from "./pages/MinhaColecao.tsx";
 import DadosDeUso from "./pages/DadosDeUso.tsx";
+import Parceiros from "./pages/Parceiros.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
 
-// Timeout de inatividade: 90 segundos
 const IDLE_TIMEOUT_MS = 90_000;
 
-/**
- * TotemShell
- * Envolve todas as rotas com a lógica de inatividade do totem.
- * Quando o usuário fica inativo por IDLE_TIMEOUT_MS, exibe o IdleOverlay
- * e reseta a sessão ao ser tocado novamente.
- */
 function TotemShell() {
   const navigate = useNavigate();
   const [isIdle, setIsIdle] = useState(false);
@@ -63,6 +58,7 @@ function TotemShell() {
         <Route path="/mapa" element={<MapaInterativo />} />
         <Route path="/colecao" element={<MinhaColecao />} />
         <Route path="/dados" element={<DadosDeUso />} />
+        <Route path="/parceiros" element={<Parceiros />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
@@ -72,11 +68,13 @@ function TotemShell() {
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <TotemShell />
-      </BrowserRouter>
+      <LanguageProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <TotemShell />
+        </BrowserRouter>
+      </LanguageProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

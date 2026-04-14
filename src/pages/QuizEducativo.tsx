@@ -5,6 +5,7 @@ import { MaspHeader } from '@/components/MaspHeader';
 import { quizCategories, QuizCategory, QuizQuestion } from '@/data/quizzes';
 import { useVoice } from '@/hooks/useVoice';
 import { CouponModal } from '@/components/CouponModal';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const iconMap: Record<string, React.ReactNode> = {
   landmark: <Landmark className="w-7 h-7" />,
@@ -22,6 +23,7 @@ export default function QuizEducativo() {
   const [finished, setFinished] = useState(false);
   const [showCoupon, setShowCoupon] = useState(false);
   const { speak } = useVoice();
+  const { t } = useLanguage();
 
   const startQuiz = (cat: QuizCategory) => {
     setSelectedCategory(cat);
@@ -68,9 +70,9 @@ export default function QuizEducativo() {
 
       <div className="px-6 py-8">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-3xl font-black text-foreground mb-2">Quiz Educativo</h1>
+          <h1 className="text-3xl font-black text-foreground mb-2">{t('quiz.titulo')}</h1>
           <p className="text-muted-foreground text-sm mb-8">
-            {selectedCategory ? selectedCategory.title : 'Escolha uma categoria para começar'}
+            {selectedCategory ? selectedCategory.title : t('quiz.escolha')}
           </p>
         </motion.div>
 
@@ -99,7 +101,7 @@ export default function QuizEducativo() {
                   </div>
                   <div className="flex-1">
                     <h3 className="font-bold text-foreground group-hover:text-primary transition-colors">{cat.title}</h3>
-                    <p className="text-xs text-muted-foreground">{cat.description} | {cat.questions.length} perguntas</p>
+                    <p className="text-xs text-muted-foreground">{cat.description} | {cat.questions.length} {t('quiz.perguntas')}</p>
                   </div>
                   <ArrowRight className="w-5 h-5 text-muted-foreground" />
                 </motion.button>
@@ -174,7 +176,7 @@ export default function QuizEducativo() {
                     onClick={nextQuestion}
                     className="w-full py-4 bg-primary text-primary-foreground font-bold"
                   >
-                    {currentIndex + 1 < selectedCategory.questions.length ? 'Próxima pergunta' : 'Ver resultado'}
+                    {currentIndex + 1 < selectedCategory.questions.length ? t('quiz.proxima') : t('quiz.resultado')}
                   </button>
                 </motion.div>
               )}
@@ -196,13 +198,13 @@ export default function QuizEducativo() {
               </div>
               <h2 className="text-2xl font-black text-foreground mb-2">
                 {score === selectedCategory.questions.length
-                  ? 'Excelente!'
+                  ? t('quiz.excelente')
                   : score >= selectedCategory.questions.length / 2
-                  ? 'Muito bem!'
-                  : 'Continue aprendendo!'}
+                  ? t('quiz.muitobem')
+                  : t('quiz.continue')}
               </h2>
               <p className="text-muted-foreground mb-8">
-                Voce acertou {score} de {selectedCategory.questions.length} perguntas
+                {t('quiz.acertou')} {score} {t('quiz.de')} {selectedCategory.questions.length} {t('quiz.perguntas')}
               </p>
 
               {score >= Math.ceil(selectedCategory.questions.length * 0.8) && (
@@ -214,16 +216,16 @@ export default function QuizEducativo() {
                 >
                   <div className="flex items-center justify-center gap-2 mb-2">
                     <Coffee className="w-5 h-5 text-primary" />
-                    <span className="font-black text-foreground">Parabens! Voce ganhou um premio</span>
+                    <span className="font-black text-foreground">{t('quiz.parabens')}</span>
                   </div>
                   <p className="text-sm text-muted-foreground mb-3">
-                    15% de desconto no Cafe e Loja MASP
+                    {t('quiz.desconto')}
                   </p>
                   <button
                     onClick={() => setShowCoupon(true)}
                     className="w-full py-3 bg-primary text-primary-foreground font-bold"
                   >
-                    Resgatar cupom
+                    {t('quiz.resgatar')}
                   </button>
                 </motion.div>
               )}
@@ -233,13 +235,13 @@ export default function QuizEducativo() {
                   onClick={() => startQuiz(selectedCategory)}
                   className="w-full flex items-center justify-center gap-2 py-4 border border-primary text-primary font-bold"
                 >
-                  <RotateCcw className="w-4 h-4" /> Jogar novamente
+                  <RotateCcw className="w-4 h-4" /> {t('quiz.novamente')}
                 </button>
                 <button
                   onClick={reset}
                   className="w-full py-4 bg-primary text-primary-foreground font-bold"
                 >
-                  Escolher outro quiz
+                  {t('quiz.outro')}
                 </button>
               </div>
             </motion.div>

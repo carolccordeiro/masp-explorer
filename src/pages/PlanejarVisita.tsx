@@ -5,26 +5,26 @@ import { MaspHeader } from '@/components/MaspHeader';
 import { VoiceButton } from '@/components/VoiceButton';
 import { exhibitions, Exhibition } from '@/data/exhibitions';
 import { useVoice } from '@/hooks/useVoice';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const timeOptions = [30, 60, 90, 120, 180];
 
 const profileOptions = [
-  { id: 'solo', label: 'Sozinho(a)', emoji: '🧍' },
-  { id: 'casal', label: 'Casal', emoji: '👫' },
-  { id: 'familia', label: 'Família com crianças', emoji: '👨‍👩‍👧' },
-  { id: 'grupo', label: 'Grupo / Turma', emoji: '👥' },
+  { id: 'solo', label: 'Sozinho(a)', labelEn: 'Solo' },
+  { id: 'casal', label: 'Casal', labelEn: 'Couple' },
+  { id: 'familia', label: 'Família com crianças', labelEn: 'Family with children' },
+  { id: 'grupo', label: 'Grupo / Turma', labelEn: 'Group / Class' },
 ];
 
 const themeOptions = [
-  { id: 'arte-moderna', label: 'Arte Moderna' },
-  { id: 'historia-brasil', label: 'História do Brasil' },
-  { id: 'arte-contemporanea', label: 'Arte Contemporânea' },
-  { id: 'arte-europeia', label: 'Arte Europeia' },
-  { id: 'identidade-cultura', label: 'Identidade & Cultura' },
-  { id: 'arte-indigena', label: 'Arte Indígena' },
+  { id: 'arte-moderna', label: 'Arte Moderna', labelEn: 'Modern Art' },
+  { id: 'historia-brasil', label: 'História do Brasil', labelEn: 'Brazilian History' },
+  { id: 'arte-contemporanea', label: 'Arte Contemporânea', labelEn: 'Contemporary Art' },
+  { id: 'arte-europeia', label: 'Arte Europeia', labelEn: 'European Art' },
+  { id: 'identidade-cultura', label: 'Identidade & Cultura', labelEn: 'Identity & Culture' },
+  { id: 'arte-indigena', label: 'Arte Indígena', labelEn: 'Indigenous Art' },
 ];
 
-// Map theme IDs to exhibition categories for filtering
 const themeToCategoryMap: Record<string, string[]> = {
   'arte-moderna': ['Arte Moderna', 'Modernismo'],
   'historia-brasil': ['Arte Brasileira', 'História'],
@@ -44,6 +44,7 @@ export default function PlanejarVisita() {
   const [suggested, setSuggested] = useState<Exhibition[]>([]);
   const [selectedExpo, setSelectedExpo] = useState<Exhibition | null>(null);
   const { speak } = useVoice();
+  const { lang, t } = useLanguage();
 
   const handleSelectTime = (minutes: number) => {
     setSelectedTime(minutes);
@@ -70,11 +71,9 @@ export default function PlanejarVisita() {
     const minutes = selectedTime;
     const preferredCategories = selectedThemes.flatMap(t => themeToCategoryMap[t] || []);
 
-    // Prioritize main exhibition
     const main = exhibitions.find((e) => e.isMainExhibition);
     let others = exhibitions.filter((e) => !e.isMainExhibition);
 
-    // Sort: preferred themes first, then random
     if (preferredCategories.length > 0) {
       others = others.sort((a, b) => {
         const aMatch = preferredCategories.some(cat =>
@@ -144,10 +143,10 @@ export default function PlanejarVisita() {
   const totalDuration = useMemo(() => suggested.reduce((s, e) => s + e.duration, 0), [suggested]);
 
   const stepLabels: Record<Step, string> = {
-    time: '1. Tempo disponível',
-    profile: '2. Quem está visitando',
-    themes: '3. Temas de interesse',
-    result: 'Seu roteiro personalizado',
+    time: t('planejar.step1'),
+    profile: t('planejar.step2'),
+    themes: t('planejar.step3'),
+    result: t('planejar.step4'),
   };
 
   return (
@@ -156,13 +155,12 @@ export default function PlanejarVisita() {
 
       <div className="px-6 py-8">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-3xl font-black text-foreground mb-1">Planejar Visita</h1>
+          <h1 className="text-3xl font-black text-foreground mb-1">{t('planejar.titulo')}</h1>
           <p className="text-primary text-xs font-semibold uppercase tracking-widest mb-6">
             {stepLabels[step]}
           </p>
         </motion.div>
 
-        {/* STEP 1 — Tempo */}
         <AnimatePresence mode="wait">
           {step === 'time' && (
             <motion.div
@@ -173,29 +171,30 @@ export default function PlanejarVisita() {
               className="space-y-4"
             >
               <p className="text-sm text-muted-foreground mb-4">
-                Quanto tempo você tem disponível para a visita hoje?
+                {t('planejar.tempo')}
               </p>
               <div className="grid grid-cols-3 gap-3">
-                {timeOptions.map((t) => (
+                {timeOptions.map((time) => (
                   <motion.button
-                    key={t}
+                    key={time}
                     whileTap={{ scale: 0.95 }}
-                    onClick={() => handleSelectTime(t)}
+                    onClick={() => handleSelectTime(time)}
                     className="p-4 border border-border bg-background text-foreground hover:border-primary hover:text-primary transition-colors text-center"
                   >
                     <Clock className="w-5 h-5 mx-auto mb-1" />
-                    <span className="text-lg font-bold">{t >= 60 ? `${t / 60}h` : `${t}min`}</span>
+                    <span className="text-lg font-bold">{time >= 60 ? `${time / 60}h` : `${time}min`}</span>
                   </motion.button>
                 ))}
               </div>
               <div className="flex justify-center pt-2">
                 <VoiceButton onTranscript={handleVoice} />
               </div>
-              <p className="text-center text-xs text-muted-foreground">Ou diga o tempo em minutos</p>
+              <p className="text-center text-xs text-muted-foreground">
+                {lang === 'en' ? 'Or say the time in minutes' : 'Ou diga o tempo em minutos'}
+              </p>
             </motion.div>
           )}
 
-          {/* STEP 2 — Perfil */}
           {step === 'profile' && (
             <motion.div
               key="step-profile"
@@ -205,7 +204,7 @@ export default function PlanejarVisita() {
               className="space-y-4"
             >
               <p className="text-sm text-muted-foreground mb-4">
-                Quem está visitando o MASP com você hoje?
+                {t('planejar.perfil')}
               </p>
               <div className="grid grid-cols-2 gap-3">
                 {profileOptions.map((p) => (
@@ -215,8 +214,8 @@ export default function PlanejarVisita() {
                     onClick={() => handleSelectProfile(p.id)}
                     className="p-5 border border-border bg-background text-foreground hover:border-primary hover:text-primary transition-colors text-center"
                   >
-                    <span className="text-3xl block mb-2">{p.emoji}</span>
-                    <span className="text-sm font-bold">{p.label}</span>
+                    <Users className="w-6 h-6 mx-auto mb-2 text-muted-foreground" />
+                    <span className="text-sm font-bold">{lang === 'en' ? p.labelEn : p.label}</span>
                   </motion.button>
                 ))}
               </div>
@@ -224,12 +223,11 @@ export default function PlanejarVisita() {
                 onClick={() => setStep('time')}
                 className="text-xs text-muted-foreground underline mt-2 block mx-auto"
               >
-                ← Voltar
+                {t('common.voltar')}
               </button>
             </motion.div>
           )}
 
-          {/* STEP 3 — Temas */}
           {step === 'themes' && (
             <motion.div
               key="step-themes"
@@ -239,7 +237,7 @@ export default function PlanejarVisita() {
               className="space-y-4"
             >
               <p className="text-sm text-muted-foreground mb-4">
-                Quais temas mais interessam a vocês? (Selecione um ou mais)
+                {t('planejar.temas')}
               </p>
               <div className="grid grid-cols-2 gap-3">
                 {themeOptions.map((theme) => {
@@ -256,7 +254,7 @@ export default function PlanejarVisita() {
                       }`}
                     >
                       <Palette className="w-4 h-4 mx-auto mb-1" />
-                      {theme.label}
+                      {lang === 'en' ? theme.labelEn : theme.label}
                     </motion.button>
                   );
                 })}
@@ -266,18 +264,17 @@ export default function PlanejarVisita() {
                 onClick={generateRoute}
                 className="w-full py-4 bg-primary text-primary-foreground font-black text-base mt-4 hover:bg-primary/90 transition-colors"
               >
-                Gerar Meu Roteiro →
+                {t('planejar.gerar')} →
               </motion.button>
               <button
                 onClick={() => setStep('profile')}
                 className="text-xs text-muted-foreground underline block mx-auto"
               >
-                ← Voltar
+                {t('common.voltar')}
               </button>
             </motion.div>
           )}
 
-          {/* STEP 4 — Resultado */}
           {step === 'result' && suggested.length > 0 && (
             <motion.div
               key="step-result"
@@ -286,26 +283,31 @@ export default function PlanejarVisita() {
               exit={{ opacity: 0 }}
               className="space-y-4"
             >
-              {/* Summary card */}
               <div className="bg-primary/10 border border-primary p-4 mb-2">
-                <p className="text-xs font-semibold uppercase text-primary tracking-wider mb-1">Roteiro Personalizado</p>
+                <p className="text-xs font-semibold uppercase text-primary tracking-wider mb-1">
+                  {t('planejar.step4')}
+                </p>
                 <p className="text-foreground text-sm">
                   <span className="font-bold">{suggested.length} {suggested.length === 1 ? 'exposição' : 'exposições'}</span> ·{' '}
                   aprox. <span className="font-bold">{totalDuration} minutos</span> ·{' '}
-                  {profileOptions.find(p => p.id === selectedProfile)?.emoji}{' '}
-                  {profileOptions.find(p => p.id === selectedProfile)?.label}
+                  {lang === 'en'
+                    ? profileOptions.find(p => p.id === selectedProfile)?.labelEn
+                    : profileOptions.find(p => p.id === selectedProfile)?.label}
                 </p>
                 {selectedThemes.length > 0 && (
                   <p className="text-xs text-muted-foreground mt-1">
-                    Temas: {selectedThemes.map(t => themeOptions.find(o => o.id === t)?.label).join(', ')}
+                    {lang === 'en' ? 'Topics' : 'Temas'}: {selectedThemes.map(t => {
+                      const opt = themeOptions.find(o => o.id === t);
+                      return lang === 'en' ? opt?.labelEn : opt?.label;
+                    }).join(', ')}
                   </p>
                 )}
               </div>
 
               <div className="flex items-center justify-between mb-2">
-                <h2 className="text-xl font-black text-foreground">Seu Roteiro</h2>
+                <h2 className="text-xl font-black text-foreground">{t('planejar.roteiro')}</h2>
                 <button onClick={handleReset} className="flex items-center gap-1 text-primary text-xs font-semibold">
-                  <RotateCcw className="w-4 h-4" /> Recomeçar
+                  <RotateCcw className="w-4 h-4" /> {t('planejar.recomecar')}
                 </button>
               </div>
 
@@ -330,7 +332,7 @@ export default function PlanejarVisita() {
                         </p>
                         {expo.isMainExhibition && (
                           <span className="shrink-0 text-[10px] font-bold uppercase bg-primary text-primary-foreground px-1.5 py-0.5">
-                            Principal
+                            {t('planejar.principal')}
                           </span>
                         )}
                       </div>
@@ -344,7 +346,6 @@ export default function PlanejarVisita() {
           )}
         </AnimatePresence>
 
-        {/* Exhibition detail modal */}
         <AnimatePresence>
           {selectedExpo && (
             <motion.div
@@ -376,7 +377,7 @@ export default function PlanejarVisita() {
                     onClick={() => setSelectedExpo(null)}
                     className="mt-6 w-full py-3 bg-primary text-primary-foreground font-bold text-center"
                   >
-                    Fechar
+                    {t('common.fechar')}
                   </button>
                 </div>
               </motion.div>

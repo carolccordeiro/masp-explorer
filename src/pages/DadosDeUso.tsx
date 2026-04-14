@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Shield, Eye, Clock, BarChart3, Trash2 } from 'lucide-react';
 import { MaspHeader } from '@/components/MaspHeader';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const dataItems = [
   {
@@ -26,15 +27,17 @@ const dataItems = [
 ];
 
 export default function DadosDeUso() {
+  const { t } = useLanguage();
+
   return (
     <div className="min-h-screen bg-background">
       <MaspHeader />
 
       <div className="px-6 py-8">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-3xl font-black text-foreground mb-2">Dados de Uso</h1>
+          <h1 className="text-3xl font-black text-foreground mb-2">{t('dados.titulo')}</h1>
           <p className="text-muted-foreground text-sm mb-8">
-            Transparência sobre como seus dados são utilizados
+            {t('dados.subtitulo')}
           </p>
         </motion.div>
 
@@ -59,7 +62,7 @@ export default function DadosDeUso() {
         </div>
 
         <div className="p-4 bg-masp-light border-l-4 border-primary mb-6">
-          <p className="font-bold text-foreground text-sm mb-2">Seus direitos</p>
+          <p className="font-bold text-foreground text-sm mb-2">{t('dados.direitos')}</p>
           <ul className="text-xs text-muted-foreground space-y-1.5 leading-relaxed">
             <li>Você pode encerrar a sessão a qualquer momento</li>
             <li>Dados de navegação são anonimizados automaticamente</li>
@@ -71,7 +74,7 @@ export default function DadosDeUso() {
         <div className="p-4 border border-border">
           <div className="flex items-center gap-3 mb-2">
             <Trash2 className="w-4 h-4 text-muted-foreground" />
-            <p className="font-bold text-foreground text-sm">Exclusão de dados</p>
+            <p className="font-bold text-foreground text-sm">{t('dados.exclusao')}</p>
           </div>
           <p className="text-xs text-muted-foreground leading-relaxed">
             Para solicitar a exclusão dos seus dados, entre em contato pelo e-mail{' '}

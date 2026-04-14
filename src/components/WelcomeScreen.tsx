@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface WelcomeScreenProps {
   onStart: () => void;
@@ -7,6 +8,7 @@ interface WelcomeScreenProps {
 
 export function WelcomeScreen({ onStart }: WelcomeScreenProps) {
   const [accepted, setAccepted] = useState(false);
+  const { t } = useLanguage();
 
   return (
     <motion.div
@@ -43,7 +45,7 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps) {
         transition={{ delay: 0.5 }}
         className="relative z-10 text-primary-foreground/60 text-sm text-center mb-12 max-w-sm"
       >
-        Totem Interativo Inteligente · Powered by KORA · Flexmedia
+        {t('welcome.subtitle')}
       </motion.p>
 
       {/* Consent checkbox */}
@@ -73,9 +75,7 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps) {
             )}
           </div>
           <span className="text-xs text-primary-foreground/70 leading-relaxed">
-            Ao continuar, concordo com a coleta e uso dos meus dados de interação conforme a{' '}
-            <span className="underline text-primary-foreground/90">Política de Privacidade</span> do MASP.
-            Os dados serão utilizados para melhorar a experiência do visitante.
+            {t('welcome.consent')}
           </span>
         </label>
       </motion.div>
@@ -105,7 +105,7 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps) {
               : 'bg-primary-foreground/20 text-primary-foreground/40 cursor-not-allowed'
           }`}
         >
-          TOQUE PARA COMEÇAR
+          {t('welcome.start')}
         </motion.button>
       </motion.div>
 
