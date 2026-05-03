@@ -33,7 +33,7 @@ export default function Index() {
     { title: t('menu.mapa'), description: t('menu.mapa.desc'), icon: Map, path: '/mapa', color: 'bg-primary' },
     { title: t('menu.colecao'), description: t('menu.colecao.desc'), icon: Heart, path: '/colecao', color: 'bg-primary' },
     { title: t('menu.quiz'), description: t('menu.quiz.desc'), icon: HelpCircle, path: '/quiz', color: 'bg-masp-black' },
-    { title: t('menu.parceiros'), description: t('menu.parceiros.desc'), icon: Store, path: '/parceiros', color: 'bg-masp-black' },
+    
     { title: t('menu.info'), description: t('menu.info.desc'), icon: Info, path: '/informacoes', color: 'bg-masp-black' },
     { title: t('menu.dados'), description: t('menu.dados.desc'), icon: Shield, path: '/dados', color: 'bg-masp-black' },
   ];
