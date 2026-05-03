@@ -58,7 +58,7 @@ function TotemShell() {
         <Route path="/mapa" element={<MapaInterativo />} />
         <Route path="/colecao" element={<MinhaColecao />} />
         <Route path="/dados" element={<DadosDeUso />} />
-        <Route path="/parceiros" element={<Parceiros />} />
+        
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
