@@ -18,7 +18,7 @@ import AssistenteIA from "./pages/AssistenteIA.tsx";
 import MapaInterativo from "./pages/MapaInterativo.tsx";
 import MinhaColecao from "./pages/MinhaColecao.tsx";
 import DadosDeUso from "./pages/DadosDeUso.tsx";
-import Parceiros from "./pages/Parceiros.tsx";
+
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
