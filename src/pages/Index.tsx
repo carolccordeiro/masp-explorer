@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, HelpCircle, Info, Coffee, Sparkles, Map, Heart, Shield, Store } from 'lucide-react';
+import { Calendar, HelpCircle, Info, Coffee, Sparkles, Map, Heart, Shield } from 'lucide-react';
 import { CouponModal } from '@/components/CouponModal';
 import { VoiceButton } from '@/components/VoiceButton';
 import { WelcomeScreen } from '@/components/WelcomeScreen';
 import { MaspHeader } from '@/components/MaspHeader';
+import { AdBanner } from '@/components/AdBanner';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const container = {
