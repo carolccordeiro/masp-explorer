@@ -92,6 +92,9 @@ export default function Index() {
         </p>
       </div>
 
+      <AdBanner />
+
+
       <motion.div
         variants={container}
         initial="hidden"
