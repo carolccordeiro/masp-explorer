@@ -166,6 +166,11 @@ export default function Index() {
         </p>
       </div>
 
+      <footer className="hairline-top mx-6 mt-4 py-4 flex items-center justify-between text-[10px] uppercase tracking-wider text-muted-foreground">
+        <span>MASP · Av. Paulista, 1578</span>
+        <span>Powered by KORA · Flexmedia</span>
+      </footer>
+
       <CouponModal isOpen={couponOpen} onClose={() => setCouponOpen(false)} />
     </div>
   );
