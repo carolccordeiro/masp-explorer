@@ -155,8 +155,9 @@ export default function PlanejarVisita() {
 
       <div className="px-6 py-8">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-3xl font-black text-foreground mb-1">{t('planejar.titulo')}</h1>
-          <p className="text-primary text-xs font-semibold uppercase tracking-widest mb-6">
+          <span className="editorial-eyebrow"><span className="editorial-rule" />MASP · KORA</span>
+          <h1 className="text-3xl font-black text-foreground mt-2 leading-tight">{t('planejar.titulo')}</h1>
+          <p className="text-primary text-xs font-semibold uppercase tracking-widest mt-2 mb-6">
             {stepLabels[step]}
           </p>
         </motion.div>

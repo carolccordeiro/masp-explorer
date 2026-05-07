@@ -26,8 +26,9 @@ export default function MinhaColecao() {
 
       <div className="px-6 py-8">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-3xl font-black text-foreground mb-2">{t('colecao.titulo')}</h1>
-          <p className="text-muted-foreground text-sm mb-6">
+          <span className="editorial-eyebrow"><span className="editorial-rule" />{t('colecao.titulo').toUpperCase()}</span>
+          <h1 className="text-3xl font-black text-foreground mt-2 leading-tight">{t('colecao.titulo')}</h1>
+          <p className="text-muted-foreground text-sm mt-2 mb-6">
             {t('colecao.subtitulo')}
           </p>
         </motion.div>

@@ -231,6 +231,27 @@ export default function Informacoes() {
             </div>
           </div>
           <div>
+            <p className="font-bold text-foreground mb-2">Loja MASP</p>
+            <div className="text-xs text-muted-foreground space-y-1">
+              <p>Livros de arte, catálogos, design, objetos e edições especiais.</p>
+              <p>Edifício Pietro Maria Bardi (Térreo) — mesma rotina do museu.</p>
+            </div>
+          </div>
+          <div>
+            <p className="font-bold text-foreground mb-2">Biblioteca & Centro de Documentação</p>
+            <div className="text-xs text-muted-foreground space-y-1">
+              <p>Acervo de referência sobre arte e história do museu, aberto a pesquisadores mediante agendamento.</p>
+              <p>Edifício Lina Bo Bardi — 1º andar.</p>
+            </div>
+          </div>
+          <div>
+            <p className="font-bold text-foreground mb-2">Programas Educativos</p>
+            <div className="text-xs text-muted-foreground space-y-1">
+              <p>Visitas mediadas, cursos livres, oficinas para crianças e formação de professores.</p>
+              <p>Inscrições em masp.org.br/educativo</p>
+            </div>
+          </div>
+          <div>
             <p className="font-bold text-foreground mb-2">Informações adicionais</p>
             <div className="text-xs text-muted-foreground space-y-1">
               <p>O ingresso dá direito a visitar todas as exposições em cartaz no dia da visita.</p>
@@ -250,8 +271,9 @@ export default function Informacoes() {
 
       <div className="px-6 py-8">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-3xl font-black text-foreground mb-2">{t('info.titulo')}</h1>
-          <p className="text-muted-foreground text-sm mb-8">{t('info.subtitulo')}</p>
+          <span className="editorial-eyebrow"><span className="editorial-rule" />MASP</span>
+          <h1 className="text-3xl font-black text-foreground mt-2 leading-tight">{t('info.titulo')}</h1>
+          <p className="text-muted-foreground text-sm mt-2 mb-8">{t('info.subtitulo')}</p>
         </motion.div>
 
         <div className="space-y-2">

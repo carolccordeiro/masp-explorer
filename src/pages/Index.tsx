@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, HelpCircle, Info, Coffee, Sparkles, Map, Heart, Shield } from 'lucide-react';
+import { Calendar, HelpCircle, Info, Coffee, Sparkles, Map, Heart, Shield, ChevronRight } from 'lucide-react';
 import { CouponModal } from '@/components/CouponModal';
 import { VoiceButton } from '@/components/VoiceButton';
 import { WelcomeScreen } from '@/components/WelcomeScreen';
 import { MaspHeader } from '@/components/MaspHeader';
 import { AdBanner } from '@/components/AdBanner';
+import { EditorialHighlights } from '@/components/EditorialHighlights';
+import { StatsStrip } from '@/components/StatsStrip';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const container = {
@@ -21,7 +23,7 @@ const item = {
 
 export default function Index() {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [couponOpen, setCouponOpen] = useState(false);
   const [started, setStarted] = useState(() => {
     return sessionStorage.getItem('masp-started') === 'true';
@@ -79,9 +81,15 @@ export default function Index() {
 
       <MaspHeader onEndSession={handleEndSession} />
 
-      <div className="px-6 py-8 text-center">
-        <h2 className="text-2xl font-black text-foreground mb-2">{t('index.bemvindo')}</h2>
-        <p className="text-muted-foreground text-sm max-w-md mx-auto">
+      <section className="px-6 pt-8 pb-4">
+        <span className="editorial-eyebrow">
+          <span className="editorial-rule" />
+          {t('index.bemvindo').toUpperCase()}
+        </span>
+        <h1 className="text-3xl md:text-4xl font-black text-foreground leading-[1.05] tracking-tighter mt-2">
+          {lang === 'en' ? 'Discover MASP, your way.' : 'Descubra o MASP, do seu jeito.'}
+        </h1>
+        <p className="text-muted-foreground text-sm mt-3 max-w-md leading-relaxed">
           {t('index.intro').split('KORA').map((part, i, arr) =>
             i < arr.length - 1 ? (
               <span key={i}>{part}<span className="text-primary font-bold">KORA</span></span>
@@ -90,10 +98,23 @@ export default function Index() {
             )
           )}
         </p>
-      </div>
+      </section>
+
+      <StatsStrip />
+
+      <EditorialHighlights />
 
       <AdBanner />
 
+      <section className="px-6 pt-2">
+        <span className="editorial-eyebrow">
+          <span className="editorial-rule" />
+          {lang === 'en' ? 'Explore' : 'Explore'}
+        </span>
+        <h2 className="text-lg font-black text-foreground mt-1 mb-3">
+          {lang === 'en' ? 'What would you like to do?' : 'O que você quer fazer?'}
+        </h2>
+      </section>
 
       <motion.div
         variants={container}
@@ -107,15 +128,16 @@ export default function Index() {
             variants={item}
             whileTap={{ scale: 0.98 }}
             onClick={() => navigate(mi.path)}
-            className="w-full flex items-center gap-4 p-4 bg-background border border-border hover:border-primary transition-colors text-left group"
+            className="hover-lift w-full flex items-center gap-4 p-4 bg-background border border-border hover:border-primary text-left group"
           >
             <div className={`w-12 h-12 ${mi.color} flex items-center justify-center shrink-0`}>
               <mi.icon className="w-6 h-6 text-primary-foreground" />
             </div>
-            <div>
+            <div className="flex-1 min-w-0">
               <h3 className="text-base font-bold text-foreground group-hover:text-primary transition-colors">{mi.title}</h3>
-              <p className="text-xs text-muted-foreground">{mi.description}</p>
+              <p className="text-xs text-muted-foreground line-clamp-1">{mi.description}</p>
             </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
           </motion.button>
         ))}
       </motion.div>
@@ -143,6 +165,11 @@ export default function Index() {
           {t('index.voz')}
         </p>
       </div>
+
+      <footer className="hairline-top mx-6 mt-4 py-4 flex items-center justify-between text-[10px] uppercase tracking-wider text-muted-foreground">
+        <span>MASP · Av. Paulista, 1578</span>
+        <span>Powered by KORA · Flexmedia</span>
+      </footer>
 
       <CouponModal isOpen={couponOpen} onClose={() => setCouponOpen(false)} />
     </div>

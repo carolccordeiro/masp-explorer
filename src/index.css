@@ -75,6 +75,39 @@
     background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(0, 75%, 35%) 100%);
   }
 
+  /* Editorial accents */
+  .hairline-top {
+    border-top: 1px solid hsl(var(--border));
+  }
+  .hairline-bottom {
+    border-bottom: 1px solid hsl(var(--border));
+  }
+  .editorial-eyebrow {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: hsl(var(--primary));
+  }
+  .editorial-rule {
+    display: inline-block;
+    width: 28px;
+    height: 2px;
+    background: hsl(var(--primary));
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+  .hover-lift {
+    transition: transform 200ms ease, border-color 200ms ease, background-color 200ms ease;
+  }
+  .hover-lift:hover {
+    transform: translateY(-2px);
+  }
+  .marquee-fade {
+    -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  }
+
   .text-masp-red {
     color: hsl(var(--primary));
   }
