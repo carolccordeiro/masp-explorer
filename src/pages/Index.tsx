@@ -23,7 +23,7 @@ const item = {
 
 export default function Index() {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [couponOpen, setCouponOpen] = useState(false);
   const [started, setStarted] = useState(() => {
     return sessionStorage.getItem('masp-started') === 'true';
