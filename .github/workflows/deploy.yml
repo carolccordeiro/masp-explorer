@@ -27,7 +27,8 @@ jobs:
           cache: "npm"
 
       - name: Install dependencies
-        run: npm ci
+        # legacy-peer-deps: lovable-tagger pins vite <8 mas o projeto usa vite 8
+        run: npm ci --legacy-peer-deps
 
       - name: Build
         run: npm run build
