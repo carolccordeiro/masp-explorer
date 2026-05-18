@@ -79,11 +79,23 @@ export default function QuizEducativo() {
     <div className="min-h-screen bg-background">
       <MaspHeader />
 
-      <div className="px-6 py-8">
+      <div className="px-6 py-10 max-w-3xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-3xl font-black text-foreground mb-2">{t('quiz.titulo')}</h1>
-          <p className="text-muted-foreground text-sm mb-8">
-            {selectedCategory ? selectedCategory.title : t('quiz.escolha')}
+          <span className="editorial-eyebrow">
+            <span className="editorial-rule-long" />
+            {t('quiz.titulo').toUpperCase()}
+          </span>
+          <h1 className="font-display text-5xl md:text-6xl text-foreground mt-3 leading-[0.95]">
+            {selectedCategory ? (
+              <>
+                <span className="font-bold">{selectedCategory.title}</span>
+              </>
+            ) : (
+              t('quiz.titulo')
+            )}
+          </h1>
+          <p className="text-muted-foreground text-base mt-4 mb-10 max-w-md leading-relaxed">
+            {selectedCategory ? selectedCategory.description : t('quiz.escolha')}
           </p>
         </motion.div>
 
@@ -146,19 +158,27 @@ export default function QuizEducativo() {
               exit={{ opacity: 0, x: -30 }}
               className="space-y-6"
             >
-              <div className="flex items-center gap-2">
-                <div className="flex-1 h-1 bg-muted">
-                  <div
-                    className="h-1 bg-primary transition-all"
-                    style={{ width: `${((currentIndex + 1) / selectedCategory.questions.length) * 100}%` }}
+              <div className="flex items-center gap-3">
+                <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground tabular-nums">
+                  {String(currentIndex + 1).padStart(2, '0')}
+                </span>
+                <div className="flex-1 h-px bg-muted relative">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${((currentIndex + 1) / selectedCategory.questions.length) * 100}%` }}
+                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                    className="absolute inset-y-0 left-0 bg-primary"
+                    style={{ height: '2px', top: '-0.5px' }}
                   />
                 </div>
-                <span className="text-xs text-muted-foreground font-medium">
-                  {currentIndex + 1}/{selectedCategory.questions.length}
+                <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground tabular-nums">
+                  / {String(selectedCategory.questions.length).padStart(2, '0')}
                 </span>
               </div>
 
-              <h2 className="text-xl font-bold text-foreground leading-snug">{currentQuestion.question}</h2>
+              <h2 className="font-display text-3xl md:text-4xl text-foreground leading-[1.05]">
+                {currentQuestion.question}
+              </h2>
 
               <div className="space-y-3">
                 {currentQuestion.options.map((opt, i) => {
@@ -217,21 +237,29 @@ export default function QuizEducativo() {
               key="results"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="text-center py-8"
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className="text-center py-12"
             >
-              <div className="w-24 h-24 bg-primary mx-auto flex items-center justify-center mb-6">
-                <span className="text-4xl font-black text-primary-foreground">
-                  {score}/{selectedCategory.questions.length}
+              <span className="editorial-eyebrow">
+                <span className="editorial-rule" />
+                Fim do quiz
+              </span>
+              <div className="my-8 flex flex-col items-center">
+                <span className="font-display text-[clamp(8rem,18vw,12rem)] text-primary leading-[0.8] tabular-nums">
+                  {score}
+                </span>
+                <span className="font-bold text-xl text-muted-foreground mt-2">
+                  de {selectedCategory.questions.length} perguntas
                 </span>
               </div>
-              <h2 className="text-2xl font-black text-foreground mb-2">
+              <h2 className="font-display text-3xl md:text-4xl text-foreground mb-3">
                 {score === selectedCategory.questions.length
                   ? t('quiz.excelente')
                   : score >= selectedCategory.questions.length / 2
                   ? t('quiz.muitobem')
                   : t('quiz.continue')}
               </h2>
-              <p className="text-muted-foreground mb-8">
+              <p className="text-muted-foreground mb-10 max-w-sm mx-auto">
                 {t('quiz.acertou')} {score} {t('quiz.de')} {selectedCategory.questions.length} {t('quiz.perguntas')}
               </p>
 

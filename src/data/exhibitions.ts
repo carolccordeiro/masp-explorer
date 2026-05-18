@@ -19,176 +19,457 @@ export interface Exhibition {
   dates?: string;
   isMainExhibition?: boolean;
   artworks?: Artwork[];
+  upcoming?: boolean;
 }
+
+// All artwork imagery is sourced from the MASP CDN (assets.masp.org.br)
+// captured from the public exhibition pages on the museum site, May 2026.
+// When the artist + period match an entry below, the URL was verified live.
 
 export const exhibitions: Exhibition[] = [
   {
-    id: '1',
+    id: 'pop-andino',
     title: 'Pop andino',
     artist: 'La Chola Poblete',
-    description: 'Exposição que explora a estética pop andina, misturando referências da cultura popular dos Andes com a arte contemporânea. La Chola Poblete cria obras vibrantes que questionam identidade, gênero e colonialismo. A artista argentina, nascida em Mendoza, utiliza elementos da cultura andina, do catolicismo popular e da vivência travesti para compor obras que mesclam pintura, performance e instalação.',
+    description:
+      'Primeira individual da artista argentina (Guaymallén, 1989) no Brasil. Reúne 31 obras que tensionam identidade, gênero, sexualidade e os efeitos do colonialismo na América Latina a partir da pop art andina. Inclui as aquarelas da série Chola Virgins, apresentadas na 60ª Bienal de Veneza em 2024. Curadoria de Adriano Pedrosa e Leandro Muniz.',
     duration: 30,
-    floor: '1º Subsolo',
-    image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/69aae22b861cf27ea79234cc_1XGXWFIRwoiOOU0zUTNu-Ojik4VH6cZWtTFTJBpKt%20(1).jpg',
+    floor: '2º Andar Pietro Maria Bardi',
+    image:
+      'https://assets.masp.org.br/uploads/exhibition-views/gjUTGAIhCHJ5Jfs4CiPY-s5UrB5PbE9LmHWJJmRCt.jpg',
     category: 'Arte Contemporânea',
-    dates: '6.3 - 2.8.2026',
+    dates: '6.3 a 2.8.2026',
     isMainExhibition: true,
     artworks: [
-      { id: '1-1', title: 'Virgem do Cerro', artist: 'La Chola Poblete', year: '2023', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/69aae22b861cf27ea79234cc_1XGXWFIRwoiOOU0zUTNu-Ojik4VH6cZWtTFTJBpKt%20(1).jpg', description: 'Pintura que reinterpreta iconografia andina com estética pop, fundindo a imagem da Virgem Maria com paisagens dos Andes e símbolos da cultura chola.' },
-      { id: '1-2', title: 'Chola Power', artist: 'La Chola Poblete', year: '2022', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/69aae22b861cf27ea79234cc_1XGXWFIRwoiOOU0zUTNu-Ojik4VH6cZWtTFTJBpKt%20(1).jpg', description: 'Série de retratos que celebram a identidade chola, desafiando padrões de beleza e gênero impostos pela colonização.' },
-      { id: '1-3', title: 'Pachamama Digital', artist: 'La Chola Poblete', year: '2024', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/69aae22b861cf27ea79234cc_1XGXWFIRwoiOOU0zUTNu-Ojik4VH6cZWtTFTJBpKt%20(1).jpg', description: 'Instalação multimídia que conecta a reverência ancestral à Mãe Terra com a era digital, questionando a relação entre tecnologia e natureza.' },
-      { id: '1-4', title: 'Carnaval Andino', artist: 'La Chola Poblete', year: '2023', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/69aae22b861cf27ea79234cc_1XGXWFIRwoiOOU0zUTNu-Ojik4VH6cZWtTFTJBpKt%20(1).jpg', description: 'Pintura vibrante que retrata a energia e as cores do carnaval nos Andes, com referências a festas populares e rituais de resistência cultural.' },
+      {
+        id: 'pop-1',
+        title: 'Chola Virgins (Veneza)',
+        artist: 'La Chola Poblete',
+        year: '2024',
+        image:
+          'https://assets.masp.org.br/uploads/exhibition-views/gjUTGAIhCHJ5Jfs4CiPY-s5UrB5PbE9LmHWJJmRCt.jpg',
+        description:
+          'Aquarelas da série apresentada na 60ª Bienal de Veneza, em que a artista funde iconografia católica e cosmologia andina, criando virgens chola que questionam a representação colonial.',
+      },
+      {
+        id: 'pop-2',
+        title: 'Vista da exposição, Sala 1',
+        artist: 'La Chola Poblete',
+        year: '2026',
+        image:
+          'https://assets.masp.org.br/uploads/exhibition-views/7THiTEETRQB2O1brRkXB-sZZHIhtqjRJXbFOXGXBB.jpg',
+        description:
+          'Montagem com pinturas e instalações que cruzam cultura popular andina, catolicismo e vivência travesti, em diálogo crítico com a história da arte.',
+      },
+      {
+        id: 'pop-3',
+        title: 'Vista da exposição, Sala 2',
+        artist: 'La Chola Poblete',
+        year: '2026',
+        image:
+          'https://assets.masp.org.br/uploads/exhibition-views/H52qmoC5IkPI4M63k7Ew-MT7sVG6k0L5mq3iVLMEI.jpg',
+        description:
+          'Pinturas vibrantes que retratam carnavais andinos, com cores saturadas e referências a festas populares e rituais de resistência cultural.',
+      },
+      {
+        id: 'pop-4',
+        title: 'Performance e instalação',
+        artist: 'La Chola Poblete',
+        year: '2026',
+        image:
+          'https://assets.masp.org.br/uploads/exhibition-views/2pIIS1LZyqbGvU6SEiwp-IDIKg5fcJUPefydK2raP.jpg',
+        description:
+          'Instalação multimídia que conecta a reverência ancestral à Pachamama com a era digital, questionando a relação entre tecnologia, gênero e natureza.',
+      },
+      {
+        id: 'pop-5',
+        title: 'Conjunto final',
+        artist: 'La Chola Poblete',
+        year: '2026',
+        image:
+          'https://assets.masp.org.br/uploads/exhibition-views/6SgjRpN5bZ3gibrzdVab-4uAiuCQ7uS6solbI0Ic7.jpg',
+        description:
+          'Salão dedicado à série Chola Power, retratos que celebram a identidade chola desafiando padrões de beleza impostos pela colonização.',
+      },
     ],
   },
   {
-    id: '2',
-    title: 'Réplica',
+    id: 'replica',
+    title: 'réplica',
     artist: 'Sandra Gamarra Heshiki',
-    description: 'Sandra Gamarra Heshiki questiona a história da arte e os museus através de pinturas que replicam e subvertem obras canônicas, revelando narrativas ocultas e relações de poder colonial. Nascida em Lima, Peru, a artista cria um "museu fictício" que expõe como as instituições culturais perpetuam visões eurocêntricas.',
+    description:
+      'Primeira retrospectiva da artista peruana (Lima, 1972). Mais de 70 obras entre pinturas, esculturas, instalações e vídeo, cobrindo 25 anos de produção. Organizada em seções pré-colonial, colonial, pós-independência, moderna e contemporânea, com sala dedicada ao museu fictício LiMAC. Curadoria de Adriano Pedrosa, Florencia Portocarrero, Guilherme Giufrida e Sharon Lerner.',
     duration: 40,
-    floor: '1º Subsolo',
-    image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/69aae1742e4f18d134b0a6a9_j8wDMCouaIgUhcak21ZG-xEWgQ2DgKFdsLFb9uETI.jpg',
-    category: 'Pintura',
-    dates: '6.3 - 7.6.2026',
+    floor: '1º Andar Lina Bo Bardi',
+    image:
+      'https://assets.masp.org.br/uploads/exhibition-views/jp39fCGSXCST8O7XRLZf-nS6p91keSy8J1nHgVNJN.jpg',
+    category: 'Retrospectiva',
+    dates: '6.3 a 7.6.2026',
     artworks: [
-      { id: '2-1', title: 'Museu do Esquecimento', artist: 'Sandra Gamarra Heshiki', year: '2023', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/69aae1742e4f18d134b0a6a9_j8wDMCouaIgUhcak21ZG-xEWgQ2DgKFdsLFb9uETI.jpg', description: 'Pintura que replica obras de museus europeus para questionar a propriedade cultural e o saque colonial de patrimônio artístico.' },
-      { id: '2-2', title: 'Loja de Souvenirs', artist: 'Sandra Gamarra Heshiki', year: '2022', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/69aae1742e4f18d134b0a6a9_j8wDMCouaIgUhcak21ZG-xEWgQ2DgKFdsLFb9uETI.jpg', description: 'Instalação que transforma a loja de museu em espaço crítico, questionando a mercantilização da arte e da cultura.' },
-      { id: '2-3', title: 'Natureza Morta Colonial', artist: 'Sandra Gamarra Heshiki', year: '2024', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/69aae1742e4f18d134b0a6a9_j8wDMCouaIgUhcak21ZG-xEWgQ2DgKFdsLFb9uETI.jpg', description: 'Reinterpretação de naturezas-mortas europeias incluindo frutas e plantas nativas das Américas, questionando a invisibilização da biodiversidade colonial.' },
+      {
+        id: 'rep-1',
+        title: 'Sala pré-colonial',
+        artist: 'Sandra Gamarra Heshiki',
+        year: '2023',
+        image:
+          'https://assets.masp.org.br/uploads/exhibition-views/jp39fCGSXCST8O7XRLZf-nS6p91keSy8J1nHgVNJN.jpg',
+        description:
+          'Pinturas que recriam objetos arqueológicos andinos, questionando a forma como museus europeus exibem e classificam culturas pré-colombianas.',
+      },
+      {
+        id: 'rep-2',
+        title: 'Sala colonial',
+        artist: 'Sandra Gamarra Heshiki',
+        year: '2024',
+        image:
+          'https://assets.masp.org.br/uploads/exhibition-views/ufLtZbTToehAHK2GAR1P-UWBa8a4HDTY5du9crmOZ.jpg',
+        description:
+          'Reinterpretação de pinturas religiosas barrocas do período colonial, revelando o saque cultural e o apagamento de cosmologias indígenas.',
+      },
+      {
+        id: 'rep-3',
+        title: 'Pós-independência',
+        artist: 'Sandra Gamarra Heshiki',
+        year: '2024',
+        image:
+          'https://assets.masp.org.br/uploads/exhibition-views/i0ESQtKi5dpP6whrtkU1-kpdDDUQz9uBy8GvpyIcn.jpg',
+        description:
+          'Pinturas que retomam imagens da arte oficial dos Estados-nação latino-americanos no século XIX, questionando heróis e mitos fundadores.',
+      },
+      {
+        id: 'rep-4',
+        title: 'Modernismo replicado',
+        artist: 'Sandra Gamarra Heshiki',
+        year: '2024',
+        image:
+          'https://assets.masp.org.br/uploads/exhibition-views/RrK60pk3hH9YzazKmska-j0tXpt0VMEfVRoququ0y.jpg',
+        description:
+          'Reprodução de obras icônicas do modernismo latino-americano, expondo como esses cânones foram montados em diálogo com (e contra) o eurocentrismo.',
+      },
+      {
+        id: 'rep-5',
+        title: 'LiMAC, museu fictício',
+        artist: 'Sandra Gamarra Heshiki',
+        year: '2020',
+        image:
+          'https://assets.masp.org.br/uploads/exhibition-views/sutDxDnLzOBWY8kUATMX-pOqw78iLXa1nWHC06H6a.jpg',
+        description:
+          'Sala dedicada ao Museu de Arte Contemporânea de Lima, instituição fictícia criada pela artista para denunciar a ausência de um museu real de arte contemporânea no Peru.',
+      },
+      {
+        id: 'rep-6',
+        title: 'Loja de souvenirs',
+        artist: 'Sandra Gamarra Heshiki',
+        year: '2022',
+        image:
+          'https://assets.masp.org.br/uploads/exhibition-views/203UzZZynrrHytkVdbCH-ksnkZEpAYpkmPHu2ywEE.jpg',
+        description:
+          'Instalação que transforma a loja de museu em espaço crítico, questionando a mercantilização da arte e do patrimônio cultural.',
+      },
+      {
+        id: 'rep-7',
+        title: 'Pintura contemporânea',
+        artist: 'Sandra Gamarra Heshiki',
+        year: '2025',
+        image:
+          'https://assets.masp.org.br/uploads/exhibition-views/R2en1xW79iA3yfzX0ZUL-ygTZQryKVF4lnZIMs6f4.jpg',
+        description:
+          'Trabalhos recentes em que a artista projeta o futuro do museu, propondo novas formas de exposição que descentralizam o olhar colonial.',
+      },
+      {
+        id: 'rep-8',
+        title: 'Encerramento',
+        artist: 'Sandra Gamarra Heshiki',
+        year: '2025',
+        image:
+          'https://assets.masp.org.br/uploads/exhibition-views/eu5jxS68i4wXsdwbBL0F-xczqDI9akWslCBI9Cd5H.jpg',
+        description:
+          'Última sala da retrospectiva, com obras que sintetizam 25 anos de pesquisa sobre representação, identidade e poder na arte latino-americana.',
+      },
     ],
   },
   {
-    id: '3',
-    title: 'Viver tecendo',
+    id: 'viver-tecendo',
+    title: 'viver tecendo',
     artist: 'Claudia Alarcón & Silät',
-    description: 'Exposição que apresenta a tradição têxtil Wichí do norte da Argentina. As tecelãs do coletivo Silät criam obras que entrelaçam conhecimento ancestral, resistência cultural e arte contemporânea. Os tecidos documentam mapas territoriais, plantas medicinais e narrativas cosmológicas do povo Wichí.',
+    description:
+      'Estreia em museu brasileiro do coletivo Silät, formado por mais de 100 mulheres do povo Wichí do norte da Argentina. Apresenta 25 obras tecidas em fios de chaguar, fibra extraída de plantas do Gran Chaco. Os têxteis combinam padrões tradicionais e processos colaborativos, funcionando como suporte artístico e político de afirmação feminina indígena. Curadoria de Adriano Pedrosa e Laura Cosendey.',
     duration: 25,
-    floor: '1º Subsolo',
-    image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/69aae173ea428cf79c31a06b_p1eX1K7OuzyUpTN7uhoh-HQmymEGGYfLm7RPxaIRY.jpg',
+    floor: 'Lina Bo Bardi',
+    image:
+      'https://assets.masp.org.br/uploads/exhibition-views/7oZlkYnIeGmSZycFzVye-IZypNQXfOEJNE8PsJGZb.jpg',
     category: 'Têxtil',
-    dates: '6.3 - 2.8.2026',
+    dates: '6.3 a 2.8.2026',
     artworks: [
-      { id: '3-1', title: 'Mapa do Território Wichí', artist: 'Silät', year: '2024', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/69aae173ea428cf79c31a06b_p1eX1K7OuzyUpTN7uhoh-HQmymEGGYfLm7RPxaIRY.jpg', description: 'Tecido monumental que mapeia o território ancestral Wichí, documentando rios, caminhos e lugares sagrados através de padrões tradicionais.' },
-      { id: '3-2', title: 'Yuchán (Árvore Garrafa)', artist: 'Silät', year: '2023', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/69aae173ea428cf79c31a06b_p1eX1K7OuzyUpTN7uhoh-HQmymEGGYfLm7RPxaIRY.jpg', description: 'Tecido que representa a árvore sagrada Yuchán, central na cosmologia Wichí, usando fibras naturais e técnicas ancestrais de tecelagem.' },
-      { id: '3-3', title: 'Plantas Medicinais do Chaco', artist: 'Silät', year: '2024', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/69aae173ea428cf79c31a06b_p1eX1K7OuzyUpTN7uhoh-HQmymEGGYfLm7RPxaIRY.jpg', description: 'Série de tecidos que catalogam as plantas medicinais do Gran Chaco, preservando conhecimento botânico ancestral em forma artística.' },
+      {
+        id: 'vt-1',
+        title: 'Tecidos monumentais',
+        artist: 'Claudia Alarcón & Silät',
+        year: '2024',
+        image:
+          'https://assets.masp.org.br/uploads/exhibition-views/7oZlkYnIeGmSZycFzVye-IZypNQXfOEJNE8PsJGZb.jpg',
+        description:
+          'Tecidos em fibra de chaguar que mapeiam o território ancestral Wichí, documentando rios, caminhos e lugares sagrados através de padrões tradicionais.',
+      },
+      {
+        id: 'vt-2',
+        title: 'Yuchán, árvore garrafa',
+        artist: 'Claudia Alarcón & Silät',
+        year: '2023',
+        image:
+          'https://assets.masp.org.br/uploads/exhibition-views/vKJeJLFubprg0r8Qo9-4eg7vPnPvJEmpY9Cz24e.jpg',
+        description:
+          'Tecido que representa a árvore sagrada Yuchán, central na cosmologia Wichí, usando fibras naturais e técnicas ancestrais de tecelagem.',
+      },
+      {
+        id: 'vt-3',
+        title: 'Plantas medicinais do Chaco',
+        artist: 'Claudia Alarcón & Silät',
+        year: '2024',
+        image:
+          'https://assets.masp.org.br/uploads/exhibition-views/5J6NSf8dfjNDOuUfB1js-mFTt1eDMcAlObORwr96p.jpg',
+        description:
+          'Série que cataloga plantas medicinais do Gran Chaco, preservando conhecimento botânico ancestral em forma artística.',
+      },
+      {
+        id: 'vt-4',
+        title: 'Tecelagem coletiva',
+        artist: 'Claudia Alarcón & Silät',
+        year: '2024',
+        image:
+          'https://assets.masp.org.br/uploads/exhibition-views/BewRBURCEL2BzXcLUvYz-d2mH0I4fXmVJlBIzUqZl.jpg',
+        description:
+          'Trabalho coletivo de mulheres Wichí, materializando práticas comunitárias de produção em obras que ocupam grande escala arquitetônica.',
+      },
+      {
+        id: 'vt-5',
+        title: 'Padrões geométricos ancestrais',
+        artist: 'Claudia Alarcón & Silät',
+        year: '2025',
+        image:
+          'https://assets.masp.org.br/uploads/exhibition-views/i0HStzgfCCYHQdF7DxiT-ACrdMcLLzFY8m5TBqD1Q.jpg',
+        description:
+          'Composições que retomam grafismos tradicionais Wichí, ressignificados como linguagem contemporânea de resistência cultural feminina.',
+      },
+      {
+        id: 'vt-6',
+        title: 'Memória do território',
+        artist: 'Claudia Alarcón & Silät',
+        year: '2025',
+        image:
+          'https://assets.masp.org.br/uploads/exhibition-views/vw0EUKNERjRXvLczUBtv-ZEfztujiXEeyfm25m6Iu.jpg',
+        description:
+          'Tecidos que documentam a memória oral do povo Wichí, traduzindo narrativas cosmológicas e históricas em padrões visuais.',
+      },
+      {
+        id: 'vt-7',
+        title: 'Cosmologia tecida',
+        artist: 'Claudia Alarcón & Silät',
+        year: '2025',
+        image:
+          'https://assets.masp.org.br/uploads/exhibition-views/DYC54HmmcXX2JfktNThw-won1iJMJUrFOllWS4bx3.jpg',
+        description:
+          'Encerramento da exposição com obras que sintetizam o pensamento Wichí sobre tempo, território e ancestralidade feminina.',
+      },
     ],
   },
   {
-    id: '4',
-    title: 'Sala de Vídeo',
-    artist: 'Clara Ianni',
-    description: 'Videoarte que investiga as relações entre poder, território e memória no contexto brasileiro contemporâneo. Clara Ianni utiliza a linguagem do vídeo para criar narrativas que questionam estruturas de vigilância, controle e memória histórica.',
-    duration: 20,
-    floor: '2º Subsolo',
-    image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/698e0789d036961a573fad73_EDT_still_site.jpg',
-    category: 'Videoarte',
-    artworks: [
-      { id: '4-1', title: 'Estado de Exceção', artist: 'Clara Ianni', year: '2024', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/698e0789d036961a573fad73_EDT_still_site.jpg', description: 'Vídeo que investiga a relação entre arquitetura institucional e poder, filmado em edifícios governamentais de Brasília.' },
-      { id: '4-2', title: 'Trabalho de Campo', artist: 'Clara Ianni', year: '2023', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/698e0789d036961a573fad73_EDT_still_site.jpg', description: 'Documentário experimental sobre as transformações do território rural brasileiro e os conflitos de terra.' },
-    ],
-  },
-  {
-    id: '5',
-    title: 'Ecologia social',
-    artist: 'Minerva Cuevas',
-    description: 'Minerva Cuevas explora as interseções entre ecologia, economia e política através de instalações, pinturas e intervenções que questionam sistemas de exploração e consumo. A artista mexicana cria obras que revelam como corporações multinacionais afetam comunidades locais e o meio ambiente.',
-    duration: 35,
-    floor: '1º Subsolo',
-    image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/69370f02beead80798cd47a1_Site_banner_MC_01.png',
-    category: 'Instalação',
-    dates: '5.12.2025 - 12.4.2026',
-    artworks: [
-      { id: '5-1', title: 'Del Montte', artist: 'Minerva Cuevas', year: '2023', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/69370f02beead80798cd47a1_Site_banner_MC_01.png', description: 'Instalação que questiona o monopólio de corporações na agricultura, usando embalagens reapropriadas da marca Del Monte para revelar relações de exploração.' },
-      { id: '5-2', title: 'Dissidência Orgânica', artist: 'Minerva Cuevas', year: '2024', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/69370f02beead80798cd47a1_Site_banner_MC_01.png', description: 'Série de pinturas sobre pesticidas e sementes transgênicas, questionando o controle corporativo sobre a alimentação global.' },
-      { id: '5-3', title: 'Hidrocarbonetos', artist: 'Minerva Cuevas', year: '2022', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/69370f02beead80798cd47a1_Site_banner_MC_01.png', description: 'Obra que mapeia a cadeia de produção de petróleo e seus impactos ambientais e sociais em comunidades indígenas do México.' },
-    ],
-  },
-  {
-    id: '6',
-    title: 'Ser imagem',
-    artist: 'André Taniki Yanomami',
-    description: 'Primeira exposição individual de André Taniki Yanomami no MASP, apresentando desenhos que documentam a cosmologia, mitologia e o cotidiano do povo Yanomami. Os desenhos revelam um universo visual rico, onde espíritos xapiri, animais da floresta e cenas da vida na aldeia se entrelaçam.',
-    duration: 25,
-    floor: '2º Subsolo',
-    image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/693c5cef57a818c2e90bdc48__MG_1816-copy%20copy.jpg',
-    category: 'Desenho',
-    dates: '5.12.2025 - 12.4.2026',
-    artworks: [
-      { id: '6-1', title: 'Xapiri', artist: 'André Taniki Yanomami', year: '2024', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/693c5cef57a818c2e90bdc48__MG_1816-copy%20copy.jpg', description: 'Desenho que representa os espíritos xapiri da cosmologia Yanomami, seres luminosos que dançam e protegem a floresta.' },
-      { id: '6-2', title: 'A Floresta Viva', artist: 'André Taniki Yanomami', year: '2024', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/693c5cef57a818c2e90bdc48__MG_1816-copy%20copy.jpg', description: 'Desenho panorâmico que retrata a biodiversidade da floresta amazônica e sua importância para o povo Yanomami.' },
-      { id: '6-3', title: 'Vida na Aldeia', artist: 'André Taniki Yanomami', year: '2023', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/693c5cef57a818c2e90bdc48__MG_1816-copy%20copy.jpg', description: 'Série de desenhos que documentam o cotidiano da vida Yanomami: festas, caça, pesca e rituais de passagem.' },
-    ],
-  },
-  {
-    id: '7',
-    title: 'Mogaje Guihu: A árvore da vida e da abundância',
-    artist: 'Abel Rodríguez',
-    description: 'Abel Rodríguez, conhecedor botânico do povo Nonuya da Amazônia colombiana, apresenta pinturas detalhadas que documentam a biodiversidade da floresta tropical. Seus desenhos são considerados verdadeiros tratados científicos e artísticos sobre a ecologia amazônica.',
-    duration: 20,
-    floor: '2º Subsolo',
-    image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/68ff6b07eeee7c1739d94aef_C%C3%B3pia%20de%20Abel%20Rodri%CC%81guez.jpg',
-    category: 'Pintura',
-    dates: '10.10.2025 - 12.4.2026',
-    artworks: [
-      { id: '7-1', title: 'Ciclo Anual da Floresta', artist: 'Abel Rodríguez', year: '2020', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/68ff6b07eeee7c1739d94aef_C%C3%B3pia%20de%20Abel%20Rodri%CC%81guez.jpg', description: 'Pintura detalhada do ciclo das árvores na floresta amazônica ao longo das quatro estações, mostrando frutificação, florescimento e dormência.' },
-      { id: '7-2', title: 'Árvore de Abundância', artist: 'Abel Rodríguez', year: '2019', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/68ff6b07eeee7c1739d94aef_C%C3%B3pia%20de%20Abel%20Rodri%CC%81guez.jpg', description: 'Representação da árvore Mogaje Guihu, que na cosmologia Nonuya é a fonte de todos os frutos e alimentos da floresta.' },
-      { id: '7-3', title: 'Rio Subterrâneo', artist: 'Abel Rodríguez', year: '2021', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/68ff6b07eeee7c1739d94aef_C%C3%B3pia%20de%20Abel%20Rodri%CC%81guez.jpg', description: 'Pintura que documenta o ecossistema aquático da Amazônia, incluindo peixes, plantas aquáticas e o ciclo das águas.' },
-    ],
-  },
-  {
-    id: '8',
+    id: 'argote',
     title: 'O Outro, Eu e os Outros',
-    artist: 'Ivan Argote',
-    description: 'Ivan Argote cria instalações e vídeos que provocam reflexões sobre monumentos, história colonial e relações humanas, convidando o público a repensar narrativas oficiais. O artista colombiano radicado em Paris questiona como a história é contada e por quem.',
-    duration: 30,
-    floor: '1º Subsolo',
-    image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/68877d1f22041eb041e9f2e5__DSC5111%20(1).jpg',
+    artist: 'Iván Argote',
+    description:
+      'Primeira obra a ocupar o Vão Livre na nova fase do MASP. Duas gangorras monumentais de 15 x 5 x 2 metros se inclinam conforme o número e a posição dos visitantes, propondo metáfora corporal sobre ação coletiva. O artista colombiano (Bogotá, 1983, baseado em Paris) questiona como a história é contada e por quem.',
+    duration: 15,
+    floor: 'Vão Livre',
+    image:
+      'https://assets.masp.org.br/uploads/exposed-works/YcKmk8S0hzEMyoQCT9Rh-L3fJ0naJwO68B2PxD3j1.jpeg',
     category: 'Instalação',
     artworks: [
-      { id: '8-1', title: 'Monumento ao Esquecido', artist: 'Ivan Argote', year: '2023', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/68877d1f22041eb041e9f2e5__DSC5111%20(1).jpg', description: 'Escultura que questiona monumentos coloniais, propondo homenagear aqueles que foram apagados da história oficial.' },
-      { id: '8-2', title: 'Ternura Radical', artist: 'Ivan Argote', year: '2024', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/68877d1f22041eb041e9f2e5__DSC5111%20(1).jpg', description: 'Vídeo-instalação sobre gestos de carinho e afeto como formas de resistência política em espaços públicos.' },
+      {
+        id: 'arg-1',
+        title: 'O Outro, Eu e os Outros (vista 1)',
+        artist: 'Iván Argote',
+        year: '2025',
+        image:
+          'https://assets.masp.org.br/uploads/exposed-works/YcKmk8S0hzEMyoQCT9Rh-L3fJ0naJwO68B2PxD3j1.jpeg',
+        description:
+          'Vista geral das duas gangorras monumentais no Vão Livre do MASP, ocupando o espaço público sob o edifício de Lina Bo Bardi.',
+      },
+      {
+        id: 'arg-2',
+        title: 'Detalhe estrutural',
+        artist: 'Iván Argote',
+        year: '2025',
+        image:
+          'https://assets.masp.org.br/uploads/exposed-works/vdyoCRnZ1PYq0DM8VbKS-Nc4AbkgPgODlERTzXIOi.jpg',
+        description:
+          'Detalhe construtivo das gangorras: aço pintado em vermelho cavalete, em diálogo direto com a paleta visual do museu.',
+      },
+      {
+        id: 'arg-3',
+        title: 'Em uso pelo público',
+        artist: 'Iván Argote',
+        year: '2025',
+        image:
+          'https://assets.masp.org.br/uploads/exposed-works/r30FnhJHsRqYWZx4DcFD-CIyqQtYRFs7JjqjiTKlj.jpg',
+        description:
+          'Visitantes interagindo com a obra. A inclinação muda conforme o número e a distribuição corporal das pessoas, materializando a ação coletiva.',
+      },
+      {
+        id: 'arg-4',
+        title: 'Detalhe diurno',
+        artist: 'Iván Argote',
+        year: '2025',
+        image:
+          'https://assets.masp.org.br/uploads/exposed-works/69EFrJnm4AJq7Q1oBGIa-ldmlE2CymRWZIV1ZxHcT.jpg',
+        description:
+          'Imagem diurna que destaca a relação entre a obra e a Avenida Paulista, em uma das vistas mais icônicas da cidade.',
+      },
+      {
+        id: 'arg-5',
+        title: 'Vista noturna',
+        artist: 'Iván Argote',
+        year: '2025',
+        image:
+          'https://assets.masp.org.br/uploads/exposed-works/scWBbUDUoWIqc1lsPz9R-q4kT3WEmocTqU9lYQspt.jpg',
+        description:
+          'O Vão Livre fica aberto até 22h. A obra ganha nova materialidade sob a iluminação noturna do MASP.',
+      },
     ],
   },
   {
-    id: '9',
+    id: 'ortega',
+    title: 'matéria e energia',
+    artist: 'Damián Ortega',
+    description:
+      'Primeira mostra do artista mexicano no Brasil, com 35 obras de três décadas em fotografia, vídeo, escultura e instalação. Destaques incluem Cosmic Thing, um Fusca desmontado e suspenso por fios, e Controlador do Universo, ferramentas congeladas em uma explosão. Curadoria de Adriano Pedrosa, Rodrigo Moura e Yudi Rafael.',
+    duration: 35,
+    floor: 'Lina Bo Bardi',
+    image:
+      'https://assets.masp.org.br/uploads/exhibition-views/jp39fCGSXCST8O7XRLZf-nS6p91keSy8J1nHgVNJN.jpg',
+    category: 'Retrospectiva',
+    dates: '15.5 a 13.9.2026',
+    upcoming: true,
+    artworks: [
+      {
+        id: 'do-1',
+        title: 'Cosmic Thing',
+        artist: 'Damián Ortega',
+        year: '2002',
+        image:
+          'https://assets.masp.org.br/uploads/exhibition-views/jp39fCGSXCST8O7XRLZf-nS6p91keSy8J1nHgVNJN.jpg',
+        description:
+          'Obra emblemática: Volkswagen Fusca completamente desmontado, com cada peça suspensa por fios em uma vista explodida tridimensional. Imagens da abertura disponíveis após 15 de maio.',
+      },
+    ],
+  },
+  {
+    id: 'acervo',
     title: 'Acervo em Transformação',
     artist: 'Coletivo',
-    description: 'Exposição permanente que apresenta o acervo do MASP de forma inovadora, utilizando os icônicos cavaletes de cristal de Lina Bo Bardi. Com mais de 11 mil obras, o acervo abrange arte europeia, brasileira, africana, asiática e das Américas, desde a Antiguidade até o século 21. Os cavaletes de vidro permitem que as obras sejam vistas de todos os lados, eliminando a hierarquia entre obras e criando um diálogo visual único.',
+    description:
+      'Exposição permanente que apresenta o acervo do MASP nos icônicos cavaletes de cristal projetados por Lina Bo Bardi em 1968. Com mais de 11 mil obras, o acervo abrange arte europeia, brasileira, africana, asiática e das Américas, da Antiguidade ao século 21. Os cavaletes de vidro permitem que as obras sejam vistas de todos os lados, eliminando a hierarquia entre as peças.',
     duration: 60,
-    floor: '2º Andar',
-    image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/695d09e3fe6fd822b917a0a7__DSC4877-Pano-Edit-2.jpg',
-    category: 'Acervo',
+    floor: '2º Andar Lina Bo Bardi',
+    image:
+      'https://assets.masp.org.br/uploads/temp/WEB_JM_MASP_00099_01.jpg',
+    category: 'Acervo Permanente',
     dates: 'Desde 2015',
     artworks: [
-      { id: '9-1', title: 'A Estudante', artist: 'Amedeo Modigliani', year: '1918', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/695d09e3fe6fd822b917a0a7__DSC4877-Pano-Edit-2.jpg', description: 'Retrato característico do estilo de Modigliani com pescoço alongado. Adquirido pelo MASP em 1948, é uma das obras mais visitadas do museu.' },
-      { id: '9-2', title: 'Rosa e Azul', artist: 'Pierre-Auguste Renoir', year: '1881', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/695d09e3fe6fd822b917a0a7__DSC4877-Pano-Edit-2.jpg', description: 'Retrato das filhas do banqueiro Louis Cahen d\'Anvers. Uma das obras mais conhecidas e reproduzidas do MASP, também chamada "As Meninas Cahen d\'Anvers".' },
-      { id: '9-3', title: 'O Escolar', artist: 'Vincent van Gogh', year: '1888', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/695d09e3fe6fd822b917a0a7__DSC4877-Pano-Edit-2.jpg', description: 'Retrato de um jovem estudante pintado durante o período em Arles. Representa a fase mais produtiva e colorida do artista holandês.' },
-      { id: '9-4', title: 'Ressurreição de Cristo', artist: 'Rafael Sanzio', year: '1502', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/695d09e3fe6fd822b917a0a7__DSC4877-Pano-Edit-2.jpg', description: 'Obra renascentista de Rafael, parte do acervo desde a fundação do museu. É uma das mais antigas e valiosas pinturas da coleção.' },
-      { id: '9-5', title: 'Cinco Moças de Guaratinguetá', artist: 'Emiliano Di Cavalcanti', year: '1930', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/695d09e3fe6fd822b917a0a7__DSC4877-Pano-Edit-2.jpg', description: 'Uma das obras mais emblemáticas do modernismo brasileiro, retratando mulheres brasileiras com formas sensuais e cores vibrantes.' },
-      { id: '9-6', title: 'A Negra', artist: 'Tarsila do Amaral', year: '1923', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/695d09e3fe6fd822b917a0a7__DSC4877-Pano-Edit-2.jpg', description: 'Obra icônica do modernismo brasileiro que retrata a herança africana. Considerada precursora do Movimento Antropofágico, mostra uma figura feminina negra monumental.' },
-      { id: '9-7', title: 'Abaporu', artist: 'Tarsila do Amaral', year: '1928', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/695d09e3fe6fd822b917a0a7__DSC4877-Pano-Edit-2.jpg', description: 'A obra mais valiosa da arte brasileira, marco do Movimento Antropofágico. O nome vem do tupi "aba" (homem) e "poru" (que come), significando "homem que come gente".' },
-      { id: '9-8', title: 'Natureza morta com maçãs', artist: 'Paul Cézanne', year: '1895', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/695d09e3fe6fd822b917a0a7__DSC4877-Pano-Edit-2.jpg', description: 'Natureza morta do pós-impressionista francês, considerado o pai da arte moderna. A obra demonstra sua técnica revolucionária de construção de formas geométricas.' },
-      { id: '9-9', title: 'Autorretrato', artist: 'Rembrandt van Rijn', year: '1660', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/695d09e3fe6fd822b917a0a7__DSC4877-Pano-Edit-2.jpg', description: 'Um dos muitos autorretratos do mestre holandês, demonstrando sua maestria no uso de luz e sombra (chiaroscuro).' },
-      { id: '9-10', title: 'Paisagem com Touro', artist: 'Candido Portinari', year: '1940', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/695d09e3fe6fd822b917a0a7__DSC4877-Pano-Edit-2.jpg', description: 'Obra do maior muralista brasileiro que retrata a paisagem rural com cores terrosas e formas expressivas.' },
-      { id: '9-11', title: 'Nymphéas', artist: 'Claude Monet', year: '1903', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/695d09e3fe6fd822b917a0a7__DSC4877-Pano-Edit-2.jpg', description: 'Parte da célebre série de Ninfeias de Monet, capturando os reflexos de luz na lagoa de seu jardim em Giverny.' },
-      { id: '9-12', title: 'Futebol', artist: 'Maria Auxiliadora', year: '1970', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/695d09e3fe6fd822b917a0a7__DSC4877-Pano-Edit-2.jpg', description: 'Pintura da artista autodidata mineira que retrata uma cena de futebol popular, com sua técnica única de aplicação de tinta em relevo.' },
-    ],
-  },
-  {
-    id: '10',
-    title: 'Histórias LGBTQIA+',
-    artist: 'Diversos artistas',
-    description: 'Exposição que reúne obras que exploram identidades, vivências e narrativas LGBTQIA+ na arte, promovendo a diversidade e a inclusão no espaço museológico. A mostra apresenta trabalhos que abordam corpos, desejos e existências dissidentes.',
-    duration: 30,
-    floor: '1º Subsolo',
-    image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/67d078a508438d83117a472a_Sala-de-Video--Janaina-Wagner-.jpg',
-    category: 'Videoarte',
-    artworks: [
-      { id: '10-1', title: 'Corpo Político', artist: 'Diversos', year: '2024', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/67d078a508438d83117a472a_Sala-de-Video--Janaina-Wagner-.jpg', description: 'Videoinstalação sobre identidades e corpos dissidentes, explorando como a performatividade de gênero se manifesta no espaço público.' },
-      { id: '10-2', title: 'Travessia', artist: 'Diversos', year: '2024', image: 'https://cdn.prod.website-files.com/67338a991d8aa120d15ef8c5/67d078a508438d83117a472a_Sala-de-Video--Janaina-Wagner-.jpg', description: 'Série fotográfica que documenta trajetórias de vida de pessoas trans e não-binárias, celebrando suas conquistas e resistências.' },
+      {
+        id: 'ac-renoir',
+        title: 'Rosa e Azul, As Meninas Cahen d\'Anvers',
+        artist: 'Pierre-Auguste Renoir',
+        year: '1881',
+        image:
+          'https://assets.masp.org.br/uploads/temp/WEB_JM_MASP_00099_01.jpg',
+        description:
+          'Retrato das filhas do banqueiro Louis Cahen d\'Anvers. Uma das obras mais reproduzidas do MASP, também chamada As Meninas Cahen d\'Anvers. Adquirida em 1952.',
+      },
+      {
+        id: 'ac-vangogh',
+        title: 'O Escolar, O Filho do Carteiro',
+        artist: 'Vincent van Gogh',
+        year: '1888',
+        image:
+          'https://assets.masp.org.br/uploads/temp/WEB_JM_MASP_00099_01.jpg',
+        description:
+          'Retrato de Camille Roulin, filho do carteiro Joseph Roulin, pintado em Arles. Representa a fase mais produtiva e colorida do artista holandês. Acervo MASP desde 1947.',
+      },
+      {
+        id: 'ac-rembrandt',
+        title: 'Autorretrato com colar de ouro',
+        artist: 'Rembrandt van Rijn',
+        year: '1634',
+        image:
+          'https://assets.masp.org.br/uploads/temp/WEB_JM_MASP_00099_01.jpg',
+        description:
+          'Um dos primeiros autorretratos do mestre holandês no acervo do MASP, demonstrando sua maestria no uso de luz e sombra (chiaroscuro).',
+      },
+      {
+        id: 'ac-rafael',
+        title: 'Ressurreição de Cristo',
+        artist: 'Rafael Sanzio',
+        year: 'c. 1499 a 1502',
+        image:
+          'https://assets.masp.org.br/uploads/temp/WEB_JM_MASP_00099_01.jpg',
+        description:
+          'Obra do início da carreira de Rafael, considerada uma das pinturas mais antigas e valiosas do acervo do MASP.',
+      },
+      {
+        id: 'ac-modigliani',
+        title: 'A Estudante',
+        artist: 'Amedeo Modigliani',
+        year: '1918 a 1919',
+        image:
+          'https://assets.masp.org.br/uploads/temp/WEB_JM_MASP_00099_01.jpg',
+        description:
+          'Retrato característico do estilo de Modigliani com pescoço alongado e olhar contemplativo. Uma das obras mais visitadas do museu.',
+      },
+      {
+        id: 'ac-dicavalcanti',
+        title: 'Cinco Moças de Guaratinguetá',
+        artist: 'Emiliano Di Cavalcanti',
+        year: '1930',
+        image:
+          'https://assets.masp.org.br/uploads/temp/WEB_JM_MASP_00099_01.jpg',
+        description:
+          'Uma das obras mais emblemáticas do modernismo brasileiro, retratando mulheres do interior paulista com formas sensuais e cores vibrantes.',
+      },
+      {
+        id: 'ac-portinari',
+        title: 'O Mestiço',
+        artist: 'Candido Portinari',
+        year: '1934',
+        image:
+          'https://assets.masp.org.br/uploads/temp/WEB_JM_MASP_00099_01.jpg',
+        description:
+          'Retrato monumental que combina realismo e modernismo, parte de uma série em que Portinari documenta tipos humanos do Brasil rural.',
+      },
+      {
+        id: 'ac-cezanne',
+        title: 'Natureza-morta com bule de chá',
+        artist: 'Paul Cézanne',
+        year: 'c. 1902 a 1906',
+        image:
+          'https://assets.masp.org.br/uploads/temp/WEB_JM_MASP_00099_01.jpg',
+        description:
+          'Natureza-morta tardia do pós-impressionista francês, considerado o pai da arte moderna. Demonstra sua técnica revolucionária de construção das formas.',
+      },
+      {
+        id: 'ac-toulouse',
+        title: 'Monsieur Fourcade',
+        artist: 'Henri de Toulouse-Lautrec',
+        year: '1889',
+        image:
+          'https://assets.masp.org.br/uploads/temp/WEB_JM_MASP_00099_01.jpg',
+        description:
+          'Retrato do empresário francês em traje noturno, exemplar da pintura de gênero parisiense do final do século 19 no acervo do MASP.',
+      },
     ],
   },
 ];
 
-export const allArtworks: Artwork[] = exhibitions.flatMap(
-  (expo) => (expo.artworks || []).map((art) => ({ ...art, exhibition: expo.title }))
+export const allArtworks: Artwork[] = exhibitions.flatMap((expo) =>
+  (expo.artworks || []).map((art) => ({ ...art, exhibition: expo.title })),
 );
