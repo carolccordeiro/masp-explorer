@@ -27,8 +27,9 @@ jobs:
           cache: "npm"
 
       - name: Install dependencies
-        # legacy-peer-deps: lovable-tagger pins vite <8 mas o projeto usa vite 8
-        run: npm ci --legacy-peer-deps
+        # npm install (nao ci) porque o package-lock esta desincronizado com package.json.
+        # legacy-peer-deps: lovable-tagger pins vite <8 mas o projeto usa vite 8.
+        run: npm install --legacy-peer-deps
 
       - name: Build
         run: npm run build
