@@ -26,6 +26,8 @@ const translations: Record<Lang, Record<string, string>> = {
     // Header
     'header.menu': 'Menu',
     'header.encerrar': 'Encerrar',
+    'header.ouvir': 'Ouvir',
+    'header.parar': 'Parar',
     // Welcome
     'welcome.subtitle': 'Totem Interativo Inteligente · Powered by KORA · Flexmedia',
     'welcome.consent': 'Ao continuar, concordo com a coleta e uso dos meus dados de interação conforme a Política de Privacidade do MASP. Os dados serão utilizados para melhorar a experiência do visitante.',
@@ -127,6 +129,8 @@ const translations: Record<Lang, Record<string, string>> = {
     // Header
     'header.menu': 'Menu',
     'header.encerrar': 'End',
+    'header.ouvir': 'Listen',
+    'header.parar': 'Stop',
     // Welcome
     'welcome.subtitle': 'Smart Interactive Totem · Powered by KORA · Flexmedia',
     'welcome.consent': 'By continuing, I agree to the collection and use of my interaction data in accordance with MASP\'s Privacy Policy. Data will be used to improve the visitor experience.',

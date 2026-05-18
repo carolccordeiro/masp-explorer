@@ -104,6 +104,134 @@ export default function MapaInterativo() {
           ))}
         </div>
 
+        {/* Visual schematic, vertical stack of floors with top-down order.
+            Each rectangle is clickable and syncs with the expandable list below. */}
+        <div className="mb-6 border border-border bg-muted/20 p-4">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-3">
+            {activeBuilding}
+          </p>
+
+          {(() => {
+            // Order floors from top to bottom of the building.
+            const priority = (id: string) => {
+              if (id === '2-andar') return 0;
+              if (id === '1-andar') return 1;
+              if (id === 'vao-livre' || id === 'pmb-terreo') return 2;
+              if (id === '1-subsolo' || id === 'pmb-subsolo') return 3;
+              if (id === '2-subsolo') return 4;
+              return 5;
+            };
+            const ordered = [...filteredFloors].sort((a, b) => priority(a.id) - priority(b.id));
+            const rowH = 36;
+            const groundIdx = ordered.findIndex((f) => f.id === 'vao-livre' || f.id === 'pmb-terreo');
+            const totalH = ordered.length * rowH + 24;
+
+            return (
+              <svg
+                viewBox={`0 0 320 ${totalH}`}
+                className="w-full h-auto max-w-md mx-auto block"
+                role="img"
+                aria-label={`Corte esquemático do ${activeBuilding}`}
+              >
+                <defs>
+                  <pattern id="hash" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+                    <line x1="0" y1="0" x2="0" y2="6" stroke="hsl(var(--muted-foreground) / 0.25)" strokeWidth="1" />
+                  </pattern>
+                </defs>
+
+                {ordered.map((floor, i) => {
+                  const y = 12 + i * rowH;
+                  const isSelected = selectedFloor?.id === floor.id;
+                  const isGround = floor.id === 'vao-livre' || floor.id === 'pmb-terreo';
+                  const expoCount = getExhibitionsForFloor(floor.name).length;
+
+                  return (
+                    <g
+                      key={floor.id}
+                      onClick={() => setSelectedFloor(isSelected ? null : floor)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <rect
+                        x="40"
+                        y={y}
+                        width="240"
+                        height={rowH - 4}
+                        fill={isSelected ? 'hsl(var(--primary))' : isGround ? 'url(#hash)' : 'hsl(var(--background))'}
+                        stroke={isSelected ? 'hsl(var(--primary))' : 'hsl(var(--border))'}
+                        strokeWidth="1.5"
+                      />
+                      <text
+                        x="52"
+                        y={y + (rowH - 4) / 2}
+                        fontSize="13"
+                        fontWeight="700"
+                        fontFamily="inherit"
+                        fill={isSelected ? 'hsl(var(--primary-foreground))' : 'hsl(var(--foreground))'}
+                        dominantBaseline="middle"
+                      >
+                        {floor.name}
+                      </text>
+                      {expoCount > 0 && (
+                        <g>
+                          <circle
+                            cx="265"
+                            cy={y + (rowH - 4) / 2}
+                            r="11"
+                            fill={isSelected ? 'hsl(var(--primary-foreground))' : 'hsl(var(--primary))'}
+                          />
+                          <text
+                            x="265"
+                            y={y + (rowH - 4) / 2}
+                            fontSize="12"
+                            fontWeight="800"
+                            fontFamily="inherit"
+                            fill={isSelected ? 'hsl(var(--primary))' : 'hsl(var(--primary-foreground))'}
+                            textAnchor="middle"
+                            dominantBaseline="middle"
+                          >
+                            {expoCount}
+                          </text>
+                        </g>
+                      )}
+                    </g>
+                  );
+                })}
+
+                {/* Ground line drawn in the gap between the ground floor row and the first subsoil */}
+                {groundIdx >= 0 && (() => {
+                  const groundY = 12 + (groundIdx + 1) * rowH - 2;
+                  return (
+                    <line
+                      x1="20"
+                      y1={groundY}
+                      x2="300"
+                      y2={groundY}
+                      stroke="hsl(var(--primary))"
+                      strokeWidth="1"
+                      strokeDasharray="4 4"
+                    />
+                  );
+                })()}
+
+                {/* Side rule */}
+                <line x1="34" y1="6" x2="34" y2={totalH - 6} stroke="hsl(var(--border))" strokeWidth="1.5" />
+              </svg>
+            );
+          })()}
+
+          <div className="flex items-center justify-between mt-3 text-[10px] text-muted-foreground gap-2 flex-wrap">
+            <span className="flex items-center gap-1.5">
+              <span className="inline-block w-3 h-3 bg-primary rounded-full" />
+              número de exposições no andar
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="inline-block w-3 border-t border-dashed border-primary" />
+              nível da rua, Av. Paulista
+            </span>
+            <span>Toque para ver detalhes</span>
+          </div>
+        </div>
+
         {/* Visual floor stack */}
         <div className="space-y-2 mb-8">
           {filteredFloors.map((floor, i) => {

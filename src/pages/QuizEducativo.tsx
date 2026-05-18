@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Check, X, RotateCcw, Landmark, Palette, Frame, Scissors, BookOpen, Coffee } from 'lucide-react';
 import { MaspHeader } from '@/components/MaspHeader';
 import { quizCategories, QuizCategory, QuizQuestion } from '@/data/quizzes';
+import { exhibitions } from '@/data/exhibitions';
 import { useVoice } from '@/hooks/useVoice';
 import { CouponModal } from '@/components/CouponModal';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -13,6 +14,16 @@ const iconMap: Record<string, React.ReactNode> = {
   frame: <Frame className="w-7 h-7" />,
   scissors: <Scissors className="w-7 h-7" />,
   'book-open': <BookOpen className="w-7 h-7" />,
+};
+
+// Map each quiz category to an exhibition image when possible, so the cards show
+// the real artwork instead of a generic icon. The fallback keeps the lucide icon.
+const categoryImageMap: Record<string, string | undefined> = {
+  'expo-chola': exhibitions.find((e) => e.artist === 'La Chola Poblete')?.image,
+  'expo-gamarra': exhibitions.find((e) => e.artist === 'Sandra Gamarra Heshiki')?.image,
+  'expo-alarcon': exhibitions.find((e) => e.artist === 'Claudia Alarcón & Silät')?.image,
+  acervo: exhibitions.find((e) => e.title === 'Acervo em Transformação')?.image,
+  // 'masp' fica sem imagem específica, usa o ícone landmark
 };
 
 export default function QuizEducativo() {
@@ -86,26 +97,43 @@ export default function QuizEducativo() {
               exit={{ opacity: 0 }}
               className="space-y-3"
             >
-              {quizCategories.map((cat, i) => (
-                <motion.button
-                  key={cat.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.08 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => startQuiz(cat)}
-                  className="w-full flex items-center gap-4 p-5 border border-border hover:border-primary transition-colors text-left group"
-                >
-                  <div className="w-12 h-12 bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                    {iconMap[cat.iconName]}
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-bold text-foreground group-hover:text-primary transition-colors">{cat.title}</h3>
-                    <p className="text-xs text-muted-foreground">{cat.description} | {cat.questions.length} {t('quiz.perguntas')}</p>
-                  </div>
-                  <ArrowRight className="w-5 h-5 text-muted-foreground" />
-                </motion.button>
-              ))}
+              {quizCategories.map((cat, i) => {
+                const img = categoryImageMap[cat.id];
+                return (
+                  <motion.button
+                    key={cat.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.08 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => startQuiz(cat)}
+                    className="w-full flex items-center gap-4 p-3 border border-border hover:border-primary transition-colors text-left group overflow-hidden"
+                  >
+                    {img ? (
+                      <div className="w-20 h-20 shrink-0 overflow-hidden">
+                        <img
+                          src={img}
+                          alt={cat.title}
+                          className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                          loading="lazy"
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-20 h-20 bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                        {iconMap[cat.iconName]}
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                        {cat.questions.length} {t('quiz.perguntas')}
+                      </span>
+                      <h3 className="font-bold text-foreground group-hover:text-primary transition-colors mt-0.5">{cat.title}</h3>
+                      <p className="text-xs text-muted-foreground line-clamp-1">{cat.description}</p>
+                    </div>
+                    <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+                  </motion.button>
+                );
+              })}
             </motion.div>
           )}
 

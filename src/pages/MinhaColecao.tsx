@@ -5,9 +5,17 @@ import { MaspHeader } from '@/components/MaspHeader';
 import { exhibitions, Artwork } from '@/data/exhibitions';
 import { useCollection } from '@/hooks/useCollection';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { toast } from 'sonner';
 
 export default function MinhaColecao() {
-  const { saved, toggle, isSaved } = useCollection();
+  const { saved, toggle: rawToggle, isSaved } = useCollection();
+
+  // Wrap toggle so the visitor always gets visual feedback when they save or remove an artwork.
+  const toggle = (id: string) => {
+    const wasSaved = isSaved(id);
+    rawToggle(id);
+    toast(wasSaved ? 'Removido dos favoritos' : 'Salvo em Minha Coleção');
+  };
   const [expandedExpo, setExpandedExpo] = useState<string | null>(null);
   const [selectedArtwork, setSelectedArtwork] = useState<(Artwork & { expoTitle: string }) | null>(null);
   const [tab, setTab] = useState<'explorar' | 'salvos'>('explorar');
@@ -81,22 +89,30 @@ export default function MinhaColecao() {
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="grid grid-cols-2 gap-2 p-3 pt-0">
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 p-4 pt-0">
                         {expo.artworks!.map((art) => (
-                          <div key={art.id} className="relative border border-border">
+                          <div key={art.id} className="relative border border-border bg-background group/card overflow-hidden">
                             <button
                               onClick={() => setSelectedArtwork({ ...art, expoTitle: expo.title })}
                               className="w-full text-left"
                             >
-                              <img src={art.image} alt={art.title} className="w-full aspect-square object-cover" />
-                              <div className="p-2">
-                                <p className="text-xs font-bold text-foreground truncate">{art.title}</p>
-                                <p className="text-[10px] text-muted-foreground truncate">{art.artist}{art.year ? `, ${art.year}` : ''}</p>
+                              <div className="aspect-square overflow-hidden">
+                                <img
+                                  src={art.image}
+                                  alt={art.title}
+                                  className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105"
+                                  loading="lazy"
+                                />
+                              </div>
+                              <div className="p-3">
+                                <p className="text-sm font-bold text-foreground truncate group-hover/card:text-primary transition-colors">{art.title}</p>
+                                <p className="text-[11px] text-muted-foreground truncate">{art.artist}{art.year ? `, ${art.year}` : ''}</p>
                               </div>
                             </button>
                             <button
                               onClick={(e) => { e.stopPropagation(); toggle(art.id); }}
-                              className="absolute top-2 right-2 w-8 h-8 bg-background/80 backdrop-blur-sm flex items-center justify-center"
+                              className="absolute top-2 right-2 w-9 h-9 bg-background/90 backdrop-blur-sm flex items-center justify-center hover:bg-background transition-colors"
+                              aria-label={isSaved(art.id) ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
                             >
                               <Heart
                                 className={`w-4 h-4 transition-colors ${
@@ -126,29 +142,37 @@ export default function MinhaColecao() {
                 </p>
               </motion.div>
             ) : (
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                 {savedArtworks.map((art, i) => (
                   <motion.div
                     key={art.id}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.05 }}
-                    className="relative border border-border"
+                    className="relative border border-border bg-background group/card overflow-hidden"
                   >
                     <button
                       onClick={() => setSelectedArtwork(art)}
                       className="w-full text-left"
                     >
-                      <img src={art.image} alt={art.title} className="w-full aspect-square object-cover" />
-                      <div className="p-2">
+                      <div className="aspect-square overflow-hidden">
+                        <img
+                          src={art.image}
+                          alt={art.title}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105"
+                          loading="lazy"
+                        />
+                      </div>
+                      <div className="p-3">
                         <p className="text-[10px] font-semibold uppercase text-primary tracking-wider truncate">{art.expoTitle}</p>
-                        <p className="text-xs font-bold text-foreground truncate">{art.title}</p>
-                        <p className="text-[10px] text-muted-foreground truncate">{art.artist}</p>
+                        <p className="text-sm font-bold text-foreground truncate mt-0.5">{art.title}</p>
+                        <p className="text-[11px] text-muted-foreground truncate">{art.artist}</p>
                       </div>
                     </button>
                     <button
                       onClick={() => toggle(art.id)}
-                      className="absolute top-2 right-2 w-8 h-8 bg-background/80 backdrop-blur-sm flex items-center justify-center"
+                      className="absolute top-2 right-2 w-9 h-9 bg-background/90 backdrop-blur-sm flex items-center justify-center hover:bg-background transition-colors"
+                      aria-label="Remover dos favoritos"
                     >
                       <Heart className="w-4 h-4 fill-primary text-primary" />
                     </button>
