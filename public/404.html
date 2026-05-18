@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Carregando...</title>
+    <script>
+      // SPA fallback for GitHub Pages.
+      // GitHub Pages serves 404.html when the path doesn't match a real file.
+      // We rewrite the URL into a query string the SPA can re-parse on load,
+      // then redirect to / so React Router takes over.
+      // See https://github.com/rafgraph/spa-github-pages
+      (function () {
+        var pathSegmentsToKeep = 1; // "masp-explorer"
+        var l = window.location;
+        l.replace(
+          l.protocol + "//" + l.hostname + (l.port ? ":" + l.port : "") +
+          l.pathname.split("/").slice(0, 1 + pathSegmentsToKeep).join("/") + "/?/" +
+          l.pathname.slice(1).split("/").slice(pathSegmentsToKeep).join("/").replace(/&/g, "~and~") +
+          (l.search ? "&" + l.search.slice(1).replace(/&/g, "~and~") : "") +
+          l.hash
+        );
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>

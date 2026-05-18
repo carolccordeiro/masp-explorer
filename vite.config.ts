@@ -5,6 +5,8 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+  // GitHub Pages serves the site at /masp-explorer/, so all assets need that prefix in production.
+  base: mode === "production" ? "/masp-explorer/" : "/",
   server: {
     host: "::",
     port: 8080,
