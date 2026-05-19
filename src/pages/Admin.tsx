@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   LineChart, Line, Cell,
@@ -6,6 +8,7 @@ import {
 import {
   Eye, MousePointerClick, Clock, ShieldCheck, Ticket, Users, ArrowDownRight, ArrowUpRight,
   Calendar, Map, Heart, Sparkles, Info, Shield, HelpCircle,
+  Lock, ArrowLeft, KeyRound,
 } from 'lucide-react';
 
 /**
@@ -66,12 +69,138 @@ const STATS = [
 
 const tickFormat = (n: number) => n.toLocaleString('pt-BR');
 
+// Senha demo do console operador. Em producao seria autenticacao real
+// (OAuth Flexmedia + RBAC), aqui um gate simples pra mostrar a intencao.
+const ADMIN_PASSWORD = '123';
+
+function PasswordGate({ onUnlock, onBack }: { onUnlock: () => void; onBack: () => void }) {
+  const [input, setInput] = useState('');
+  const [error, setError] = useState(false);
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (input === ADMIN_PASSWORD) {
+      onUnlock();
+    } else {
+      setError(true);
+      setInput('');
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-background flex flex-col">
+      <header className="border-b-2 border-foreground bg-background">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <button
+            onClick={onBack}
+            className="flex items-center gap-2 text-foreground hover:text-primary transition-colors"
+            aria-label="Voltar ao menu do totem"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            <span className="text-sm font-bold uppercase tracking-[0.18em]">Voltar ao menu</span>
+          </button>
+          <span className="text-primary font-black text-2xl tracking-tighter">MASP</span>
+          <span className="text-[10px] font-black tracking-[0.3em] uppercase text-muted-foreground">
+            Console Flexmedia
+          </span>
+        </div>
+      </header>
+
+      <main className="flex-1 flex items-center justify-center px-6 py-10">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="w-full max-w-md"
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <Lock className="w-5 h-5 text-primary" />
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">
+              Acesso restrito
+            </span>
+          </div>
+
+          <h1 className="font-display text-5xl md:text-6xl text-foreground uppercase leading-[0.95]">
+            Console Flexmedia
+          </h1>
+          <div className="brutalist-rule-red mt-5 w-24" />
+          <p className="text-muted-foreground text-base mt-5 leading-relaxed">
+            Esta área é reservada à operação Flexmedia. Informe a senha do operador
+            para continuar.
+          </p>
+
+          <form onSubmit={submit} className="mt-8">
+            <label className="block text-[10px] font-black uppercase tracking-[0.18em] text-foreground mb-2">
+              <KeyRound className="w-3 h-3 inline-block mr-1.5 -mt-0.5" />
+              Senha do operador
+            </label>
+            <input
+              type="password"
+              inputMode="numeric"
+              autoFocus
+              value={input}
+              onChange={(e) => {
+                setInput(e.target.value);
+                if (error) setError(false);
+              }}
+              className={`w-full text-2xl font-display tracking-[0.6em] text-center py-5 border-2 bg-background text-foreground focus:outline-none transition-colors ${
+                error ? 'border-primary' : 'border-foreground focus:border-primary'
+              }`}
+              placeholder="• • •"
+              aria-label="Senha do operador"
+            />
+            {error && (
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary mt-3">
+                Senha incorreta, tente novamente
+              </p>
+            )}
+            <button
+              type="submit"
+              disabled={!input.trim()}
+              className="mt-5 w-full py-5 bg-foreground text-background font-black text-xs uppercase tracking-[0.3em] hover:bg-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+            >
+              Entrar no console
+            </button>
+          </form>
+
+          <p className="text-[10px] text-muted-foreground mt-6 leading-relaxed">
+            Em produção esta tela seria substituída por autenticação Flexmedia com
+            controle de acesso por perfil. Os dados exibidos no console são agregados
+            e anônimos, em conformidade com LGPD.
+          </p>
+        </motion.div>
+      </main>
+    </div>
+  );
+}
+
 export default function Admin() {
+  const navigate = useNavigate();
+  const [unlocked, setUnlocked] = useState(false);
+
+  if (!unlocked) {
+    return (
+      <PasswordGate
+        onUnlock={() => setUnlocked(true)}
+        onBack={() => navigate('/')}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b-2 border-foreground sticky top-0 z-50 bg-background">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
+          <button
+            onClick={() => navigate('/')}
+            className="flex items-center gap-2 text-foreground hover:text-primary transition-colors shrink-0"
+            aria-label="Voltar ao menu do totem"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            <span className="text-xs font-bold uppercase tracking-[0.18em] hidden sm:inline">
+              Voltar ao menu
+            </span>
+          </button>
+          <div className="flex items-center gap-4 shrink-0">
             <span className="text-primary font-black text-2xl tracking-tighter">MASP</span>
             <span className="block w-px h-6 bg-foreground/20" />
             <div>
@@ -81,9 +210,9 @@ export default function Admin() {
               <p className="text-sm font-bold text-foreground">Dashboard de uso do totem</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
-              Periodo
+          <div className="flex items-center gap-3 shrink-0">
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground hidden md:inline">
+              Período
             </span>
             <span className="border-2 border-foreground px-3 py-1 text-xs font-bold uppercase tracking-[0.18em]">
               7 dias · 12 a 18 mai 2026
