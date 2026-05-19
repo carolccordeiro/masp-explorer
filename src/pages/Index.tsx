@@ -95,13 +95,7 @@ export default function Index() {
         </h1>
         <div className="brutalist-rule-red mt-6 w-24" />
         <p className="text-muted-foreground text-sm md:text-base mt-5 max-w-md leading-relaxed">
-          {t('index.intro').split('KORA').map((part, i, arr) =>
-            i < arr.length - 1 ? (
-              <span key={i}>{part}<span className="font-black text-primary">KORA</span></span>
-            ) : (
-              <span key={i}>{part}</span>
-            )
-          )}
+          {t('index.intro')}
         </p>
       </section>
 

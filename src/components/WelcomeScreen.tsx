@@ -26,10 +26,10 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps) {
         className="relative z-10 flex items-center justify-between px-10 py-7 border-b-2 border-primary-foreground/15"
       >
         <span className="text-[10px] font-black tracking-[0.32em] uppercase">
-          Totem · Av. Paulista 1578
+          Totem oficial · Av. Paulista 1578
         </span>
         <span className="text-[10px] font-black tracking-[0.32em] uppercase">
-          MASP / KORA · MMXXVI
+          MASP · 2026
         </span>
       </motion.header>
 
@@ -78,16 +78,16 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps) {
           className="text-lg md:text-2xl font-bold tracking-tight max-w-2xl mt-8 leading-tight"
         >
           Museu de Arte de São Paulo Assis Chateaubriand.<br />
-          Concierge inteligente para sua visita.
+          Roteiro personalizado para sua visita.
         </motion.p>
 
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.85 }}
-          className="text-[10px] tracking-[0.32em] uppercase text-primary-foreground/60 mt-6 font-black"
+          className="text-[10px] tracking-[0.32em] uppercase text-primary-foreground/60 mt-6 font-medium"
         >
-          Powered by KORA · Flexmedia
+          Sua sessão é anônima · Sem login, sem cadastro
         </motion.p>
       </div>
 
@@ -98,32 +98,40 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps) {
         transition={{ delay: 1, duration: 0.4 }}
         className="relative z-10 border-t-2 border-primary-foreground/15 px-10 md:px-16 py-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6"
       >
-        <label className="flex items-start gap-3 cursor-pointer group max-w-md">
-          <button
-            type="button"
-            onClick={() => setAccepted(!accepted)}
-            aria-pressed={accepted}
-            aria-label={t('welcome.consent')}
-            className={`w-5 h-5 border-2 shrink-0 mt-0.5 flex items-center justify-center transition-colors ${
-              accepted
-                ? 'bg-primary-foreground border-primary-foreground'
-                : 'border-primary-foreground/60 group-hover:border-primary-foreground'
-            }`}
-          >
-            {accepted && (
-              <motion.svg
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                width="12" height="12" viewBox="0 0 14 14" fill="none"
-              >
-                <path d="M2 7L5.5 10.5L12 3.5" stroke="hsl(var(--primary))" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-              </motion.svg>
-            )}
-          </button>
-          <span className="text-[11px] text-primary-foreground/80 leading-relaxed font-medium">
-            {t('welcome.consent')}
-          </span>
-        </label>
+        <div className="max-w-md">
+          {/* LGPD reescrito curto e amigavel apos auditoria UX. O texto longo
+              estava assustando visitantes nao-tech. */}
+          <p className="text-[11px] text-primary-foreground leading-relaxed mb-3">
+            <span className="font-bold">Visita anônima.</span>{' '}
+            Não pedimos nome, e-mail ou CPF.
+          </p>
+          <label className="flex items-start gap-3 cursor-pointer group">
+            <button
+              type="button"
+              onClick={() => setAccepted(!accepted)}
+              aria-pressed={accepted}
+              aria-label="Concordo com a política de privacidade do MASP"
+              className={`w-5 h-5 border-2 shrink-0 mt-0.5 flex items-center justify-center transition-colors ${
+                accepted
+                  ? 'bg-primary-foreground border-primary-foreground'
+                  : 'border-primary-foreground/60 group-hover:border-primary-foreground'
+              }`}
+            >
+              {accepted && (
+                <motion.svg
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  width="12" height="12" viewBox="0 0 14 14" fill="none"
+                >
+                  <path d="M2 7L5.5 10.5L12 3.5" stroke="hsl(var(--primary))" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                </motion.svg>
+              )}
+            </button>
+            <span className="text-[11px] text-primary-foreground/80 leading-relaxed">
+              Concordo com a Política de Privacidade do MASP (LGPD)
+            </span>
+          </label>
+        </div>
 
         <motion.button
           onClick={() => accepted && onStart()}

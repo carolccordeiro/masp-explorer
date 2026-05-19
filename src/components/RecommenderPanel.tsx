@@ -1,9 +1,10 @@
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   ScatterChart, Scatter, XAxis, YAxis, ZAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, ReferenceLine,
 } from 'recharts';
-import { Cpu, Sparkles } from 'lucide-react';
+import { Sparkles, Info, X } from 'lucide-react';
 import { Recommendation, featureLabel } from '@/lib/recommender';
 
 /**
@@ -25,6 +26,8 @@ const DOT_COLOR_REST = 'hsl(var(--foreground))';
 const DOT_COLOR_UPCOMING = 'hsl(var(--muted-foreground))';
 
 export function RecommenderPanel({ recommendations, topK = 4, lang = 'pt' }: Props) {
+  const [showHow, setShowHow] = useState(false);
+
   if (recommendations.length === 0) return null;
 
   const topIds = new Set(recommendations.slice(0, topK).map((r) => r.exhibition.id));
@@ -71,21 +74,80 @@ export function RecommenderPanel({ recommendations, topK = 4, lang = 'pt' }: Pro
       <header className="flex items-center justify-between border-b-2 border-foreground p-5 flex-wrap gap-3">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-foreground text-background flex items-center justify-center shrink-0">
-            <Cpu className="w-5 h-5" />
+            <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary flex items-center gap-2">
-              <Sparkles className="w-3 h-3" /> Pipeline IA
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">
+              Recomendações para você
             </span>
             <p className="font-display text-xl md:text-2xl uppercase text-foreground leading-tight mt-0.5">
-              Match KORA
+              Combina com você
             </p>
           </div>
         </div>
-        <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground max-w-xs text-right">
-          Similaridade de cosseno entre seu perfil e o vetor de features de cada exposição
-        </p>
+        <button
+          onClick={() => setShowHow(true)}
+          className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground hover:text-primary transition-colors"
+        >
+          <Info className="w-3 h-3" />
+          Como recomendamos
+        </button>
       </header>
+
+      {/* Modal "Como recomendamos" mostra o que tem por baixo do pano sem
+          assustar o visitante leigo. Visivel sob demanda. */}
+      <AnimatePresence>
+        {showHow && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowHow(false)}
+            className="fixed inset-0 z-50 bg-foreground/70 backdrop-blur-sm flex items-center justify-center p-6"
+          >
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 20, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-background border-2 border-foreground max-w-lg w-full"
+            >
+              <div className="flex items-center justify-between border-b-2 border-foreground p-5">
+                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">
+                  Como recomendamos
+                </span>
+                <button
+                  onClick={() => setShowHow(false)}
+                  className="w-8 h-8 border-2 border-foreground flex items-center justify-center hover:bg-foreground hover:text-background transition-colors"
+                  aria-label="Fechar"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </div>
+              <div className="p-6 space-y-4 text-sm text-foreground leading-relaxed">
+                <p>
+                  Cada exposição tem um <span className="font-bold">perfil curatorial</span>:
+                  qual ciclo do MASP, quanto tempo dura, em qual andar fica e se é destaque.
+                </p>
+                <p>
+                  Pegamos suas escolhas (tempo + temas) e comparamos com cada exposição usando{' '}
+                  <span className="font-bold">similaridade de cosseno</span>, uma fórmula matemática
+                  que mede o quanto dois conjuntos de características são parecidos.
+                </p>
+                <p>
+                  Quanto mais perto de <span className="tnum font-bold">100%</span>, mais a exposição
+                  combina com o que você pediu. O mapa 2D mostra todas as exposições nos eixos
+                  histórico/contemporâneo e latino-americana/internacional.
+                </p>
+                <p className="text-xs text-muted-foreground border-t border-border pt-4">
+                  Nenhum dado pessoal é usado. O cálculo roda no próprio totem, sua sessão
+                  termina e os dados somem em 90 segundos.
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr]">
         {/* Ranking textual */}

@@ -13,8 +13,8 @@ const translations: Record<Lang, Record<string, string>> = {
     'menu.mapa.desc': 'Explore cada andar',
     'menu.colecao': 'Minha Coleção',
     'menu.colecao.desc': 'Salve obras e exposições favoritas',
-    'menu.quiz': 'Quiz Educativo',
-    'menu.quiz.desc': 'Quiz e caça ao tesouro nas exposições',
+    'menu.quiz': 'Conheça o acervo',
+    'menu.quiz.desc': 'Teste seu olhar com perguntas sobre as exposições',
     'menu.info': 'Informações',
     'menu.info.desc': 'Saiba tudo sobre o MASP',
     'menu.dados': 'Dados de Uso',
@@ -25,7 +25,7 @@ const translations: Record<Lang, Record<string, string>> = {
     'menu.cupom.desc': 'Toque para ganhar seu cupom',
     // Header
     'header.menu': 'Menu',
-    'header.encerrar': 'Encerrar',
+    'header.encerrar': 'Início',
     'header.ouvir': 'Ouvir',
     'header.parar': 'Parar',
     // Welcome
@@ -34,7 +34,7 @@ const translations: Record<Lang, Record<string, string>> = {
     'welcome.start': 'TOQUE PARA COMEÇAR',
     // Index
     'index.bemvindo': 'Bem-vindo ao MASP!',
-    'index.intro': 'Sou a KORA, sua guia interativa. Diga quanto tempo você tem e eu crio um roteiro personalizado só para você.',
+    'index.intro': 'O totem cria em segundos um roteiro adaptado ao tempo, perfil e temas que você escolher. Sessão anônima, sem cadastro.',
     'index.voz': 'Diga "Planejar visita", "Quiz", "Mapa", "Assistente" ou "Informações"',
     // Common
     'common.fechar': 'Fechar',
@@ -137,7 +137,7 @@ const translations: Record<Lang, Record<string, string>> = {
     'welcome.start': 'TAP TO START',
     // Index
     'index.bemvindo': 'Welcome to MASP!',
-    'index.intro': 'I\'m KORA, your interactive guide. Tell me how much time you have and I\'ll create a personalized itinerary just for you.',
+    'index.intro': 'The totem creates a personalized itinerary in seconds based on your available time, profile and topics. Anonymous session, no sign-up.',
     'index.voz': 'Say "Plan visit", "Quiz", "Map", "Assistant" or "Information"',
     // Common
     'common.fechar': 'Close',
