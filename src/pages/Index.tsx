@@ -173,7 +173,18 @@ export default function Index() {
 
       <footer className="hairline-top mx-6 mt-4 py-4 flex items-center justify-between text-[10px] uppercase tracking-wider text-muted-foreground">
         <span>MASP · Av. Paulista, 1578</span>
-        <span>Powered by KORA · Flexmedia</span>
+        <div className="flex items-center gap-4">
+          {/* Link discreto pro console Flexmedia. Em producao seria autenticado. */}
+          <button
+            onClick={() => navigate('/admin')}
+            className="hover:text-primary transition-colors"
+            aria-label="Console Flexmedia, operador"
+          >
+            Console Flexmedia
+          </button>
+          <span className="text-muted-foreground/40">·</span>
+          <span>Powered by KORA · Flexmedia</span>
+        </div>
       </footer>
 
       <CouponModal isOpen={couponOpen} onClose={() => setCouponOpen(false)} />

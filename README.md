@@ -1,6 +1,6 @@
 # KORA – Totem Interativo Inteligente Flexmedia
 
-> **Projeto desenvolvido para a disciplina de AI Challenges – FIAP 2025**  
+> **Projeto desenvolvido para a disciplina de AI Challenges – FIAP 2026**  
 > Equipe KORA | Caso de uso: Museu de Arte de São Paulo (MASP)
 
 ---
@@ -102,7 +102,7 @@ npm run build
 
 ## Contexto Acadêmico
 
-Este projeto foi desenvolvido no âmbito do **Challenge FIAP 2025**, integrando as disciplinas:
+Este projeto foi desenvolvido no âmbito do **Challenge FIAP 2026**, integrando as disciplinas:
 
 - AI Challenges
 - AI Computer Systems & Sensors
@@ -124,7 +124,6 @@ O nome **KORA** remete a conceitos de origem, essência e núcleo criativo. Repr
 
 ---
 
-**FIAP 2025 · Equipe KORA · Projeto Flexmedia – Caso de Uso MASP**
+**FIAP 2026 · Equipe KORA · Projeto Flexmedia · Caso de Uso MASP**
 
-
-https://lovable.dev/projects/0f6364eb-b1fd-4dcc-87c6-91a14cb82685?magic_link=mc_e7fc206c-decb-4eca-a358-1063bf836666
+Site público: https://carolccordeiro.github.io/masp-explorer/
