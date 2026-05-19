@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
-import { Shield, Eye, Clock, BarChart3, Trash2 } from 'lucide-react';
+import { Shield, Eye, Clock, BarChart3, Trash2, Lock, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { MaspHeader } from '@/components/MaspHeader';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -28,6 +29,7 @@ const dataItems = [
 
 export default function DadosDeUso() {
   const { t } = useLanguage();
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-background">
@@ -82,6 +84,36 @@ export default function DadosDeUso() {
             fale com um atendente na recepção do museu.
           </p>
         </div>
+
+        {/* Console Flexmedia, acesso restrito operador. Mostrado aqui porque eh
+            a pagina de transparencia de dados, faz sentido conectar com onde os
+            dados anonimos sao visualizados. */}
+        <motion.button
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={() => navigate('/admin')}
+          className="mt-6 w-full flex items-stretch border-2 border-foreground bg-foreground text-background hover:bg-primary hover:border-primary transition-colors group/admin"
+        >
+          <div className="w-14 shrink-0 flex items-center justify-center border-r-2 border-background/20">
+            <Lock className="w-5 h-5" />
+          </div>
+          <div className="flex-1 py-4 px-5 text-left">
+            <span className="block text-[10px] font-black uppercase tracking-[0.3em] opacity-80">
+              Acesso restrito
+            </span>
+            <span className="block font-display text-xl uppercase mt-0.5">
+              Console Flexmedia
+            </span>
+            <span className="block text-xs opacity-80 mt-1">
+              Dashboard de uso anônimo do totem · operador
+            </span>
+          </div>
+          <div className="w-14 shrink-0 flex items-center justify-center">
+            <ArrowRight className="w-5 h-5 group-hover/admin:translate-x-1 transition-transform" />
+          </div>
+        </motion.button>
       </div>
     </div>
   );
