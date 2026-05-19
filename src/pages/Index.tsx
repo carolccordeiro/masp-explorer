@@ -8,6 +8,7 @@ import { WelcomeScreen } from '@/components/WelcomeScreen';
 import { MaspHeader } from '@/components/MaspHeader';
 import { AdBanner } from '@/components/AdBanner';
 import { EditorialHighlights } from '@/components/EditorialHighlights';
+import { UpcomingExhibitions } from '@/components/UpcomingExhibitions';
 import { StatsStrip } from '@/components/StatsStrip';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -29,12 +30,14 @@ export default function Index() {
     return sessionStorage.getItem('masp-started') === 'true';
   });
 
+  // Assistente IA chat retirado do menu por feedback dos visitantes
+  // (respostas inconsistentes). Código preservado em /assistente caso
+  // queiramos reintroduzir com prompt refinado.
   const menuItems = [
     { title: t('menu.planejar'), description: t('menu.planejar.desc'), icon: Calendar, path: '/planejar', color: 'bg-primary' },
-    { title: t('menu.assistente'), description: t('menu.assistente.desc'), icon: Sparkles, path: '/assistente', color: 'bg-primary' },
     { title: t('menu.mapa'), description: t('menu.mapa.desc'), icon: Map, path: '/mapa', color: 'bg-primary' },
     { title: t('menu.colecao'), description: t('menu.colecao.desc'), icon: Heart, path: '/colecao', color: 'bg-primary' },
-    { title: t('menu.quiz'), description: t('menu.quiz.desc'), icon: HelpCircle, path: '/quiz', color: 'bg-masp-black' },
+    { title: t('menu.quiz'), description: t('menu.quiz.desc'), icon: HelpCircle, path: '/quiz', color: 'bg-primary' },
     { title: lang === 'en' ? 'Selfie at MASP' : 'Selfie no MASP', description: lang === 'en' ? 'Take your photo with the brutalist frame' : 'Sua foto com o quadro brutalista', icon: Camera, path: '/selfie', color: 'bg-masp-black' },
     { title: lang === 'en' ? '79 years of MASP' : '79 anos de MASP', description: lang === 'en' ? '1947 to 2026 timeline' : 'Linha do tempo 1947 a 2026', icon: Clock, path: '/sobre-masp', color: 'bg-masp-black' },
     { title: t('menu.info'), description: t('menu.info.desc'), icon: Info, path: '/informacoes', color: 'bg-masp-black' },
@@ -105,6 +108,8 @@ export default function Index() {
       <StatsStrip />
 
       <EditorialHighlights />
+
+      <UpcomingExhibitions />
 
       <AdBanner />
 
