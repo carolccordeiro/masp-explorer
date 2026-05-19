@@ -6,6 +6,7 @@ interface UseVoiceReturn {
   startListening: () => void;
   stopListening: () => void;
   speak: (text: string) => void;
+  stopSpeaking: () => void;
   isSpeaking: boolean;
 }
 
@@ -48,13 +49,21 @@ export function useVoice(): UseVoiceReturn {
   }, []);
 
   const speak = useCallback((text: string) => {
+    // Always cancel any previous utterance, otherwise repeated taps queue speeches
+    speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'pt-BR';
     utterance.rate = 0.95;
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
     speechSynthesis.speak(utterance);
   }, []);
 
-  return { isListening, transcript, startListening, stopListening, speak, isSpeaking };
+  const stopSpeaking = useCallback(() => {
+    speechSynthesis.cancel();
+    setIsSpeaking(false);
+  }, []);
+
+  return { isListening, transcript, startListening, stopListening, speak, stopSpeaking, isSpeaking };
 }

@@ -108,25 +108,36 @@ export default function AssistenteIA() {
       <MaspHeader />
 
       {/* Chat area */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-6 space-y-4">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto px-6 py-10 space-y-4 max-w-3xl mx-auto w-full">
         {messages.length === 0 && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-12">
-            <div className="w-20 h-20 bg-primary mx-auto flex items-center justify-center mb-6">
-              <Sparkles className="w-10 h-10 text-primary-foreground" />
-            </div>
-            <h2 className="text-2xl font-black text-foreground mb-2">Assistente IA do MASP</h2>
-            <p className="text-sm text-muted-foreground mb-8 max-w-sm mx-auto">
-              Pergunte sobre exposições, história do museu, obras do acervo e muito mais!
+            <span className="editorial-eyebrow">
+              <span className="editorial-rule" />
+              Assistente KORA
+            </span>
+            <h2 className="font-display text-4xl md:text-5xl text-foreground mt-3 leading-[0.98]">
+              Pergunte qualquer coisa <span className="font-bold text-primary">sobre o MASP</span>.
+            </h2>
+            <p className="text-base text-muted-foreground mt-5 mb-10 max-w-md mx-auto leading-relaxed">
+              Exposições em cartaz, história do museu, obras do acervo, horários e ingressos.
+              Use o botão de microfone abaixo se preferir falar.
             </p>
-            <div className="flex flex-wrap gap-2 justify-center max-w-lg mx-auto">
-              {SUGGESTIONS.map((s) => (
-                <button
+            <div className="flex flex-col gap-2 max-w-md mx-auto">
+              <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground mb-2">
+                Sugestões
+              </span>
+              {SUGGESTIONS.map((s, i) => (
+                <motion.button
                   key={s}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 + i * 0.06 }}
                   onClick={() => sendMessage(s)}
-                  className="px-3 py-2 text-xs border border-border hover:border-primary hover:text-primary transition-colors text-muted-foreground"
+                  className="text-left px-5 py-4 border border-border hover:border-primary hover:bg-muted/20 transition-colors text-foreground text-sm group flex items-center justify-between"
                 >
-                  {s}
-                </button>
+                  <span>{s}</span>
+                  <Sparkles className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+                </motion.button>
               ))}
             </div>
           </motion.div>

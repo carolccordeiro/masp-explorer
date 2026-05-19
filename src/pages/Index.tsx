@@ -81,18 +81,19 @@ export default function Index() {
 
       <MaspHeader onEndSession={handleEndSession} />
 
-      <section className="px-6 pt-8 pb-4">
+      <section className="px-6 pt-10 pb-6">
         <span className="editorial-eyebrow">
-          <span className="editorial-rule" />
+          <span className="editorial-rule-long" />
           {t('index.bemvindo').toUpperCase()}
         </span>
-        <h1 className="text-3xl md:text-4xl font-black text-foreground leading-[1.05] tracking-tighter mt-2">
-          {lang === 'en' ? 'Discover MASP, your way.' : 'Descubra o MASP, do seu jeito.'}
+        <h1 className="font-display text-5xl md:text-7xl text-foreground mt-4 max-w-2xl uppercase">
+          {lang === 'en' ? <>Discover MASP,<br />your way.</> : <>Descubra o MASP,<br />do seu jeito.</>}
         </h1>
-        <p className="text-muted-foreground text-sm mt-3 max-w-md leading-relaxed">
+        <div className="brutalist-rule-red mt-6 w-24" />
+        <p className="text-muted-foreground text-sm md:text-base mt-5 max-w-md leading-relaxed">
           {t('index.intro').split('KORA').map((part, i, arr) =>
             i < arr.length - 1 ? (
-              <span key={i}>{part}<span className="text-primary font-bold">KORA</span></span>
+              <span key={i}>{part}<span className="font-black text-primary">KORA</span></span>
             ) : (
               <span key={i}>{part}</span>
             )
@@ -106,12 +107,12 @@ export default function Index() {
 
       <AdBanner />
 
-      <section className="px-6 pt-2">
+      <section className="px-6 pt-4 pb-2">
         <span className="editorial-eyebrow">
-          <span className="editorial-rule" />
+          <span className="editorial-rule-long" />
           {lang === 'en' ? 'Explore' : 'Explore'}
         </span>
-        <h2 className="text-lg font-black text-foreground mt-1 mb-3">
+        <h2 className="font-display text-2xl md:text-3xl text-foreground mt-2 mb-5 uppercase">
           {lang === 'en' ? 'What would you like to do?' : 'O que você quer fazer?'}
         </h2>
       </section>
@@ -122,22 +123,25 @@ export default function Index() {
         animate="show"
         className="px-6 flex-1 grid grid-cols-1 md:grid-cols-2 gap-3"
       >
-        {menuItems.map((mi) => (
+        {menuItems.map((mi, idx) => (
           <motion.button
             key={mi.path}
             variants={item}
             whileTap={{ scale: 0.98 }}
             onClick={() => navigate(mi.path)}
-            className="hover-lift w-full flex items-center gap-4 p-4 bg-background border border-border hover:border-primary text-left group"
+            className="hover-lift relative w-full flex items-center gap-5 p-5 bg-background border border-border hover:border-primary text-left group overflow-hidden"
           >
-            <div className={`w-12 h-12 ${mi.color} flex items-center justify-center shrink-0`}>
+            <span className="absolute top-3 right-3 text-[10px] font-mono text-muted-foreground/40 tabular-nums">
+              {String(idx + 1).padStart(2, '0')}
+            </span>
+            <div className={`w-14 h-14 ${mi.color} flex items-center justify-center shrink-0 transition-transform group-hover:scale-105`}>
               <mi.icon className="w-6 h-6 text-primary-foreground" />
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="text-base font-bold text-foreground group-hover:text-primary transition-colors">{mi.title}</h3>
-              <p className="text-xs text-muted-foreground line-clamp-1">{mi.description}</p>
+              <h3 className="text-base font-bold text-foreground group-hover:text-primary transition-colors leading-tight">{mi.title}</h3>
+              <p className="text-xs text-muted-foreground line-clamp-1 mt-1">{mi.description}</p>
             </div>
-            <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+            <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-all group-hover:translate-x-0.5 shrink-0" />
           </motion.button>
         ))}
       </motion.div>

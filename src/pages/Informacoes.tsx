@@ -269,48 +269,60 @@ export default function Informacoes() {
     <div className="min-h-screen bg-background">
       <MaspHeader />
 
-      <div className="px-6 py-8">
+      <div className="px-6 py-10 max-w-4xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <span className="editorial-eyebrow"><span className="editorial-rule" />MASP</span>
-          <h1 className="text-3xl font-black text-foreground mt-2 leading-tight">{t('info.titulo')}</h1>
-          <p className="text-muted-foreground text-sm mt-2 mb-8">{t('info.subtitulo')}</p>
+          <span className="editorial-eyebrow"><span className="editorial-rule-long" />MASP</span>
+          <h1 className="font-display text-5xl md:text-6xl text-foreground mt-3 leading-[0.95]">{t('info.titulo')}</h1>
+          <p className="text-muted-foreground text-base mt-4 mb-10 max-w-xl leading-relaxed">{t('info.subtitulo')}</p>
         </motion.div>
 
-        <div className="space-y-2">
-          {sections.map((section, i) => (
-            <motion.div
-              key={section.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.05 }}
-              className="border border-border"
-            >
-              <button
-                onClick={() => toggle(section.id)}
-                className="w-full flex items-center gap-3 p-4 text-left hover:bg-masp-light transition-colors"
+        <div className="border-t border-border">
+          {sections.map((section, i) => {
+            const isOpen = openSection === section.id;
+            return (
+              <motion.div
+                key={section.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.04 }}
+                className="border-b border-border"
               >
-                <div className="text-primary">{section.icon}</div>
-                <span className="flex-1 font-bold text-foreground">{section.title}</span>
-                {openSection === section.id ? (
-                  <ChevronUp className="w-5 h-5 text-muted-foreground" />
-                ) : (
-                  <ChevronDown className="w-5 h-5 text-muted-foreground" />
-                )}
-              </button>
-              <AnimatePresence>
-                {openSection === section.id && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    className="overflow-hidden"
-                  >
-                    <div className="px-4 pb-4">{section.content}</div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          ))}
+                <button
+                  onClick={() => toggle(section.id)}
+                  className="w-full flex items-center gap-5 py-6 text-left group/sect hover:bg-muted/20 transition-colors px-2"
+                  aria-expanded={isOpen}
+                >
+                  <span className="text-[11px] font-mono text-muted-foreground/60 tabular-nums w-6">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <div className={`text-primary transition-transform ${isOpen ? 'scale-110' : ''}`}>
+                    {section.icon}
+                  </div>
+                  <span className="flex-1 font-display text-xl md:text-2xl text-foreground group-hover/sect:text-primary transition-colors">
+                    {section.title}
+                  </span>
+                  {isOpen ? (
+                    <ChevronUp className="w-5 h-5 text-primary shrink-0" />
+                  ) : (
+                    <ChevronDown className="w-5 h-5 text-muted-foreground group-hover/sect:text-primary transition-colors shrink-0" />
+                  )}
+                </button>
+                <AnimatePresence>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                      className="overflow-hidden"
+                    >
+                      <div className="pb-8 pl-[3.6rem] pr-2 max-w-prose">{section.content}</div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </div>

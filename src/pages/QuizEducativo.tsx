@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Check, X, RotateCcw, Landmark, Palette, Frame, Scissors, BookOpen, Coffee } from 'lucide-react';
 import { MaspHeader } from '@/components/MaspHeader';
 import { quizCategories, QuizCategory, QuizQuestion } from '@/data/quizzes';
+import { exhibitions } from '@/data/exhibitions';
 import { useVoice } from '@/hooks/useVoice';
 import { CouponModal } from '@/components/CouponModal';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -13,6 +14,16 @@ const iconMap: Record<string, React.ReactNode> = {
   frame: <Frame className="w-7 h-7" />,
   scissors: <Scissors className="w-7 h-7" />,
   'book-open': <BookOpen className="w-7 h-7" />,
+};
+
+// Map each quiz category to an exhibition image when possible, so the cards show
+// the real artwork instead of a generic icon. The fallback keeps the lucide icon.
+const categoryImageMap: Record<string, string | undefined> = {
+  'expo-chola': exhibitions.find((e) => e.artist === 'La Chola Poblete')?.image,
+  'expo-gamarra': exhibitions.find((e) => e.artist === 'Sandra Gamarra Heshiki')?.image,
+  'expo-alarcon': exhibitions.find((e) => e.artist === 'Claudia Alarcón & Silät')?.image,
+  acervo: exhibitions.find((e) => e.title === 'Acervo em Transformação')?.image,
+  // 'masp' fica sem imagem específica, usa o ícone landmark
 };
 
 export default function QuizEducativo() {
@@ -68,11 +79,23 @@ export default function QuizEducativo() {
     <div className="min-h-screen bg-background">
       <MaspHeader />
 
-      <div className="px-6 py-8">
+      <div className="px-6 py-10 max-w-3xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-3xl font-black text-foreground mb-2">{t('quiz.titulo')}</h1>
-          <p className="text-muted-foreground text-sm mb-8">
-            {selectedCategory ? selectedCategory.title : t('quiz.escolha')}
+          <span className="editorial-eyebrow">
+            <span className="editorial-rule-long" />
+            {t('quiz.titulo').toUpperCase()}
+          </span>
+          <h1 className="font-display text-5xl md:text-6xl text-foreground mt-3 leading-[0.95]">
+            {selectedCategory ? (
+              <>
+                <span className="font-bold">{selectedCategory.title}</span>
+              </>
+            ) : (
+              t('quiz.titulo')
+            )}
+          </h1>
+          <p className="text-muted-foreground text-base mt-4 mb-10 max-w-md leading-relaxed">
+            {selectedCategory ? selectedCategory.description : t('quiz.escolha')}
           </p>
         </motion.div>
 
@@ -86,26 +109,43 @@ export default function QuizEducativo() {
               exit={{ opacity: 0 }}
               className="space-y-3"
             >
-              {quizCategories.map((cat, i) => (
-                <motion.button
-                  key={cat.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.08 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => startQuiz(cat)}
-                  className="w-full flex items-center gap-4 p-5 border border-border hover:border-primary transition-colors text-left group"
-                >
-                  <div className="w-12 h-12 bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                    {iconMap[cat.iconName]}
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-bold text-foreground group-hover:text-primary transition-colors">{cat.title}</h3>
-                    <p className="text-xs text-muted-foreground">{cat.description} | {cat.questions.length} {t('quiz.perguntas')}</p>
-                  </div>
-                  <ArrowRight className="w-5 h-5 text-muted-foreground" />
-                </motion.button>
-              ))}
+              {quizCategories.map((cat, i) => {
+                const img = categoryImageMap[cat.id];
+                return (
+                  <motion.button
+                    key={cat.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.08 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => startQuiz(cat)}
+                    className="w-full flex items-center gap-4 p-3 border border-border hover:border-primary transition-colors text-left group overflow-hidden"
+                  >
+                    {img ? (
+                      <div className="w-20 h-20 shrink-0 overflow-hidden">
+                        <img
+                          src={img}
+                          alt={cat.title}
+                          className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                          loading="lazy"
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-20 h-20 bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                        {iconMap[cat.iconName]}
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                        {cat.questions.length} {t('quiz.perguntas')}
+                      </span>
+                      <h3 className="font-bold text-foreground group-hover:text-primary transition-colors mt-0.5">{cat.title}</h3>
+                      <p className="text-xs text-muted-foreground line-clamp-1">{cat.description}</p>
+                    </div>
+                    <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+                  </motion.button>
+                );
+              })}
             </motion.div>
           )}
 
@@ -118,19 +158,27 @@ export default function QuizEducativo() {
               exit={{ opacity: 0, x: -30 }}
               className="space-y-6"
             >
-              <div className="flex items-center gap-2">
-                <div className="flex-1 h-1 bg-muted">
-                  <div
-                    className="h-1 bg-primary transition-all"
-                    style={{ width: `${((currentIndex + 1) / selectedCategory.questions.length) * 100}%` }}
+              <div className="flex items-center gap-3">
+                <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground tabular-nums">
+                  {String(currentIndex + 1).padStart(2, '0')}
+                </span>
+                <div className="flex-1 h-px bg-muted relative">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${((currentIndex + 1) / selectedCategory.questions.length) * 100}%` }}
+                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                    className="absolute inset-y-0 left-0 bg-primary"
+                    style={{ height: '2px', top: '-0.5px' }}
                   />
                 </div>
-                <span className="text-xs text-muted-foreground font-medium">
-                  {currentIndex + 1}/{selectedCategory.questions.length}
+                <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground tabular-nums">
+                  / {String(selectedCategory.questions.length).padStart(2, '0')}
                 </span>
               </div>
 
-              <h2 className="text-xl font-bold text-foreground leading-snug">{currentQuestion.question}</h2>
+              <h2 className="font-display text-3xl md:text-4xl text-foreground leading-[1.05]">
+                {currentQuestion.question}
+              </h2>
 
               <div className="space-y-3">
                 {currentQuestion.options.map((opt, i) => {
@@ -189,21 +237,29 @@ export default function QuizEducativo() {
               key="results"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="text-center py-8"
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className="text-center py-12"
             >
-              <div className="w-24 h-24 bg-primary mx-auto flex items-center justify-center mb-6">
-                <span className="text-4xl font-black text-primary-foreground">
-                  {score}/{selectedCategory.questions.length}
+              <span className="editorial-eyebrow">
+                <span className="editorial-rule" />
+                Fim do quiz
+              </span>
+              <div className="my-8 flex flex-col items-center">
+                <span className="font-display text-[clamp(8rem,18vw,12rem)] text-primary leading-[0.8] tabular-nums">
+                  {score}
+                </span>
+                <span className="font-bold text-xl text-muted-foreground mt-2">
+                  de {selectedCategory.questions.length} perguntas
                 </span>
               </div>
-              <h2 className="text-2xl font-black text-foreground mb-2">
+              <h2 className="font-display text-3xl md:text-4xl text-foreground mb-3">
                 {score === selectedCategory.questions.length
                   ? t('quiz.excelente')
                   : score >= selectedCategory.questions.length / 2
                   ? t('quiz.muitobem')
                   : t('quiz.continue')}
               </h2>
-              <p className="text-muted-foreground mb-8">
+              <p className="text-muted-foreground mb-10 max-w-sm mx-auto">
                 {t('quiz.acertou')} {score} {t('quiz.de')} {selectedCategory.questions.length} {t('quiz.perguntas')}
               </p>
 
