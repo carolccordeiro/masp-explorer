@@ -1,8 +1,9 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Clock, ChevronRight, RotateCcw, Users, Palette } from 'lucide-react';
+import { Clock, ChevronRight, RotateCcw, Users, Palette, Target } from 'lucide-react';
 import { MaspHeader } from '@/components/MaspHeader';
 import { VoiceButton } from '@/components/VoiceButton';
+import { TreasureHunt } from '@/components/TreasureHunt';
 import { exhibitions, Exhibition } from '@/data/exhibitions';
 import { useVoice } from '@/hooks/useVoice';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -43,6 +44,7 @@ export default function PlanejarVisita() {
   const [selectedThemes, setSelectedThemes] = useState<string[]>([]);
   const [suggested, setSuggested] = useState<Exhibition[]>([]);
   const [selectedExpo, setSelectedExpo] = useState<Exhibition | null>(null);
+  const [huntOpen, setHuntOpen] = useState(false);
   const { speak } = useVoice();
   const { lang, t } = useLanguage();
 
@@ -305,6 +307,31 @@ export default function PlanejarVisita() {
                 )}
               </div>
 
+              {/* CTA principal: ativar caça ao tesouro com o roteiro */}
+              <motion.button
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 }}
+                onClick={() => setHuntOpen(true)}
+                className="w-full mb-6 border-2 border-foreground bg-foreground text-background py-5 px-6 flex items-center justify-between gap-4 hover:bg-primary hover:border-primary transition-colors group/hunt"
+              >
+                <div className="flex items-center gap-4 text-left">
+                  <Target className="w-7 h-7 shrink-0" />
+                  <div>
+                    <span className="block text-[10px] font-black uppercase tracking-[0.3em] opacity-80">
+                      Modo jogo
+                    </span>
+                    <span className="block font-display text-2xl md:text-3xl uppercase mt-0.5">
+                      Caça ao Tesouro
+                    </span>
+                    <span className="block text-xs opacity-80 mt-1">
+                      Encontre as obras no museu e ganhe 15% off no Café do MASP
+                    </span>
+                  </div>
+                </div>
+                <ChevronRight className="w-6 h-6 shrink-0 group-hover/hunt:translate-x-1 transition-transform" />
+              </motion.button>
+
               <div className="flex items-center justify-between mb-2">
                 <h2 className="text-xl font-black text-foreground">{t('planejar.roteiro')}</h2>
                 <button onClick={handleReset} className="flex items-center gap-1 text-primary text-xs font-semibold">
@@ -344,6 +371,17 @@ export default function PlanejarVisita() {
                 ))}
               </div>
             </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {huntOpen && suggested.length > 0 && (
+            <TreasureHunt
+              itinerary={suggested}
+              profileLabel={profileOptions.find((p) => p.id === selectedProfile)?.label || 'visitante'}
+              totalDuration={totalDuration}
+              onClose={() => setHuntOpen(false)}
+            />
           )}
         </AnimatePresence>
 
