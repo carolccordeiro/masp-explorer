@@ -8,6 +8,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { IdleOverlay } from "@/components/IdleOverlay";
 import { useIdleTimer } from "@/hooks/useIdleTimer";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import { AccessibilityProvider } from "@/contexts/AccessibilityContext";
 import "./totem.css";
 
 import Index from "./pages/Index.tsx";
@@ -19,6 +20,9 @@ import MapaInterativo from "./pages/MapaInterativo.tsx";
 import MinhaColecao from "./pages/MinhaColecao.tsx";
 import DadosDeUso from "./pages/DadosDeUso.tsx";
 import Roteiro from "./pages/Roteiro.tsx";
+import Admin from "./pages/Admin.tsx";
+import SobreMASP from "./pages/SobreMASP.tsx";
+import Selfie from "./pages/Selfie.tsx";
 
 import NotFound from "./pages/NotFound.tsx";
 
@@ -31,9 +35,12 @@ function TotemShell() {
   const location = useLocation();
   const [isIdle, setIsIdle] = useState(false);
 
-  // /roteiro is opened from a visitor's phone after scanning the QR code,
-  // it must not inherit the kiosk idle timer or session wipe behavior.
+  // /roteiro opens on a visitor's phone after scanning the QR code;
+  // /admin is the Flexmedia operator dashboard.
+  // Neither should inherit the kiosk idle timer or session wipe behavior.
   const isPhoneRoute = location.pathname.startsWith("/roteiro");
+  const isAdminRoute = location.pathname.startsWith("/admin");
+  const skipKioskShell = isPhoneRoute || isAdminRoute;
 
   const handleIdle = useCallback(() => {
     setIsIdle(true);
@@ -45,12 +52,12 @@ function TotemShell() {
     navigate("/");
   }, [navigate]);
 
-  useIdleTimer(handleIdle, IDLE_TIMEOUT_MS, !isIdle && !isPhoneRoute);
+  useIdleTimer(handleIdle, IDLE_TIMEOUT_MS, !isIdle && !skipKioskShell);
 
   return (
     <>
       <AnimatePresence>
-        {isIdle && !isPhoneRoute && (
+        {isIdle && !skipKioskShell && (
           <IdleOverlay visible={isIdle} onTouch={handleWakeUp} />
         )}
       </AnimatePresence>
@@ -65,6 +72,9 @@ function TotemShell() {
         <Route path="/colecao" element={<MinhaColecao />} />
         <Route path="/dados" element={<DadosDeUso />} />
         <Route path="/roteiro" element={<Roteiro />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/sobre-masp" element={<SobreMASP />} />
+        <Route path="/selfie" element={<Selfie />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
@@ -76,11 +86,13 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <LanguageProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter basename={import.meta.env.BASE_URL}>
-          <TotemShell />
-        </BrowserRouter>
+        <AccessibilityProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter basename={import.meta.env.BASE_URL}>
+            <TotemShell />
+          </BrowserRouter>
+        </AccessibilityProvider>
       </LanguageProvider>
     </TooltipProvider>
   </QueryClientProvider>
