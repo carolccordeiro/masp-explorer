@@ -8,6 +8,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { IdleOverlay } from "@/components/IdleOverlay";
 import { useIdleTimer } from "@/hooks/useIdleTimer";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import { AccessibilityProvider } from "@/contexts/AccessibilityContext";
 import "./totem.css";
 
 import Index from "./pages/Index.tsx";
@@ -20,6 +21,8 @@ import MinhaColecao from "./pages/MinhaColecao.tsx";
 import DadosDeUso from "./pages/DadosDeUso.tsx";
 import Roteiro from "./pages/Roteiro.tsx";
 import Admin from "./pages/Admin.tsx";
+import SobreMASP from "./pages/SobreMASP.tsx";
+import Selfie from "./pages/Selfie.tsx";
 
 import NotFound from "./pages/NotFound.tsx";
 
@@ -70,6 +73,8 @@ function TotemShell() {
         <Route path="/dados" element={<DadosDeUso />} />
         <Route path="/roteiro" element={<Roteiro />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/sobre-masp" element={<SobreMASP />} />
+        <Route path="/selfie" element={<Selfie />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
@@ -81,11 +86,13 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <LanguageProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter basename={import.meta.env.BASE_URL}>
-          <TotemShell />
-        </BrowserRouter>
+        <AccessibilityProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter basename={import.meta.env.BASE_URL}>
+            <TotemShell />
+          </BrowserRouter>
+        </AccessibilityProvider>
       </LanguageProvider>
     </TooltipProvider>
   </QueryClientProvider>

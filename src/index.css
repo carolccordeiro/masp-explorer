@@ -130,6 +130,35 @@
     font-variant-numeric: tabular-nums;
     font-feature-settings: 'tnum';
   }
+}
+
+/* Accessibility overrides applied at html-level by AccessibilityContext */
+html.a11y-high-contrast {
+  --background: 0 0% 100%;
+  --foreground: 0 0% 0%;
+  --primary: 357 100% 36%;
+  --primary-foreground: 0 0% 100%;
+  --muted: 0 0% 88%;
+  --muted-foreground: 0 0% 18%;
+  --border: 0 0% 0%;
+  --ring: 357 100% 36%;
+}
+html.a11y-high-contrast * {
+  text-shadow: none;
+}
+html.a11y-high-contrast img {
+  filter: contrast(1.1);
+}
+html.a11y-reduce-motion *,
+html.a11y-reduce-motion *::before,
+html.a11y-reduce-motion *::after {
+  animation-duration: 0.001ms !important;
+  animation-delay: 0ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}
+
+@layer utilities {
 
   /* Editorial accents */
   .hairline-top {
