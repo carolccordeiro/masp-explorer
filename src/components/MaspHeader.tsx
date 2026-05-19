@@ -74,16 +74,16 @@ export function MaspHeader({ onEndSession }: MaspHeaderProps) {
 
   return (
     <header className="sticky top-0 z-50 bg-background border-b border-border">
-      <div className="flex items-center justify-between px-6 py-4">
+      <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 gap-2">
         {!isHome ? (
-          <button onClick={() => navigate('/')} className="flex items-center gap-2 text-foreground hover:text-primary transition-colors">
+          <button onClick={() => navigate('/')} className="flex items-center gap-2 text-foreground hover:text-primary transition-colors shrink-0">
             <ArrowLeft className="w-5 h-5" />
-            <span className="text-sm font-medium">{t('header.menu')}</span>
+            <span className="text-sm font-medium hidden sm:inline">{t('header.menu')}</span>
           </button>
         ) : onEndSession ? (
-          <button onClick={onEndSession} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+          <button onClick={onEndSession} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors shrink-0">
             <LogOut className="w-4 h-4" />
-            <span className="text-xs font-medium">{t('header.encerrar')}</span>
+            <span className="text-xs font-medium hidden sm:inline">{t('header.encerrar')}</span>
           </button>
         ) : (
           <div />
@@ -94,9 +94,9 @@ export function MaspHeader({ onEndSession }: MaspHeaderProps) {
           className="absolute left-1/2 -translate-x-1/2"
           aria-label="MASP"
         >
-          <span className="text-primary font-black text-3xl tracking-tighter">MASP</span>
+          <span className="text-primary font-black text-2xl sm:text-3xl tracking-tighter">MASP</span>
         </motion.button>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 sm:gap-4 shrink-0">
           <button
             onClick={handleNarrate}
             className={`flex items-center gap-1.5 transition-colors ${
@@ -106,7 +106,7 @@ export function MaspHeader({ onEndSession }: MaspHeaderProps) {
             aria-pressed={isSpeaking}
           >
             {isSpeaking ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-            <span className="text-xs font-bold uppercase">{isSpeaking ? t('header.parar') : t('header.ouvir')}</span>
+            <span className="text-xs font-bold uppercase hidden sm:inline">{isSpeaking ? t('header.parar') : t('header.ouvir')}</span>
           </button>
           <A11yMenu />
           <button

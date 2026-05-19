@@ -34,7 +34,7 @@ export function A11yMenu() {
         aria-expanded={open}
       >
         <Accessibility className="w-4 h-4" />
-        <span className="text-xs font-bold uppercase">Acessib.</span>
+        <span className="text-xs font-bold uppercase hidden sm:inline">Acessib.</span>
       </button>
 
       {open && (

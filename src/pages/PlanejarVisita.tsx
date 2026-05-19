@@ -4,9 +4,11 @@ import { Clock, ChevronRight, RotateCcw, Users, Palette, Target } from 'lucide-r
 import { MaspHeader } from '@/components/MaspHeader';
 import { VoiceButton } from '@/components/VoiceButton';
 import { TreasureHunt } from '@/components/TreasureHunt';
+import { RecommenderPanel } from '@/components/RecommenderPanel';
 import { exhibitions, Exhibition } from '@/data/exhibitions';
 import { useVoice } from '@/hooks/useVoice';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { recommend, Recommendation } from '@/lib/recommender';
 
 const timeOptions = [30, 60, 90, 120, 180];
 
@@ -17,22 +19,26 @@ const profileOptions = [
   { id: 'grupo', label: 'Grupo / Turma', labelEn: 'Group / Class' },
 ];
 
+// Categorias seguem a proposta curatorial anual do MASP 2026, com seis ciclos
+// tematicos publicados no guia do ano. Foi atualizado a partir do feedback
+// dos visitantes da Sprint 3, que pediram correspondencia com o linguajar
+// oficial do museu.
 const themeOptions = [
+  { id: 'arte-classica', label: 'Arte Clássica', labelEn: 'Classical Art' },
   { id: 'arte-moderna', label: 'Arte Moderna', labelEn: 'Modern Art' },
-  { id: 'historia-brasil', label: 'História do Brasil', labelEn: 'Brazilian History' },
   { id: 'arte-contemporanea', label: 'Arte Contemporânea', labelEn: 'Contemporary Art' },
-  { id: 'arte-europeia', label: 'Arte Europeia', labelEn: 'European Art' },
-  { id: 'identidade-cultura', label: 'Identidade & Cultura', labelEn: 'Identity & Culture' },
-  { id: 'arte-indigena', label: 'Arte Indígena', labelEn: 'Indigenous Art' },
+  { id: 'historia-brasil', label: 'História do Brasil', labelEn: 'Brazilian History' },
+  { id: 'historia-geral', label: 'História Geral', labelEn: 'General History' },
+  { id: 'historias-latam', label: 'Histórias Latino-Americanas', labelEn: 'Latin American Stories' },
 ];
 
 const themeToCategoryMap: Record<string, string[]> = {
-  'arte-moderna': ['Arte Moderna', 'Modernismo'],
-  'historia-brasil': ['Arte Brasileira', 'História'],
-  'arte-contemporanea': ['Arte Contemporânea', 'Contemporâneo'],
-  'arte-europeia': ['Arte Europeia', 'Europeu'],
-  'identidade-cultura': ['Identidade', 'Cultura', 'Pop Andino'],
-  'arte-indigena': ['Arte Indígena', 'Indígena', 'Têxtil'],
+  'arte-classica': ['Acervo Permanente', 'Acervo', 'Pintura', 'Clássica', 'Renascimento'],
+  'arte-moderna': ['Arte Moderna', 'Modernismo', 'Pintura'],
+  'arte-contemporanea': ['Arte Contemporânea', 'Contemporâneo', 'Instalação', 'Videoarte'],
+  'historia-brasil': ['Arte Brasileira', 'História', 'Brasil', 'Modernismo'],
+  'historia-geral': ['Acervo Permanente', 'Acervo', 'Retrospectiva'],
+  'historias-latam': ['Latino-Americana', 'Têxtil', 'Pop Andino', 'Instalação', 'Retrospectiva'],
 };
 
 type Step = 'time' | 'profile' | 'themes' | 'result';
@@ -43,6 +49,7 @@ export default function PlanejarVisita() {
   const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
   const [selectedThemes, setSelectedThemes] = useState<string[]>([]);
   const [suggested, setSuggested] = useState<Exhibition[]>([]);
+  const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [selectedExpo, setSelectedExpo] = useState<Exhibition | null>(null);
   const [huntOpen, setHuntOpen] = useState(false);
   const { speak } = useVoice();
@@ -111,6 +118,15 @@ export default function PlanejarVisita() {
 
     result.sort((a, b) => a.floor.localeCompare(b.floor));
     setSuggested(result);
+
+    // Roda o recomendador IA em paralelo: similaridade de cosseno entre
+    // o vetor de preferencia (temas + duracao) e o vetor de features de cada
+    // exposicao. Resultado alimenta o RecommenderPanel.
+    const recs = recommend(exhibitions, {
+      selectedThemes,
+      minutes,
+    });
+    setRecommendations(recs);
 
     const totalTime = result.reduce((sum, e) => sum + e.duration, 0);
     const profileLabel = profileOptions.find(p => p.id === selectedProfile)?.label || 'vocês';
@@ -306,6 +322,13 @@ export default function PlanejarVisita() {
                   </p>
                 )}
               </div>
+
+              {/* Painel "MATCH IA": ranking e visualizacao 2D do recomendador */}
+              <RecommenderPanel
+                recommendations={recommendations}
+                topK={Math.min(4, suggested.length)}
+                lang={lang}
+              />
 
               {/* CTA principal: ativar caça ao tesouro com o roteiro */}
               <motion.button

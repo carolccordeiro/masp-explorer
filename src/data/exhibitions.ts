@@ -20,7 +20,30 @@ export interface Exhibition {
   isMainExhibition?: boolean;
   artworks?: Artwork[];
   upcoming?: boolean;
+  // Vetor de features para o sistema de recomendacao (cosine similarity).
+  // Ordem: [arte_classica, arte_moderna, arte_contemporanea, historia_brasil,
+  //         historia_geral, historias_latam, duracao_curta, duracao_media,
+  //         duracao_longa, andar_subsolo, andar_terreo, andar_andar, principal]
+  features?: number[];
 }
+
+// Dimensoes do vetor de features. Tem que casar com os themes do PlanejarVisita
+// e tambem alimenta a visualizacao 2D do recomendador.
+export const FEATURE_DIMENSIONS = [
+  'arte_classica',
+  'arte_moderna',
+  'arte_contemporanea',
+  'historia_brasil',
+  'historia_geral',
+  'historias_latam',
+  'duracao_curta',
+  'duracao_media',
+  'duracao_longa',
+  'andar_subsolo',
+  'andar_terreo',
+  'andar_andar',
+  'principal',
+] as const;
 
 // All artwork imagery is sourced from the MASP CDN (assets.masp.org.br)
 // captured from the public exhibition pages on the museum site, May 2026.
@@ -40,6 +63,8 @@ export const exhibitions: Exhibition[] = [
     category: 'Arte Contemporânea',
     dates: '6.3 a 2.8.2026',
     isMainExhibition: true,
+    // contemporanea forte, latam forte, duracao media, 2 andar, principal
+    features: [0, 0, 0.95, 0, 0, 0.9, 0, 1, 0, 0, 0, 0.8, 1],
     artworks: [
       {
         id: 'pop-1',
@@ -105,6 +130,8 @@ export const exhibitions: Exhibition[] = [
       'https://assets.masp.org.br/uploads/exhibition-views/jp39fCGSXCST8O7XRLZf-nS6p91keSy8J1nHgVNJN.jpg',
     category: 'Retrospectiva',
     dates: '6.3 a 7.6.2026',
+    // contemporanea, historia geral pos-colonial, latam, duracao media-longa
+    features: [0.2, 0.3, 0.85, 0, 0.6, 0.85, 0, 0.6, 0.5, 0, 0, 1, 0],
     artworks: [
       {
         id: 'rep-1',
@@ -200,6 +227,8 @@ export const exhibitions: Exhibition[] = [
       'https://assets.masp.org.br/uploads/exhibition-views/7oZlkYnIeGmSZycFzVye-IZypNQXfOEJNE8PsJGZb.jpg',
     category: 'Têxtil',
     dates: '6.3 a 2.8.2026',
+    // contemporanea, latam super forte, duracao curta, sem andar especifico
+    features: [0, 0, 0.7, 0, 0, 1, 1, 0, 0, 0, 0, 0.6, 0],
     artworks: [
       {
         id: 'vt-1',
@@ -284,6 +313,8 @@ export const exhibitions: Exhibition[] = [
     image:
       'https://assets.masp.org.br/uploads/exposed-works/YcKmk8S0hzEMyoQCT9Rh-L3fJ0naJwO68B2PxD3j1.jpeg',
     category: 'Instalação',
+    // contemporanea, latam, super curta, terreo
+    features: [0, 0, 0.95, 0, 0, 0.7, 1, 0, 0, 0, 1, 0, 0],
     artworks: [
       {
         id: 'arg-1',
@@ -349,7 +380,8 @@ export const exhibitions: Exhibition[] = [
       'https://assets.masp.org.br/uploads/exhibition-views/jp39fCGSXCST8O7XRLZf-nS6p91keSy8J1nHgVNJN.jpg',
     category: 'Retrospectiva',
     dates: '15.5 a 13.9.2026',
-    upcoming: true,
+    // contemporanea, latam, duracao media
+    features: [0, 0.3, 0.85, 0, 0, 0.85, 0, 0.7, 0.5, 0, 0, 0.7, 0],
     artworks: [
       {
         id: 'do-1',
@@ -375,6 +407,8 @@ export const exhibitions: Exhibition[] = [
       'https://assets.masp.org.br/uploads/temp/WEB_JM_MASP_00099_01.jpg',
     category: 'Acervo Permanente',
     dates: 'Desde 2015',
+    // classica forte, moderna forte, historia geral, duracao longa
+    features: [1, 0.9, 0.2, 0.6, 1, 0.3, 0, 0, 1, 0, 0, 1, 0],
     artworks: [
       {
         id: 'ac-renoir',
@@ -467,6 +501,73 @@ export const exhibitions: Exhibition[] = [
           'Retrato do empresário francês em traje noturno, exemplar da pintura de gênero parisiense do final do século 19 no acervo do MASP.',
       },
     ],
+  },
+  // Proximas exposicoes do ciclo curatorial "Historias Latino-Americanas" 2026.
+  // Confirmadas no programa anual do MASP em 19 de maio 2026.
+  {
+    id: 'caycedo',
+    title: 'confluências',
+    artist: 'Carolina Caycedo',
+    description:
+      'Pratica multidisciplinar da artista colombiana (Londres, 1978) que une arte contemporanea, saberes ribeirinhos ancestrais e estrategias de resistencia, reconstruindo memoria comunitaria de bens comuns. Curadoria de Isabella Rjeille.',
+    duration: 30,
+    floor: 'Lina Bo Bardi',
+    image:
+      'https://assets.masp.org.br/uploads/exhibition-views/7oZlkYnIeGmSZycFzVye-IZypNQXfOEJNE8PsJGZb.jpg',
+    category: 'Arte Contemporânea',
+    dates: '3.7 a 4.10.2026',
+    upcoming: true,
+    features: [0, 0, 0.95, 0, 0.3, 0.95, 0, 1, 0, 0, 0, 0.8, 0],
+    artworks: [],
+  },
+  {
+    id: 'sol-calero',
+    title: 'Pabellón criollo',
+    artist: 'Sol Calero',
+    description:
+      'Pavilhao imersivo projetado por Sol Calero (Caracas, 1982) para o Vao Livre do MASP, misturando arquitetura vernacular e referencias visuais latino-americanas, explorando identidade, deslocamento e pertencimento. Aberto e gratuito.',
+    duration: 20,
+    floor: 'Vão Livre',
+    image:
+      'https://assets.masp.org.br/uploads/exposed-works/YcKmk8S0hzEMyoQCT9Rh-L3fJ0naJwO68B2PxD3j1.jpeg',
+    category: 'Instalação',
+    dates: '3.7.2026 a 30.5.2027',
+    upcoming: true,
+    features: [0, 0, 0.9, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0],
+    artworks: [],
+  },
+  {
+    id: 'historias-latam',
+    title: 'Histórias Latino-Americanas',
+    artist: 'Coletiva internacional',
+    description:
+      'Mostra-pilar do ciclo 2026 do MASP, ocupa cinco andares do edificio Pietro Maria Bardi com cinco nucleos: colonizacao, barroco e paraiso tropical como mecanismos de poder, organizacao indigena e afrodescendente, migracao e diaspora, e concepcoes indigenas de renovacao. Curadoria de Amanda Carneiro e Julieta Gonzalez.',
+    duration: 90,
+    floor: 'Pietro Maria Bardi (5 andares)',
+    image:
+      'https://assets.masp.org.br/uploads/exhibition-views/jp39fCGSXCST8O7XRLZf-nS6p91keSy8J1nHgVNJN.jpg',
+    category: 'Exposição Anual',
+    dates: '4.9.2026 a 31.1.2027',
+    upcoming: true,
+    isMainExhibition: true,
+    features: [0.5, 0.6, 0.7, 0.5, 0.9, 1, 0, 0, 1, 0, 0, 1, 1],
+    artworks: [],
+  },
+  {
+    id: 'pablo-delano',
+    title: 'Museu da Antiga Colônia',
+    artist: 'Pablo Delano',
+    description:
+      'Grande instalacao do artista porto-riquenho (1954) com objetos, fotografias, jornais e filmes que examina as estruturas coloniais persistentes a partir dos 500 anos de colonizacao porto-riquenha sob dominio espanhol e estadunidense. Curadoria de Adriano Pedrosa e Fernando Oliva.',
+    duration: 45,
+    floor: 'Lina Bo Bardi',
+    image:
+      'https://assets.masp.org.br/uploads/exhibition-views/i0ESQtKi5dpP6whrtkU1-kpdDDUQz9uBy8GvpyIcn.jpg',
+    category: 'Instalação',
+    dates: '30.10.2026 a 31.1.2027',
+    upcoming: true,
+    features: [0.3, 0.4, 0.85, 0, 0.7, 0.95, 0, 0.8, 0.5, 0, 0, 0.9, 0],
+    artworks: [],
   },
 ];
 
