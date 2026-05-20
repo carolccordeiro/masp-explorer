@@ -76,14 +76,24 @@ export function MaspHeader({ onEndSession }: MaspHeaderProps) {
     <header className="sticky top-0 z-50 bg-background border-b border-border">
       <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 gap-2">
         {!isHome ? (
-          <button onClick={() => navigate('/')} className="flex items-center gap-2 text-foreground hover:text-primary transition-colors shrink-0">
+          <button
+            onClick={() => navigate('/')}
+            className="flex items-center gap-2 text-foreground hover:text-primary transition-colors shrink-0"
+            title={t('header.menu')}
+            aria-label={t('header.menu')}
+          >
             <ArrowLeft className="w-5 h-5" />
-            <span className="text-sm font-medium hidden sm:inline">{t('header.menu')}</span>
+            <span className="text-sm font-medium hidden lg:inline">{t('header.menu')}</span>
           </button>
         ) : onEndSession ? (
-          <button onClick={onEndSession} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors shrink-0">
+          <button
+            onClick={onEndSession}
+            className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors shrink-0"
+            title={t('header.encerrar')}
+            aria-label={t('header.encerrar')}
+          >
             <LogOut className="w-4 h-4" />
-            <span className="text-xs font-medium hidden sm:inline">{t('header.encerrar')}</span>
+            <span className="text-xs font-medium hidden lg:inline">{t('header.encerrar')}</span>
           </button>
         ) : (
           <div />
@@ -104,14 +114,17 @@ export function MaspHeader({ onEndSession }: MaspHeaderProps) {
             }`}
             aria-label={isSpeaking ? t('header.parar') : t('header.ouvir')}
             aria-pressed={isSpeaking}
+            title={isSpeaking ? t('header.parar') : t('header.ouvir')}
           >
             {isSpeaking ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-            <span className="text-xs font-bold uppercase hidden sm:inline">{isSpeaking ? t('header.parar') : t('header.ouvir')}</span>
+            <span className="text-xs font-bold uppercase hidden lg:inline">{isSpeaking ? t('header.parar') : t('header.ouvir')}</span>
           </button>
           <A11yMenu />
           <button
             onClick={toggleLang}
             className="flex items-center gap-1.5 text-muted-foreground hover:text-primary transition-colors"
+            title={lang === 'pt' ? 'English' : 'Português'}
+            aria-label={lang === 'pt' ? 'English' : 'Português'}
           >
             <Globe className="w-4 h-4" />
             <span className="text-xs font-bold uppercase">{lang === 'pt' ? 'EN' : 'PT'}</span>

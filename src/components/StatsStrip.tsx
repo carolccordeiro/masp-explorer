@@ -22,7 +22,7 @@ export function StatsStrip() {
           className={`px-3 py-5 text-center ${i > 0 ? 'border-l border-border' : ''}`}
         >
           <div className="flex items-baseline justify-center gap-0.5">
-            <span className="font-display text-3xl md:text-4xl text-primary leading-none">
+            <span className="font-display text-3xl md:text-4xl text-primary leading-none tnum">
               {s.value}
             </span>
             {s.suffix && (

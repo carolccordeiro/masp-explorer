@@ -189,32 +189,33 @@ export default function Admin() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b-2 border-foreground sticky top-0 z-50 bg-background">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
           <button
             onClick={() => navigate('/')}
             className="flex items-center gap-2 text-foreground hover:text-primary transition-colors shrink-0"
             aria-label="Voltar ao menu do totem"
+            title="Voltar ao menu"
           >
             <ArrowLeft className="w-5 h-5" />
-            <span className="text-xs font-bold uppercase tracking-[0.18em] hidden sm:inline">
+            <span className="text-xs font-bold uppercase tracking-[0.18em] hidden md:inline">
               Voltar ao menu
             </span>
           </button>
-          <div className="flex items-center gap-4 shrink-0">
-            <span className="text-primary font-black text-2xl tracking-tighter">MASP</span>
+          <div className="flex items-center gap-3 sm:gap-4 shrink-0 order-3 md:order-2 w-full md:w-auto justify-center md:justify-start">
+            <span className="text-primary font-black text-xl sm:text-2xl tracking-tighter">MASP</span>
             <span className="block w-px h-6 bg-foreground/20" />
             <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground">
+              <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.25em] sm:tracking-[0.3em] text-muted-foreground">
                 Console Flexmedia
               </p>
-              <p className="text-sm font-bold text-foreground">Dashboard de uso do totem</p>
+              <p className="text-xs sm:text-sm font-bold text-foreground">Dashboard de uso do totem</p>
             </div>
           </div>
-          <div className="flex items-center gap-3 shrink-0">
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground hidden md:inline">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0 order-2 md:order-3">
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground hidden lg:inline">
               Período
             </span>
-            <span className="border-2 border-foreground px-3 py-1 text-xs font-bold uppercase tracking-[0.18em]">
+            <span className="border-2 border-foreground px-2 sm:px-3 py-1 text-[10px] sm:text-xs font-bold uppercase tracking-[0.14em] sm:tracking-[0.18em] whitespace-nowrap">
               7 dias · 12 a 18 mai 2026
             </span>
           </div>
@@ -446,8 +447,8 @@ export default function Admin() {
             </span>
           </div>
           <div className="border-2 border-foreground p-4 bg-background">
-            <ResponsiveContainer width="100%" height={260}>
-              <BarChart data={TOP_EXPOS} margin={{ top: 12, right: 16, left: -16, bottom: 4 }}>
+            <ResponsiveContainer width="100%" height={340}>
+              <BarChart data={TOP_EXPOS} margin={{ top: 12, right: 16, left: -16, bottom: 90 }}>
                 <CartesianGrid strokeDasharray="2 4" stroke="hsl(var(--border))" vertical={false} />
                 <XAxis
                   dataKey="nome"
@@ -455,6 +456,9 @@ export default function Admin() {
                   axisLine={{ stroke: 'hsl(var(--foreground))', strokeWidth: 2 }}
                   tickLine={false}
                   interval={0}
+                  angle={-28}
+                  textAnchor="end"
+                  height={80}
                 />
                 <YAxis
                   tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }}

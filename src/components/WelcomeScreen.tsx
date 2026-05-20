@@ -25,10 +25,10 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps) {
         transition={{ delay: 0.1 }}
         className="relative z-10 flex items-center justify-between px-10 py-7 border-b-2 border-primary-foreground/15"
       >
-        <span className="text-[10px] font-black tracking-[0.32em] uppercase">
+        <span className="text-[9px] sm:text-[10px] font-black tracking-[0.2em] sm:tracking-[0.3em] uppercase whitespace-nowrap">
           Totem oficial · Av. Paulista 1578
         </span>
-        <span className="text-[10px] font-black tracking-[0.32em] uppercase">
+        <span className="text-[9px] sm:text-[10px] font-black tracking-[0.2em] sm:tracking-[0.3em] uppercase whitespace-nowrap">
           MASP · 2026
         </span>
       </motion.header>
@@ -77,7 +77,15 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps) {
           transition={{ delay: 0.7 }}
           className="text-lg md:text-2xl font-bold tracking-tight max-w-2xl mt-8 leading-tight"
         >
-          Museu de Arte de São Paulo Assis Chateaubriand.<br />
+          Museu de Arte de São Paulo Assis Chateaubriand.
+        </motion.p>
+
+        <motion.p
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.85 }}
+          className="text-sm md:text-base font-normal text-primary-foreground/80 max-w-2xl mt-4 leading-tight"
+        >
           Roteiro personalizado para sua visita.
         </motion.p>
 

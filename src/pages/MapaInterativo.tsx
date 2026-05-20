@@ -73,8 +73,30 @@ export default function MapaInterativo() {
   const buildings = ['Edifício Lina Bo Bardi', 'Edifício Pietro Maria Bardi'];
   const filteredFloors = floors.filter((f) => f.building === activeBuilding);
 
-  const getExhibitionsForFloor = (floorName: string) =>
-    exhibitions.filter((e) => e.floor === floorName);
+  // Ordenar floors de cima pra baixo, igual ao SVG do mapa
+  const floorPriority = (id: string) => {
+    if (id === '2-andar') return 0;
+    if (id === '1-andar') return 1;
+    if (id === 'vao-livre' || id === 'pmb-terreo') return 2;
+    if (id === '1-subsolo' || id === 'pmb-subsolo') return 3;
+    if (id === '2-subsolo') return 4;
+    return 5;
+  };
+  const orderedFloors = [...filteredFloors].sort((a, b) => floorPriority(a.id) - floorPriority(b.id));
+
+  // Match flexivel pra cruzar floor name do exhibitions (ex: "1º Andar Lina Bo Bardi")
+  // com floor name do mapa (ex: "1º Andar"). Tambem trata caso "Lina Bo Bardi" sozinho.
+  const getExhibitionsForFloor = (floor: FloorInfo) => {
+    const buildingShort = floor.building.replace('Edifício ', '');
+    return exhibitions.filter((e) => {
+      if (!e.floor) return false;
+      // Match exato (ex: "Vão Livre")
+      if (e.floor === floor.name) return true;
+      // Match com nome+edifício (ex: "1º Andar Lina Bo Bardi" pra floor.name "1º Andar")
+      if (e.floor.startsWith(floor.name) && e.floor.includes(buildingShort)) return true;
+      return false;
+    });
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -143,7 +165,7 @@ export default function MapaInterativo() {
                   const y = 12 + i * rowH;
                   const isSelected = selectedFloor?.id === floor.id;
                   const isGround = floor.id === 'vao-livre' || floor.id === 'pmb-terreo';
-                  const expoCount = getExhibitionsForFloor(floor.name).length;
+                  const expoCount = getExhibitionsForFloor(floor).length;
 
                   return (
                     <g
@@ -232,10 +254,10 @@ export default function MapaInterativo() {
           </div>
         </div>
 
-        {/* Visual floor stack */}
+        {/* Visual floor stack, ordenado de cima pra baixo igual ao SVG */}
         <div className="space-y-2 mb-8">
-          {filteredFloors.map((floor, i) => {
-            const expos = getExhibitionsForFloor(floor.name);
+          {orderedFloors.map((floor, i) => {
+            const expos = getExhibitionsForFloor(floor);
             const isSelected = selectedFloor?.id === floor.id;
 
             return (
