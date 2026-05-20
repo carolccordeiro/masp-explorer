@@ -5,7 +5,7 @@ import {
   ResponsiveContainer, ReferenceLine,
 } from 'recharts';
 import { Sparkles, Info, X } from 'lucide-react';
-import { Recommendation, featureLabel } from '@/lib/recommender';
+import { Recommendation } from '@/lib/recommender';
 
 /**
  * Painel "MATCH IA" que exibe o ranking do recomendador (cosine similarity)
@@ -78,10 +78,10 @@ export function RecommenderPanel({ recommendations, topK = 4, lang = 'pt' }: Pro
           </div>
           <div>
             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">
-              Recomendações para você
+              {lang === 'en' ? 'Recommendations for you' : 'Recomendações para você'}
             </span>
             <p className="font-display text-xl md:text-2xl uppercase text-foreground leading-tight mt-0.5">
-              Combina com você
+              {lang === 'en' ? 'Matches you' : 'Combina com você'}
             </p>
           </div>
         </div>
@@ -90,7 +90,7 @@ export function RecommenderPanel({ recommendations, topK = 4, lang = 'pt' }: Pro
           className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground hover:text-primary transition-colors"
         >
           <Info className="w-3 h-3" />
-          Como recomendamos
+          {lang === 'en' ? 'How we recommend' : 'Como recomendamos'}
         </button>
       </header>
 
@@ -114,34 +114,56 @@ export function RecommenderPanel({ recommendations, topK = 4, lang = 'pt' }: Pro
             >
               <div className="flex items-center justify-between border-b-2 border-foreground p-5">
                 <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">
-                  Como recomendamos
+                  {lang === 'en' ? 'How we recommend' : 'Como recomendamos'}
                 </span>
                 <button
                   onClick={() => setShowHow(false)}
                   className="w-8 h-8 border-2 border-foreground flex items-center justify-center hover:bg-foreground hover:text-background transition-colors"
-                  aria-label="Fechar"
+                  aria-label={lang === 'en' ? 'Close' : 'Fechar'}
                 >
                   <X className="w-3 h-3" />
                 </button>
               </div>
               <div className="p-6 space-y-4 text-sm text-foreground leading-relaxed">
-                <p>
-                  Cada exposição tem um <span className="font-bold">perfil curatorial</span>:
-                  qual ciclo do MASP, quanto tempo dura, em qual andar fica e se é destaque.
-                </p>
-                <p>
-                  Pegamos suas escolhas (tempo + temas) e comparamos com cada exposição usando{' '}
-                  <span className="font-bold">similaridade de cosseno</span>, uma fórmula matemática
-                  que mede o quanto dois conjuntos de características são parecidos.
-                </p>
-                <p>
-                  Quanto mais perto de <span className="tnum font-bold">100%</span>, mais a exposição
-                  combina com o que você pediu. O mapa 2D mostra todas as exposições nos eixos
-                  histórico/contemporâneo e latino-americana/internacional.
-                </p>
+                {lang === 'en' ? (
+                  <>
+                    <p>
+                      Each exhibition has a <span className="font-bold">curatorial profile</span>:
+                      which MASP cycle, how long it takes, on which floor, and whether it's a highlight.
+                    </p>
+                    <p>
+                      We take your choices (time + topics) and compare with each exhibition using{' '}
+                      <span className="font-bold">cosine similarity</span>, a math formula that
+                      measures how alike two sets of features are.
+                    </p>
+                    <p>
+                      The closer to <span className="tnum font-bold">100%</span>, the more the
+                      exhibition matches what you asked. The 2D map shows all exhibitions on the
+                      historical/contemporary and Latin American/international axes.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p>
+                      Cada exposição tem um <span className="font-bold">perfil curatorial</span>:
+                      qual ciclo do MASP, quanto tempo dura, em qual andar fica e se é destaque.
+                    </p>
+                    <p>
+                      Pegamos suas escolhas (tempo + temas) e comparamos com cada exposição usando{' '}
+                      <span className="font-bold">similaridade de cosseno</span>, uma fórmula matemática
+                      que mede o quanto dois conjuntos de características são parecidos.
+                    </p>
+                    <p>
+                      Quanto mais perto de <span className="tnum font-bold">100%</span>, mais a exposição
+                      combina com o que você pediu. O mapa 2D mostra todas as exposições nos eixos
+                      histórico/contemporâneo e latino-americana/internacional.
+                    </p>
+                  </>
+                )}
                 <p className="text-xs text-muted-foreground border-t border-border pt-4">
-                  Nenhum dado pessoal é usado. O cálculo roda no próprio totem, sua sessão
-                  termina e os dados somem em 90 segundos.
+                  {lang === 'en'
+                    ? 'No personal data is used. The calculation runs on the totem itself; your session ends and data is gone in 90 seconds.'
+                    : 'Nenhum dado pessoal é usado. O cálculo roda no próprio totem, sua sessão termina e os dados somem em 90 segundos.'}
                 </p>
               </div>
             </motion.div>
@@ -149,49 +171,13 @@ export function RecommenderPanel({ recommendations, topK = 4, lang = 'pt' }: Pro
         )}
       </AnimatePresence>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr]">
-        {/* Ranking textual */}
-        <ol className="border-b-2 lg:border-b-0 lg:border-r-2 border-foreground">
-          {recommendations.slice(0, 6).map((r, i) => {
-            const isTop = i < topK;
-            return (
-              <li
-                key={r.exhibition.id}
-                className={`flex items-stretch gap-4 ${i < 5 ? 'border-b border-foreground/30' : ''}`}
-              >
-                <div className={`w-14 shrink-0 flex flex-col items-center justify-center text-center ${
-                  isTop ? 'bg-primary text-primary-foreground' : 'bg-background text-foreground border-r border-foreground/30'
-                }`}>
-                  <span className="font-display text-xl tnum">{String(i + 1).padStart(2, '0')}</span>
-                </div>
-                <div className="flex-1 min-w-0 py-3 pr-3">
-                  <div className="flex items-baseline justify-between gap-2 flex-wrap">
-                    <p className="font-bold text-foreground truncate text-sm">{r.exhibition.title}</p>
-                    <span className="font-display text-lg text-primary tnum shrink-0">{r.scorePct}%</span>
-                  </div>
-                  <p className="text-[10px] text-muted-foreground truncate">{r.exhibition.artist}</p>
-                  {r.reasonTags.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mt-1.5">
-                      {r.reasonTags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="text-[9px] font-bold uppercase tracking-[0.14em] text-foreground bg-muted px-1.5 py-0.5"
-                        >
-                          {featureLabel(tag, lang)}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </li>
-            );
-          })}
-        </ol>
-
-        {/* Scatter plot 2D */}
+      {/* Scatter plot 2D em destaque, full width.
+          Removida a lista textual de exposicoes pra evitar redundancia com
+          a lista numerada do resultado do PlanejarVisita logo abaixo. */}
+      <div>
         <div className="p-4">
           <p className="text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground mb-2">
-            Mapa do acervo, eixos curatoriais
+            {lang === 'en' ? 'Collection map, curatorial axes' : 'Mapa do acervo, eixos curatoriais'}
           </p>
           <div className="h-[280px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -205,7 +191,13 @@ export function RecommenderPanel({ recommendations, topK = 4, lang = 'pt' }: Pro
                   axisLine={false}
                   tickLine={false}
                   ticks={[-0.8, 0, 0.8]}
-                  tickFormatter={(v) => (v < 0 ? 'clássico' : v > 0 ? 'contemp.' : '')}
+                  tickFormatter={(v) =>
+                    v < 0
+                      ? lang === 'en' ? 'classical' : 'clássico'
+                      : v > 0
+                      ? lang === 'en' ? 'contemp.' : 'contemp.'
+                      : ''
+                  }
                 />
                 <YAxis
                   type="number"
@@ -215,7 +207,13 @@ export function RecommenderPanel({ recommendations, topK = 4, lang = 'pt' }: Pro
                   axisLine={false}
                   tickLine={false}
                   ticks={[-0.8, 0, 0.8]}
-                  tickFormatter={(v) => (v < 0 ? 'internac.' : v > 0 ? 'latam' : '')}
+                  tickFormatter={(v) =>
+                    v < 0
+                      ? lang === 'en' ? 'internat.' : 'internac.'
+                      : v > 0
+                      ? lang === 'en' ? 'lat. am.' : 'latam'
+                      : ''
+                  }
                 />
                 <ZAxis type="number" dataKey="z" range={[80, 360]} />
                 <ReferenceLine x={0} stroke="hsl(var(--foreground))" strokeWidth={1} />

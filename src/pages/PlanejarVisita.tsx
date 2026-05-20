@@ -1,9 +1,9 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Clock, ChevronRight, RotateCcw, Users, Palette, Target } from 'lucide-react';
+import { Clock, ChevronRight, RotateCcw, Users, Palette, Smartphone, ArrowLeft } from 'lucide-react';
+import { QRCodeSVG } from 'qrcode.react';
 import { MaspHeader } from '@/components/MaspHeader';
 import { VoiceButton } from '@/components/VoiceButton';
-import { TreasureHunt } from '@/components/TreasureHunt';
 import { RecommenderPanel } from '@/components/RecommenderPanel';
 import { exhibitions, Exhibition } from '@/data/exhibitions';
 import { useVoice } from '@/hooks/useVoice';
@@ -51,20 +51,16 @@ export default function PlanejarVisita() {
   const [suggested, setSuggested] = useState<Exhibition[]>([]);
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [selectedExpo, setSelectedExpo] = useState<Exhibition | null>(null);
-  const [huntOpen, setHuntOpen] = useState(false);
   const { speak } = useVoice();
   const { lang, t } = useLanguage();
 
   const handleSelectTime = (minutes: number) => {
     setSelectedTime(minutes);
-    speak(`Ótimo! Você tem ${minutes >= 60 ? `${minutes / 60} hora${minutes > 60 ? 's' : ''}` : `${minutes} minutos`}. Agora me diga: quem está visitando com você?`);
     setStep('profile');
   };
 
   const handleSelectProfile = (profileId: string) => {
     setSelectedProfile(profileId);
-    const profile = profileOptions.find(p => p.id === profileId);
-    speak(`Perfeito! ${profile?.label}. Agora selecione os temas que mais interessam a vocês.`);
     setStep('themes');
   };
 
@@ -127,15 +123,6 @@ export default function PlanejarVisita() {
       minutes,
     });
     setRecommendations(recs);
-
-    const totalTime = result.reduce((sum, e) => sum + e.duration, 0);
-    const profileLabel = profileOptions.find(p => p.id === selectedProfile)?.label || 'vocês';
-
-    speak(
-      `Excelente! Preparamos um roteiro de ${totalTime} minutos para ${profileLabel}. ` +
-      `Sugerimos ${result.length} ${result.length === 1 ? 'exposição' : 'exposições'}. ` +
-      (result[0] ? `Começaremos por ${result[0].artist} — ${result[0].title}.` : '')
-    );
 
     setStep('result');
   };
@@ -201,7 +188,13 @@ export default function PlanejarVisita() {
                     className="p-4 border border-border bg-background text-foreground hover:border-primary hover:text-primary transition-colors text-center"
                   >
                     <Clock className="w-5 h-5 mx-auto mb-1" />
-                    <span className="text-lg font-bold">{time >= 60 ? `${time / 60}h` : `${time}min`}</span>
+                    <span className="text-lg font-bold">
+                      {time >= 60
+                        ? time % 60 === 0
+                          ? `${time / 60}h`
+                          : `${Math.floor(time / 60)}:${String(time % 60).padStart(2, '0')}h`
+                        : `${time}min`}
+                    </span>
                   </motion.button>
                 ))}
               </div>
@@ -240,8 +233,9 @@ export default function PlanejarVisita() {
               </div>
               <button
                 onClick={() => setStep('time')}
-                className="text-xs text-muted-foreground underline mt-2 block mx-auto"
+                className="mt-4 flex items-center gap-2 px-4 py-3 border-2 border-foreground text-foreground font-black text-xs uppercase tracking-[0.18em] hover:bg-foreground hover:text-background transition-colors mx-auto"
               >
+                <ChevronRight className="w-4 h-4 rotate-180" />
                 {t('common.voltar')}
               </button>
             </motion.div>
@@ -287,8 +281,9 @@ export default function PlanejarVisita() {
               </motion.button>
               <button
                 onClick={() => setStep('profile')}
-                className="text-xs text-muted-foreground underline block mx-auto"
+                className="mt-2 flex items-center gap-2 px-4 py-3 border-2 border-foreground text-foreground font-black text-xs uppercase tracking-[0.18em] hover:bg-foreground hover:text-background transition-colors mx-auto"
               >
+                <ChevronRight className="w-4 h-4 rotate-180" />
                 {t('common.voltar')}
               </button>
             </motion.div>
@@ -330,30 +325,43 @@ export default function PlanejarVisita() {
                 lang={lang}
               />
 
-              {/* CTA principal: ativar caça ao tesouro com o roteiro */}
-              <motion.button
+              {/* QR Code "Leve sua visita" pro celular do visitante.
+                  Substitui o antigo CTA de caca ao tesouro (removido porque
+                  o totem e fixo). O visitante escaneia, sai com o roteiro
+                  no celular pra percorrer o museu. Sem dados pessoais. */}
+              <motion.div
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.15 }}
-                onClick={() => setHuntOpen(true)}
-                className="w-full mb-6 border-2 border-foreground bg-foreground text-background py-5 px-6 flex items-center justify-between gap-4 hover:bg-primary hover:border-primary transition-colors group/hunt"
+                className="mb-8 border-2 border-foreground bg-background grid grid-cols-1 md:grid-cols-[1fr_auto] gap-6 p-6 md:p-8 items-center"
               >
-                <div className="flex items-center gap-4 text-left">
-                  <Target className="w-7 h-7 shrink-0" />
-                  <div>
-                    <span className="block text-[10px] font-black uppercase tracking-[0.3em] opacity-80">
-                      Modo jogo
-                    </span>
-                    <span className="block font-display text-2xl md:text-3xl uppercase mt-0.5">
-                      Caça ao Tesouro
-                    </span>
-                    <span className="block text-xs opacity-80 mt-1">
-                      Encontre as obras no museu e ganhe 15% off no Café do MASP
-                    </span>
-                  </div>
+                <div>
+                  <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary flex items-center gap-2">
+                    <Smartphone className="w-3 h-3" />
+                    {lang === 'en' ? 'Take it with you' : 'Leve sua visita'}
+                  </span>
+                  <h3 className="font-display text-2xl md:text-3xl text-foreground uppercase mt-2 leading-tight">
+                    {lang === 'en'
+                      ? 'Open the itinerary on your phone'
+                      : 'Abra o roteiro no seu celular'}
+                  </h3>
+                  <p className="text-sm text-muted-foreground mt-3 leading-relaxed max-w-md">
+                    {lang === 'en'
+                      ? 'Point your phone camera at the QR code to open this itinerary on the go. No login, no email, no personal data.'
+                      : 'Aponte a câmera do celular para o código ao lado e leve este roteiro no seu bolso ao percorrer o museu. Sem login, sem e-mail, sem dado pessoal.'}
+                  </p>
                 </div>
-                <ChevronRight className="w-6 h-6 shrink-0 group-hover/hunt:translate-x-1 transition-transform" />
-              </motion.button>
+                <div className="bg-background border-2 border-foreground p-3 shrink-0 mx-auto">
+                  <QRCodeSVG
+                    value={`${typeof window !== 'undefined' ? window.location.origin : ''}/roteiro?r=${suggested.map(e => e.id).join(',')}&t=${totalDuration}`}
+                    size={160}
+                    fgColor="hsl(var(--foreground))"
+                    bgColor="hsl(var(--background))"
+                    level="M"
+                    marginSize={2}
+                  />
+                </div>
+              </motion.div>
 
               <div className="flex items-center justify-between mb-2">
                 <h2 className="text-xl font-black text-foreground">{t('planejar.roteiro')}</h2>
@@ -394,17 +402,6 @@ export default function PlanejarVisita() {
                 ))}
               </div>
             </motion.div>
-          )}
-        </AnimatePresence>
-
-        <AnimatePresence>
-          {huntOpen && suggested.length > 0 && (
-            <TreasureHunt
-              itinerary={suggested}
-              profileLabel={profileOptions.find((p) => p.id === selectedProfile)?.label || 'visitante'}
-              totalDuration={totalDuration}
-              onClose={() => setHuntOpen(false)}
-            />
           )}
         </AnimatePresence>
 

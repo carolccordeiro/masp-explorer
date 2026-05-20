@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, HelpCircle, Info, Coffee, Sparkles, Map, Heart, Shield, ChevronRight, Clock, Camera } from 'lucide-react';
+import { Calendar, HelpCircle, Info, Coffee, Sparkles, Map, Heart, Shield, ChevronRight, Clock } from 'lucide-react';
 import { CouponModal } from '@/components/CouponModal';
 import { VoiceButton } from '@/components/VoiceButton';
 import { WelcomeScreen } from '@/components/WelcomeScreen';
@@ -30,15 +30,12 @@ export default function Index() {
     return sessionStorage.getItem('masp-started') === 'true';
   });
 
-  // Assistente IA chat retirado do menu por feedback dos visitantes
-  // (respostas inconsistentes). Código preservado em /assistente caso
-  // queiramos reintroduzir com prompt refinado.
   const menuItems = [
     { title: t('menu.planejar'), description: t('menu.planejar.desc'), icon: Calendar, path: '/planejar', color: 'bg-primary' },
+    { title: t('menu.assistente'), description: t('menu.assistente.desc'), icon: Sparkles, path: '/assistente', color: 'bg-primary' },
     { title: t('menu.mapa'), description: t('menu.mapa.desc'), icon: Map, path: '/mapa', color: 'bg-primary' },
     { title: t('menu.colecao'), description: t('menu.colecao.desc'), icon: Heart, path: '/colecao', color: 'bg-primary' },
-    { title: t('menu.quiz'), description: t('menu.quiz.desc'), icon: HelpCircle, path: '/quiz', color: 'bg-primary' },
-    { title: lang === 'en' ? 'Selfie at MASP' : 'Selfie no MASP', description: lang === 'en' ? 'Take your photo with the brutalist frame' : 'Sua foto com o quadro brutalista', icon: Camera, path: '/selfie', color: 'bg-masp-black' },
+    { title: t('menu.quiz'), description: t('menu.quiz.desc'), icon: HelpCircle, path: '/quiz', color: 'bg-masp-black' },
     { title: lang === 'en' ? '79 years of MASP' : '79 anos de MASP', description: lang === 'en' ? '1947 to 2026 timeline' : 'Linha do tempo 1947 a 2026', icon: Clock, path: '/sobre-masp', color: 'bg-masp-black' },
     { title: t('menu.info'), description: t('menu.info.desc'), icon: Info, path: '/informacoes', color: 'bg-masp-black' },
     { title: t('menu.dados'), description: t('menu.dados.desc'), icon: Shield, path: '/dados', color: 'bg-masp-black' },
@@ -85,12 +82,14 @@ export default function Index() {
 
       <MaspHeader onEndSession={handleEndSession} />
 
-      <section className="px-6 pt-10 pb-6">
+      <section className="px-4 sm:px-6 pt-8 sm:pt-10 pb-6">
         <span className="editorial-eyebrow">
           <span className="editorial-rule-long" />
           {t('index.bemvindo').toUpperCase()}
         </span>
-        <h1 className="font-display text-5xl md:text-7xl text-foreground mt-4 max-w-2xl uppercase">
+        {/* leading-[1.05] aumenta o entrelinhamento pra a virgula depois de MASP
+            nao cair sobre o U de SEU/your na linha de baixo. */}
+        <h1 className="font-display text-4xl sm:text-5xl md:text-7xl text-foreground mt-4 max-w-2xl uppercase leading-[1.05]">
           {lang === 'en' ? <>Discover MASP,<br />your way.</> : <>Descubra o MASP,<br />do seu jeito.</>}
         </h1>
         <div className="brutalist-rule-red mt-6 w-24" />
@@ -121,7 +120,7 @@ export default function Index() {
         variants={container}
         initial="hidden"
         animate="show"
-        className="px-6 flex-1 grid grid-cols-1 md:grid-cols-2 gap-3"
+        className="px-4 sm:px-6 flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3"
       >
         {menuItems.map((mi, idx) => (
           <motion.button
@@ -146,7 +145,7 @@ export default function Index() {
         ))}
       </motion.div>
 
-      <div className="px-6 py-6 space-y-4">
+      <div className="px-4 sm:px-6 py-6 space-y-4">
         <motion.button
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

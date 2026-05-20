@@ -13,7 +13,7 @@ const translations: Record<Lang, Record<string, string>> = {
     'menu.mapa.desc': 'Explore cada andar',
     'menu.colecao': 'Minha Coleção',
     'menu.colecao.desc': 'Salve obras e exposições favoritas',
-    'menu.quiz': 'Conheça o acervo',
+    'menu.quiz': 'Quiz Educativo',
     'menu.quiz.desc': 'Teste seu olhar com perguntas sobre as exposições',
     'menu.info': 'Informações',
     'menu.info.desc': 'Saiba tudo sobre o MASP',

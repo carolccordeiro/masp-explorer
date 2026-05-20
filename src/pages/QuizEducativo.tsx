@@ -42,7 +42,6 @@ export default function QuizEducativo() {
     setSelectedAnswer(null);
     setScore(0);
     setFinished(false);
-    speak(`Quiz: ${cat.title}. ${cat.questions[0].question}`);
   };
 
   const currentQuestion: QuizQuestion | null = selectedCategory
@@ -54,13 +53,11 @@ export default function QuizEducativo() {
     setSelectedAnswer(index);
     const correct = index === currentQuestion!.correctIndex;
     if (correct) setScore((s) => s + 1);
-    speak(correct ? 'Correto!' : `Incorreto. ${currentQuestion!.explanation}`);
   };
 
   const nextQuestion = () => {
     if (currentIndex + 1 >= selectedCategory!.questions.length) {
       setFinished(true);
-      speak(`Fim do quiz! Você acertou ${score} de ${selectedCategory!.questions.length}.`);
     } else {
       setCurrentIndex((i) => i + 1);
       setSelectedAnswer(null);

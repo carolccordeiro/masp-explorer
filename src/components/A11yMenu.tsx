@@ -32,9 +32,10 @@ export function A11yMenu() {
         }`}
         aria-label="Preferências de acessibilidade"
         aria-expanded={open}
+        title="Acessibilidade"
       >
         <Accessibility className="w-4 h-4" />
-        <span className="text-xs font-bold uppercase hidden sm:inline">Acessib.</span>
+        <span className="text-xs font-bold uppercase hidden lg:inline">Acessib.</span>
       </button>
 
       {open && (
