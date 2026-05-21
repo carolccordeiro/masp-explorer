@@ -4,6 +4,7 @@ import { Send, Bot, User, Sparkles } from 'lucide-react';
 import { MaspHeader } from '@/components/MaspHeader';
 import { VoiceButton } from '@/components/VoiceButton';
 import { supabase } from '@/integrations/supabase/client';
+import { useLanguage } from '@/contexts/LanguageContext';
 import ReactMarkdown from 'react-markdown';
 
 interface Message {
@@ -11,7 +12,7 @@ interface Message {
   content: string;
 }
 
-const SUGGESTIONS = [
+const SUGGESTIONS_PT = [
   'Quais exposições estão em cartaz?',
   'Me conte sobre Lina Bo Bardi',
   'Qual o horário do museu hoje?',
@@ -19,11 +20,21 @@ const SUGGESTIONS = [
   'O que são os cavaletes de cristal?',
 ];
 
+const SUGGESTIONS_EN = [
+  'Which exhibitions are on view?',
+  'Tell me about Lina Bo Bardi',
+  'What are the museum hours today?',
+  'Tell me about the MASP collection',
+  'What are the crystal easels?',
+];
+
 export default function AssistenteIA() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const { lang } = useLanguage();
+  const SUGGESTIONS = lang === 'en' ? SUGGESTIONS_EN : SUGGESTIONS_PT;
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
@@ -93,11 +104,11 @@ export default function AssistenteIA() {
       }
 
       if (!assistantContent) {
-        setMessages([...newMessages, { role: 'assistant', content: 'Desculpe, não consegui gerar uma resposta. Tente novamente!' }]);
+        setMessages([...newMessages, { role: 'assistant', content: lang === 'en' ? "Sorry, I couldn't generate an answer. Please try again!" : 'Desculpe, não consegui gerar uma resposta. Tente novamente!' }]);
       }
     } catch (error) {
       console.error('Chat error:', error);
-      setMessages([...newMessages, { role: 'assistant', content: 'Desculpe, ocorreu um erro. Por favor, tente novamente.' }]);
+      setMessages([...newMessages, { role: 'assistant', content: lang === 'en' ? 'Sorry, something went wrong. Please try again.' : 'Desculpe, ocorreu um erro. Por favor, tente novamente.' }]);
     } finally {
       setIsLoading(false);
     }
@@ -113,18 +124,23 @@ export default function AssistenteIA() {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-12">
             <span className="editorial-eyebrow">
               <span className="editorial-rule" />
-              Assistente KORA
+              {lang === 'en' ? 'KORA Assistant' : 'Assistente KORA'}
             </span>
             <h2 className="font-display text-4xl md:text-5xl text-foreground mt-3 leading-[0.98]">
-              Pergunte qualquer coisa <span className="font-bold text-primary">sobre o MASP</span>.
+              {lang === 'en' ? (
+                <>Ask anything <span className="font-bold text-primary">about MASP</span>.</>
+              ) : (
+                <>Pergunte qualquer coisa <span className="font-bold text-primary">sobre o MASP</span>.</>
+              )}
             </h2>
             <p className="text-base text-muted-foreground mt-5 mb-10 max-w-md mx-auto leading-relaxed">
-              Exposições em cartaz, história do museu, obras do acervo, horários e ingressos.
-              Use o botão de microfone abaixo se preferir falar.
+              {lang === 'en'
+                ? 'Exhibitions on view, museum history, artworks in the collection, hours and tickets. Use the microphone button below if you prefer to speak.'
+                : 'Exposições em cartaz, história do museu, obras do acervo, horários e ingressos. Use o botão de microfone abaixo se preferir falar.'}
             </p>
             <div className="flex flex-col gap-2 max-w-md mx-auto">
               <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground mb-2">
-                Sugestões
+                {lang === 'en' ? 'Suggestions' : 'Sugestões'}
               </span>
               {SUGGESTIONS.map((s, i) => (
                 <motion.button
@@ -205,7 +221,7 @@ export default function AssistenteIA() {
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Pergunte sobre o MASP..."
+              placeholder={lang === 'en' ? 'Ask about MASP...' : 'Pergunte sobre o MASP...'}
               className="flex-1 px-4 py-3 border border-border bg-background text-foreground text-sm focus:outline-none focus:border-primary"
               disabled={isLoading}
             />

@@ -14,12 +14,14 @@ export default function MinhaColecao() {
   const toggle = (id: string) => {
     const wasSaved = isSaved(id);
     rawToggle(id);
-    toast(wasSaved ? 'Removido dos favoritos' : 'Salvo em Minha Coleção');
+    toast(wasSaved
+      ? (lang === 'en' ? 'Removed from favorites' : 'Removido dos favoritos')
+      : (lang === 'en' ? 'Saved to My Collection' : 'Salvo em Minha Coleção'));
   };
   const [expandedExpo, setExpandedExpo] = useState<string | null>(null);
   const [selectedArtwork, setSelectedArtwork] = useState<(Artwork & { expoTitle: string }) | null>(null);
   const [tab, setTab] = useState<'explorar' | 'salvos'>('explorar');
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
 
   const allArtworks = exhibitions.flatMap((expo) =>
     (expo.artworks || []).map((art) => ({ ...art, expoTitle: expo.title }))
@@ -87,7 +89,9 @@ export default function MinhaColecao() {
                     </p>
                     <p className="text-xs text-muted-foreground truncate mt-0.5">{expo.artist}</p>
                     <p className="text-[10px] text-muted-foreground mt-1 tabular-nums">
-                      {expo.artworks!.length} {expo.artworks!.length === 1 ? 'obra' : 'obras'} na coleção
+                      {expo.artworks!.length} {lang === 'en'
+                        ? (expo.artworks!.length === 1 ? 'artwork' : 'artworks') + ' in the collection'
+                        : (expo.artworks!.length === 1 ? 'obra' : 'obras') + ' na coleção'}
                     </p>
                   </div>
                   <div className="pr-4 flex items-center">
