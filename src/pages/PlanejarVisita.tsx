@@ -357,7 +357,7 @@ export default function PlanejarVisita() {
                 </div>
                 <div className="bg-background border-2 border-foreground p-3 shrink-0 mx-auto">
                   <QRCodeSVG
-                    value={`${typeof window !== 'undefined' ? window.location.origin : ''}/roteiro?r=${suggested.map(e => e.id).join(',')}&t=${totalDuration}`}
+                    value={`${typeof window !== 'undefined' ? window.location.origin : ''}${import.meta.env.BASE_URL}roteiro?r=${suggested.map(e => e.id).join(',')}&t=${totalDuration}`.replace(/\/{2,}roteiro/, '/roteiro')}
                     size={160}
                     fgColor="hsl(var(--foreground))"
                     bgColor="hsl(var(--background))"
