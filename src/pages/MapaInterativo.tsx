@@ -8,70 +8,111 @@ import { useLanguage } from '@/contexts/LanguageContext';
 interface FloorInfo {
   id: string;
   name: string;
+  nameEn: string;
   building: string;
+  buildingEn: string;
   description: string;
+  descriptionEn: string;
   highlights: string[];
+  highlightsEn: string[];
 }
 
 const floors: FloorInfo[] = [
   {
     id: 'vao-livre',
     name: 'Vão Livre',
+    nameEn: 'Free Span',
     building: 'Edifício Lina Bo Bardi',
+    buildingEn: 'Lina Bo Bardi Building',
     description: 'O icônico vão livre de 74 metros, espaço público aberto que abriga feiras, eventos e manifestações culturais.',
+    descriptionEn: 'The iconic 74-meter free span, a public open space hosting fairs, events and cultural gatherings.',
     highlights: ['Feiras de antiguidades aos domingos', 'Eventos culturais', 'Espaço aberto ao público'],
+    highlightsEn: ['Antique fairs on Sundays', 'Cultural events', 'Open to the public'],
   },
   {
     id: '1-subsolo',
     name: '1º Subsolo',
+    nameEn: '1st Underground',
     building: 'Edifício Lina Bo Bardi',
+    buildingEn: 'Lina Bo Bardi Building',
     description: 'Andar dedicado às exposições temporárias. Atualmente abriga as principais mostras em cartaz.',
+    descriptionEn: 'Floor dedicated to temporary exhibitions. Currently houses the main shows on view.',
     highlights: ['Exposições temporárias', 'Galeria de arte contemporânea', 'Espaço educativo'],
+    highlightsEn: ['Temporary exhibitions', 'Contemporary art gallery', 'Educational space'],
   },
   {
     id: '2-subsolo',
     name: '2º Subsolo',
+    nameEn: '2nd Underground',
     building: 'Edifício Lina Bo Bardi',
+    buildingEn: 'Lina Bo Bardi Building',
     description: 'Espaço para exposições de videoarte, desenho e instalações de menor escala.',
+    descriptionEn: 'Space for video art exhibitions, drawing and smaller-scale installations.',
     highlights: ['Sala de vídeo', 'Exposições de desenho', 'Instalações'],
+    highlightsEn: ['Video room', 'Drawing exhibitions', 'Installations'],
   },
   {
     id: '1-andar',
     name: '1º Andar',
+    nameEn: '1st Floor',
     building: 'Edifício Lina Bo Bardi',
+    buildingEn: 'Lina Bo Bardi Building',
     description: 'Espaço administrativo e educativo do museu, incluindo o centro de documentação.',
+    descriptionEn: 'Museum administrative and educational space, including the documentation center.',
     highlights: ['Centro de documentação', 'Programa educativo', 'Ateliê'],
+    highlightsEn: ['Documentation center', 'Educational program', 'Atelier'],
   },
   {
     id: '2-andar',
     name: '2º Andar',
+    nameEn: '2nd Floor',
     building: 'Edifício Lina Bo Bardi',
+    buildingEn: 'Lina Bo Bardi Building',
     description: 'Abriga o Acervo em Transformação, apresentado nos icônicos cavaletes de cristal projetados por Lina Bo Bardi.',
+    descriptionEn: 'Hosts the Collection in Transformation, presented on the iconic crystal easels designed by Lina Bo Bardi.',
     highlights: ['Cavaletes de cristal', 'Acervo permanente', 'Obras de Van Gogh, Renoir, Rafael'],
+    highlightsEn: ['Crystal easels', 'Permanent collection', 'Works by Van Gogh, Renoir, Rafael'],
   },
   {
     id: 'pmb-terreo',
     name: 'Térreo',
+    nameEn: 'Ground Floor',
     building: 'Edifício Pietro Maria Bardi',
+    buildingEn: 'Pietro Maria Bardi Building',
     description: 'Inaugurado em 2024, abriga o restaurante MASP A Baianeira e a loja do museu.',
+    descriptionEn: 'Inaugurated in 2024, houses the MASP A Baianeira restaurant and the museum store.',
     highlights: ['Restaurante MASP A Baianeira', 'Loja MASP', 'Bilheteria'],
+    highlightsEn: ['MASP A Baianeira Restaurant', 'MASP Store', 'Ticket office'],
   },
   {
     id: 'pmb-subsolo',
     name: 'Subsolo',
+    nameEn: 'Underground',
     building: 'Edifício Pietro Maria Bardi',
+    buildingEn: 'Pietro Maria Bardi Building',
     description: 'Espaço para exposições e programação cultural no novo edifício.',
+    descriptionEn: 'Space for exhibitions and cultural programming in the new building.',
     highlights: ['Exposições temporárias', 'Auditório', 'Espaço multiuso'],
+    highlightsEn: ['Temporary exhibitions', 'Auditorium', 'Multipurpose space'],
   },
 ];
 
 export default function MapaInterativo() {
   const [selectedFloor, setSelectedFloor] = useState<FloorInfo | null>(null);
   const [activeBuilding, setActiveBuilding] = useState<string>('Edifício Lina Bo Bardi');
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+
+  // Helpers de localizacao: devolvem os campos certos conforme idioma
+  const fName = (f: FloorInfo) => (lang === 'en' ? f.nameEn : f.name);
+  const fBuilding = (f: FloorInfo) => (lang === 'en' ? f.buildingEn : f.building);
+  const fDescription = (f: FloorInfo) => (lang === 'en' ? f.descriptionEn : f.description);
+  const fHighlights = (f: FloorInfo) => (lang === 'en' ? f.highlightsEn : f.highlights);
 
   const buildings = ['Edifício Lina Bo Bardi', 'Edifício Pietro Maria Bardi'];
   const filteredFloors = floors.filter((f) => f.building === activeBuilding);
+  const activeBuildingLabel = lang === 'en'
+    ? activeBuilding.replace('Edifício Lina Bo Bardi', 'Lina Bo Bardi Building').replace('Edifício Pietro Maria Bardi', 'Pietro Maria Bardi Building')
+    : activeBuilding;
 
   // Ordenar floors de cima pra baixo, igual ao SVG do mapa
   const floorPriority = (id: string) => {
@@ -130,7 +171,7 @@ export default function MapaInterativo() {
             Each rectangle is clickable and syncs with the expandable list below. */}
         <div className="mb-6 border border-border bg-muted/20 p-4">
           <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-3">
-            {activeBuilding}
+            {activeBuildingLabel}
           </p>
 
           {(() => {
@@ -191,7 +232,7 @@ export default function MapaInterativo() {
                         fill={isSelected ? 'hsl(var(--primary-foreground))' : 'hsl(var(--foreground))'}
                         dominantBaseline="middle"
                       >
-                        {floor.name}
+                        {fName(floor)}
                       </text>
                       {expoCount > 0 && (
                         <g>
@@ -244,13 +285,13 @@ export default function MapaInterativo() {
           <div className="flex items-center justify-between mt-3 text-[10px] text-muted-foreground gap-2 flex-wrap">
             <span className="flex items-center gap-1.5">
               <span className="inline-block w-3 h-3 bg-primary rounded-full" />
-              número de exposições no andar
+              {lang === 'en' ? 'exhibitions on the floor' : 'número de exposições no andar'}
             </span>
             <span className="flex items-center gap-1.5">
               <span className="inline-block w-3 border-t border-dashed border-primary" />
-              nível da rua, Av. Paulista
+              {lang === 'en' ? 'street level, Paulista Ave.' : 'nível da rua, Av. Paulista'}
             </span>
-            <span>Toque para ver detalhes</span>
+            <span>{lang === 'en' ? 'Tap to see details' : 'Toque para ver detalhes'}</span>
           </div>
         </div>
 
@@ -277,14 +318,16 @@ export default function MapaInterativo() {
                     <div className={`w-16 h-16 flex items-center justify-center border-2 shrink-0 ${
                       isSelected ? 'border-primary bg-primary text-primary-foreground' : 'border-border text-foreground'
                     }`}>
-                      <span className="text-xs font-black text-center leading-tight">{floor.name}</span>
+                      <span className="text-xs font-black text-center leading-tight">{fName(floor)}</span>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-bold text-foreground">{floor.name}</p>
-                      <p className="text-xs text-muted-foreground line-clamp-2">{floor.description}</p>
+                      <p className="font-bold text-foreground">{fName(floor)}</p>
+                      <p className="text-xs text-muted-foreground line-clamp-2">{fDescription(floor)}</p>
                       {expos.length > 0 && (
                         <p className="text-xs text-primary font-semibold mt-1">
-                          {expos.length} {expos.length === 1 ? 'exposição' : 'exposições'} em cartaz
+                          {expos.length} {lang === 'en'
+                            ? (expos.length === 1 ? 'exhibition' : 'exhibitions') + ' on view'
+                            : (expos.length === 1 ? 'exposição' : 'exposições') + ' em cartaz'}
                         </p>
                       )}
                     </div>
@@ -304,7 +347,7 @@ export default function MapaInterativo() {
                         <div>
                           <p className="text-xs font-semibold uppercase text-muted-foreground tracking-wider mb-2">{t('mapa.destaques')}</p>
                           <div className="flex flex-wrap gap-2">
-                            {floor.highlights.map((h) => (
+                            {fHighlights(floor).map((h) => (
                               <span key={h} className="text-xs px-2 py-1 bg-muted text-foreground">
                                 {h}
                               </span>

@@ -302,8 +302,12 @@ export default function PlanejarVisita() {
                   {t('planejar.step4')}
                 </p>
                 <p className="text-foreground text-sm">
-                  <span className="font-bold">{suggested.length} {suggested.length === 1 ? 'exposição' : 'exposições'}</span> ·{' '}
-                  aprox. <span className="font-bold">{totalDuration} minutos</span> ·{' '}
+                  <span className="font-bold">
+                    {suggested.length} {lang === 'en'
+                      ? (suggested.length === 1 ? 'exhibition' : 'exhibitions')
+                      : (suggested.length === 1 ? 'exposição' : 'exposições')}
+                  </span> ·{' '}
+                  {lang === 'en' ? 'approx.' : 'aprox.'} <span className="font-bold">{totalDuration} {lang === 'en' ? 'minutes' : 'minutos'}</span> ·{' '}
                   {lang === 'en'
                     ? profileOptions.find(p => p.id === selectedProfile)?.labelEn
                     : profileOptions.find(p => p.id === selectedProfile)?.label}

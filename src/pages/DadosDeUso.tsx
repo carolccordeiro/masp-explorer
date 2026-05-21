@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { MaspHeader } from '@/components/MaspHeader';
 import { useLanguage } from '@/contexts/LanguageContext';
 
-const dataItems = [
+const dataItemsPt = [
   {
     icon: <Eye className="w-5 h-5" />,
     title: 'Interações com o totem',
@@ -27,9 +27,33 @@ const dataItems = [
   },
 ];
 
+const dataItemsEn = [
+  {
+    icon: <Eye className="w-5 h-5" />,
+    title: 'Totem interactions',
+    description: 'We record which screens were accessed and for how long, to understand visitor behavior.',
+  },
+  {
+    icon: <Clock className="w-5 h-5" />,
+    title: 'Session duration',
+    description: 'We monitor the total length of your interaction with the totem to optimize the experience.',
+  },
+  {
+    icon: <BarChart3 className="w-5 h-5" />,
+    title: 'Content preferences',
+    description: 'We identify which exhibitions and works generate the most interest, to improve curation and programming.',
+  },
+  {
+    icon: <Shield className="w-5 h-5" />,
+    title: 'Coupon data',
+    description: 'Name and email provided for the discount coupon are used exclusively for that purpose.',
+  },
+];
+
 export default function DadosDeUso() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const navigate = useNavigate();
+  const dataItems = lang === 'en' ? dataItemsEn : dataItemsPt;
 
   return (
     <div className="min-h-screen bg-background">
@@ -66,10 +90,21 @@ export default function DadosDeUso() {
         <div className="p-4 bg-masp-light border-l-4 border-primary mb-6">
           <p className="font-bold text-foreground text-sm mb-2">{t('dados.direitos')}</p>
           <ul className="text-xs text-muted-foreground space-y-1.5 leading-relaxed">
-            <li>Você pode encerrar a sessão a qualquer momento</li>
-            <li>Dados de navegação são anonimizados automaticamente</li>
-            <li>Dados pessoais (nome/e-mail) são coletados apenas mediante consentimento</li>
-            <li>Em conformidade com a LGPD (Lei Geral de Proteção de Dados)</li>
+            {lang === 'en' ? (
+              <>
+                <li>You can end the session at any time</li>
+                <li>Browsing data is automatically anonymized</li>
+                <li>Personal data (name/email) is only collected with consent</li>
+                <li>In compliance with the Brazilian General Data Protection Law (LGPD)</li>
+              </>
+            ) : (
+              <>
+                <li>Você pode encerrar a sessão a qualquer momento</li>
+                <li>Dados de navegação são anonimizados automaticamente</li>
+                <li>Dados pessoais (nome/e-mail) são coletados apenas mediante consentimento</li>
+                <li>Em conformidade com a LGPD (Lei Geral de Proteção de Dados)</li>
+              </>
+            )}
           </ul>
         </div>
 
@@ -79,9 +114,19 @@ export default function DadosDeUso() {
             <p className="font-bold text-foreground text-sm">{t('dados.exclusao')}</p>
           </div>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            Para solicitar a exclusão dos seus dados, entre em contato pelo e-mail{' '}
-            <strong className="text-foreground">privacidade@masp.org.br</strong> ou
-            fale com um atendente na recepção do museu.
+            {lang === 'en' ? (
+              <>
+                To request the deletion of your data, contact us at{' '}
+                <strong className="text-foreground">privacidade@masp.org.br</strong> or
+                speak with an attendant at the museum reception.
+              </>
+            ) : (
+              <>
+                Para solicitar a exclusão dos seus dados, entre em contato pelo e-mail{' '}
+                <strong className="text-foreground">privacidade@masp.org.br</strong> ou
+                fale com um atendente na recepção do museu.
+              </>
+            )}
           </p>
         </div>
 
@@ -101,13 +146,13 @@ export default function DadosDeUso() {
           </div>
           <div className="flex-1 py-4 px-5 text-left">
             <span className="block text-[10px] font-black uppercase tracking-[0.3em] opacity-80">
-              Acesso restrito
+              {lang === 'en' ? 'Restricted access' : 'Acesso restrito'}
             </span>
             <span className="block font-display text-xl uppercase mt-0.5">
               Console Flexmedia
             </span>
             <span className="block text-xs opacity-80 mt-1">
-              Dashboard de uso anônimo do totem · operador
+              {lang === 'en' ? 'Anonymous totem usage dashboard · operator' : 'Dashboard de uso anônimo do totem · operador'}
             </span>
           </div>
           <div className="w-14 shrink-0 flex items-center justify-center">
