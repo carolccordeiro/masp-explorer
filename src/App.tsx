@@ -22,6 +22,7 @@ import DadosDeUso from "./pages/DadosDeUso.tsx";
 import Roteiro from "./pages/Roteiro.tsx";
 import Admin from "./pages/Admin.tsx";
 import SobreMASP from "./pages/SobreMASP.tsx";
+import Detector from "./pages/Detector.tsx";
 
 import NotFound from "./pages/NotFound.tsx";
 
@@ -73,6 +74,7 @@ function TotemShell() {
         <Route path="/roteiro" element={<Roteiro />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/sobre-masp" element={<SobreMASP />} />
+        <Route path="/detector" element={<Detector />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
