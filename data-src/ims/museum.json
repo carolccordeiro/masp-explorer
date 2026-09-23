@@ -1,0 +1,77 @@
+{
+  "about": "O Instituto Moreira Salles, fundado em 1992, guarda um dos acervos de fotografia mais importantes do Brasil, com cerca de 2 milhões de imagens, além de coleções de música, literatura e iconografia. O IMS Paulista, inaugurado em 2017 na Avenida Paulista, tem nove andares projetados pelo escritório Andrade Morettin, com entrada gratuita para o centro cultural e as exposições.",
+  "metro": "Estações Consolação (Linha 2 Verde) e Paulista (Linha 4 Amarela), a menos de 5 minutos a pé. Ônibus na Praça do Ciclista, em frente ao IMS.",
+  "phone": "(11) 2842-9120",
+  "site": "https://ims.com.br/unidade/sao-paulo/",
+  "hours": [
+    {"days": "Terça a domingo e feriados", "time": "10h às 20h", "note": "Última admissão 30 minutos antes do fechamento"},
+    {"days": "Segunda", "time": "Fechado"}
+  ],
+  "tickets": [
+    {"label": "Centro cultural e exposições", "price": "Grátis"},
+    {"label": "Cinema (varia por sessão)", "price": "Consulte a programação"}
+  ],
+  "free": [
+    "Entrada gratuita todos os dias de funcionamento, para o centro cultural e as exposições",
+    "Não é necessário agendar a visita"
+  ],
+  "accessibility": [
+    "Sinalização direcionada e elevadores de acesso a todos os espaços de visitação",
+    "Cadeira de rodas disponível e vagas de estacionamento para pessoas com deficiência",
+    "Recursos de acessibilidade nas exposições, como audiodescrição",
+    "Cães-guia são bem-vindos",
+    "Na KORA: áudio-guia, Libras (VLibras), alto contraste e texto ampliado"
+  ],
+  "services": [
+    "Restaurante Balaio, do chef Rodrigo Oliveira, no térreo",
+    "Café Balaio na Praça IMS",
+    "Loja e livraria IMS por Travessa",
+    "Biblioteca de Fotografia com capacidade para 30 mil itens",
+    "Guarda-volumes e achados e perdidos no 5º andar",
+    "Bicicletário gratuito"
+  ],
+  "timeline": [
+    {"year": "1992", "text": "Walther Moreira Salles cria o Instituto Moreira Salles, com sede inicial em Poços de Caldas, Minas Gerais."},
+    {"year": "1996", "text": "Abertura do IMS Higienópolis, primeiro centro cultural do instituto em São Paulo."},
+    {"year": "1999", "text": "Inauguração do IMS Rio, na antiga residência da família Moreira Salles, na Gávea."},
+    {"year": "2017", "text": "Em 20 de setembro, o IMS Paulista abre na Avenida Paulista e substitui a unidade de Higienópolis."},
+    {"year": "2017", "text": "O projeto do Andrade Morettin Arquitetos recebe o prêmio APCA de melhor obra de arquitetura em São Paulo."},
+    {"year": "2019", "text": "A escultura Eco, de Richard Serra, é inaugurada no jardim do IMS Paulista."},
+    {"year": "2026", "text": "Centenário de Fernando Lemos é celebrado com exposição de 400 obras do arquivo do artista."}
+  ],
+  "exhibitions": [
+    {"id": "fernando-lemos", "title": "Quanto mais desejo, mais invento o que vejo", "artist": "Fernando Lemos", "dates": "19.9.2026 a 7.2.2027", "start": "2026-09-19", "end": "2027-02-07", "location": "IMS Paulista", "space": "galerias", "url": "https://ims.com.br/exposicao/fernando-lemos/",
+     "description": "Celebra o centenário do artista luso-brasileiro com 400 obras em 70 anos de produção: fotografias, desenhos, design gráfico, moda, poesia e gravuras."},
+    {"id": "zinezona", "title": "ZineZona", "dates": "22.8 a 5.11.2026", "start": "2026-08-22", "end": "2026-11-05", "location": "Biblioteca de Fotografia", "space": "biblioteca", "url": "https://ims.com.br/exposicao/zinezona/",
+     "description": "Um recorte da produção contemporânea de zines fotográficos no Brasil, a partir do acervo da Biblioteca de Fotografia do IMS."},
+    {"id": "laudelina", "title": "Dignidade e luta: Laudelina de Campos Mello", "dates": "16.5 a 22.11.2026", "start": "2026-05-16", "end": "2026-11-22", "location": "IMS Paulista", "space": "galerias", "url": "https://ims.com.br/exposicao/dignidade-e-luta-laudelina-de-campos-mello/",
+     "description": "A vida e a militância da fundadora do primeiro sindicato de trabalhadoras domésticas do Brasil, com fotografias, documentos e objetos históricos."},
+    {"id": "eco-serra", "title": "Eco, de Richard Serra", "artist": "Richard Serra", "dates": "Exposição permanente", "start": "2019-02-23", "location": "Jardim externo, nos fundos do térreo", "space": "terreo", "url": "https://ims.com.br/exposicao/eco-de-richard-serra-ims-paulista/",
+     "description": "Primeira escultura de Richard Serra aberta à visitação pública permanente na América Latina, feita especialmente para o IMS Paulista."}
+  ],
+  "spaces": [
+    {"id": "galerias", "name": "Galerias de exposição", "level": 6, "badge": "G", "description": "Mais de 1.200 metros quadrados de galerias com pé-direito duplo nos andares superiores."},
+    {"id": "biblioteca", "name": "Biblioteca de Fotografia", "level": 5.5, "badge": "B", "description": "Acervo de publicações sobre fotografia, com capacidade para 30 mil itens e espaço para pesquisa."},
+    {"id": "praca", "name": "5º andar · Praça IMS", "level": 5, "badge": "5º", "description": "Área de entrada e convivência, acessada por escadas rolantes a partir do térreo, com recepção, café, loja e guarda-volumes."},
+    {"id": "cinema", "name": "Cineteatro", "level": 1, "badge": "C", "description": "Sala de cinema, shows, seminários e debates."},
+    {"id": "terreo", "name": "Térreo e jardim", "level": 0, "badge": "T", "description": "Vão livre na Avenida Paulista, restaurante Balaio e, nos fundos, o jardim com a escultura Eco, de Richard Serra."}
+  ],
+  "stats": [
+    {"value": "2 mi", "label": "imagens no acervo de fotografia"},
+    {"value": "9", "label": "andares com pé-direito duplo"},
+    {"value": "R$ 0", "label": "entrada todos os dias"}
+  ],
+  "cover_from": "zingg-avenida-paulista",
+  "quiz": [
+    {"question": "Qual é o preço da entrada no IMS Paulista?", "options": ["R$ 20,00", "R$ 50,00", "Gratuita", "Só para sócios"], "correct": 2, "explanation": "A entrada no centro cultural e nas exposições do IMS Paulista é gratuita."},
+    {"question": "Em que ano o IMS Paulista foi inaugurado?", "options": ["1992", "2007", "2017", "2022"], "correct": 2, "explanation": "O IMS Paulista abriu em 20 de setembro de 2017."},
+    {"question": "Quantos andares tem o prédio do IMS Paulista?", "options": ["3", "5", "9", "15"], "correct": 2, "explanation": "São nove andares, todos com pé-direito duplo."},
+    {"question": "Em que andar fica a Praça IMS, área de entrada do centro cultural?", "options": ["Térreo", "2º andar", "5º andar", "Cobertura"], "correct": 2, "explanation": "Os arquitetos levaram a entrada para o 5º andar, acessado por escadas rolantes."},
+    {"question": "Qual artista americano tem uma escultura permanente no jardim do IMS Paulista?", "options": ["Andy Warhol", "Richard Serra", "Jeff Koons", "Louise Bourgeois"], "correct": 1, "explanation": "A escultura Eco, de Richard Serra, foi inaugurada em 2019."},
+    {"question": "Qual fotógrafo do século XIX é destaque do acervo do IMS?", "options": ["Marc Ferrez", "Sebastião Salgado", "Cartier-Bresson", "Robert Capa"], "correct": 0, "explanation": "Marc Ferrez é considerado o maior fotógrafo brasileiro do século XIX."},
+    {"question": "Que acontecimento Marcel Gautherot fotografou no Planalto Central?", "options": ["A construção de Brasília", "A Copa de 1950", "A abolição", "A chegada da família real"], "correct": 0, "explanation": "Gautherot acompanhou a construção de Brasília, inaugurada em 1960."},
+    {"question": "O que o fotógrafo Augusto Malta documentou no Rio de Janeiro dos anos 1920?", "options": ["A demolição do morro do Castelo", "A construção do Maracanã", "O primeiro carnaval", "A fundação da cidade"], "correct": 0, "explanation": "Malta registrou passo a passo a demolição do morro do Castelo."},
+    {"question": "Qual escritor inspirou o livro de fotografias de Maureen Bisilliat sobre o sertão?", "options": ["Machado de Assis", "Guimarães Rosa", "Clarice Lispector", "Jorge Amado"], "correct": 1, "explanation": "O livro A João Guimarães Rosa percorre os lugares descritos pelo autor."},
+    {"question": "Qual técnica Hildegard Rosenthal usou para criar um jornaleiro gigante?", "options": ["Pintura", "Fotomontagem", "Inteligência artificial", "Escultura"], "correct": 1, "explanation": "Ela juntou duas fotos em uma só, técnica chamada fotomontagem."}
+  ]
+}

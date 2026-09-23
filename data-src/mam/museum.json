@@ -1,0 +1,76 @@
+{
+  "about": "Fundado em 1948 por Francisco Matarazzo Sobrinho, o MAM São Paulo organizou a primeira Bienal de São Paulo, em 1951, e hoje reúne mais de 5 mil obras de arte moderna e contemporânea brasileira. O museu fica sob a marquise projetada por Oscar Niemeyer no Parque Ibirapuera, com fachada de vidro reformada por Lina Bo Bardi e um Jardim de Esculturas desenhado por Roberto Burle Marx.",
+  "metro": "Parque Ibirapuera, portão 3. Estações mais próximas: AACD-Servidor (Linha 5 Lilás) e Brigadeiro (Linha 2 Verde), com trajeto complementar a pé ou de ônibus.",
+  "site": "https://mam.org.br",
+  "hours": [
+    {"days": "Terça a domingo", "time": "10h às 18h", "note": "Entrada até 17h30"},
+    {"days": "Domingo", "time": "10h às 18h", "note": "Entrada gratuita para todos"},
+    {"days": "Segunda", "time": "Fechado"}
+  ],
+  "tickets": [
+    {"label": "Inteira", "price": "R$ 40,00"},
+    {"label": "Meia-entrada (estudantes, ID Jovem e maiores de 60 anos)", "price": "R$ 20,00"}
+  ],
+  "free": [
+    "Domingos, para todos os públicos",
+    "Crianças menores de 10 anos",
+    "Pessoas com deficiência e um acompanhante",
+    "Professores e diretores da rede pública estadual e municipal de São Paulo",
+    "Funcionários de museus, guias de turismo credenciados e membros do ICOM, AICA e ABCA",
+    "Alunos dos cursos do MAM e participantes do MAM Educativo"
+  ],
+  "accessibility": [
+    "Audioguias com linguagem descritiva, videoguias em Libras e publicações acessíveis",
+    "Materiais táteis produzidos a partir de obras do acervo",
+    "Horários alternativos de visita para pessoas com hipersensibilidade sensorial: educativo@mam.org.br",
+    "Guarda-volumes gratuito",
+    "Na KORA: áudio-guia, Libras (VLibras), alto contraste e texto ampliado"
+  ],
+  "services": [
+    "Restaurante Petí no MAM, de terça a domingo, das 10h às 18h, com acesso independente da visita",
+    "Visitas educativas mediante agendamento: educativo@mam.org.br",
+    "Biblioteca e Centro de Documentação e Memória",
+    "Loja do MAM",
+    "Crianças menores de 12 anos devem estar acompanhadas"
+  ],
+  "timeline": [
+    {"year": "1948", "text": "Francisco Matarazzo Sobrinho, o Ciccillo, funda o Museu de Arte Moderna de São Paulo."},
+    {"year": "1951", "text": "O MAM organiza a 1ª Bienal de São Paulo, que coloca a cidade no circuito internacional da arte."},
+    {"year": "1963", "text": "O acervo original é transferido para a Universidade de São Paulo e dá origem ao MAC USP."},
+    {"year": "1969", "text": "O museu se instala sob a marquise do Ibirapuera e cria o Panorama da Arte Brasileira."},
+    {"year": "1982", "text": "Reforma projetada por Lina Bo Bardi fecha o espaço com uma grande fachada de vidro."},
+    {"year": "1993", "text": "Inauguração do Jardim de Esculturas, projetado por Roberto Burle Marx."},
+    {"year": "2026", "text": "39º Panorama da Arte Brasileira: Depois que tudo foi dito, com curadoria de Diane Lima."}
+  ],
+  "exhibitions": [
+    {"id": "panorama-39", "title": "39º Panorama da Arte Brasileira: Depois que tudo foi dito", "dates": "12.9.2026 a 24.1.2027", "start": "2026-09-12", "end": "2027-01-24", "location": "Grande Sala", "space": "grande-sala", "url": "https://mam.org.br/exposicao/39o-panorama-da-arte-brasileira-depois-que-tudo-foi-dito/",
+     "description": "Com curadoria de Diane Lima, a mostra investiga como as demandas por reparação racial e as políticas afirmativas reconfiguraram a arte brasileira nas últimas décadas."},
+    {"id": "jardim-esculturas", "title": "Jardim de Esculturas", "dates": "Permanente", "start": "1993-01-01", "location": "Área externa do museu", "space": "jardim", "url": "https://mam.org.br/acervo/",
+     "description": "Jardim projetado por Roberto Burle Marx com esculturas do acervo do MAM ao ar livre, integrado ao Parque Ibirapuera."}
+  ],
+  "spaces": [
+    {"id": "grande-sala", "name": "Grande Sala", "level": 2, "badge": "GS", "description": "Principal sala de exposições do museu, sob a marquise, com a fachada de vidro voltada para o parque."},
+    {"id": "sala-paulo-figueiredo", "name": "Sala Paulo Figueiredo", "level": 1, "badge": "SP", "description": "Sala dedicada a exposições do acervo e mostras de menor escala."},
+    {"id": "jardim", "name": "Jardim de Esculturas", "level": 0, "badge": "J", "description": "Jardim de Roberto Burle Marx com esculturas ao ar livre, aberto ao parque."},
+    {"id": "biblioteca", "name": "Biblioteca", "level": -1, "badge": "B", "description": "Biblioteca e Centro de Documentação e Memória, com publicações sobre arte moderna e contemporânea."},
+    {"id": "restaurante", "name": "Petí no MAM", "level": -2, "badge": "R", "description": "Restaurante do museu, com acesso independente da visita."}
+  ],
+  "stats": [
+    {"value": "5 mil+", "label": "obras no acervo"},
+    {"value": "1948", "label": "ano de fundação"},
+    {"value": "39º", "label": "Panorama da Arte Brasileira"}
+  ],
+  "cover_from": "volpi-portais-bandeirinhas",
+  "quiz": [
+    {"question": "Em que parque fica o MAM São Paulo?", "options": ["Parque Trianon", "Parque Ibirapuera", "Parque Villa-Lobos", "Parque da Luz"], "correct": 1, "explanation": "O MAM fica sob a marquise do Parque Ibirapuera."},
+    {"question": "Quem projetou a marquise do Ibirapuera, onde está o MAM?", "options": ["Lina Bo Bardi", "Oscar Niemeyer", "Burle Marx", "Rino Levi"], "correct": 1, "explanation": "A marquise faz parte do conjunto projetado por Oscar Niemeyer para o parque."},
+    {"question": "Qual grande evento o MAM organizou em 1951?", "options": ["A Semana de Arte Moderna", "A 1ª Bienal de São Paulo", "A Copa do Mundo", "O primeiro Panorama"], "correct": 1, "explanation": "A 1ª Bienal de São Paulo foi organizada pelo MAM em 1951."},
+    {"question": "Em que dia da semana a entrada no MAM é gratuita para todos?", "options": ["Segunda", "Terça", "Sábado", "Domingo"], "correct": 3, "explanation": "Aos domingos a entrada é gratuita para todos os públicos."},
+    {"question": "Quem projetou o Jardim de Esculturas do MAM?", "options": ["Roberto Burle Marx", "Tarsila do Amaral", "Oscar Niemeyer", "Tomie Ohtake"], "correct": 0, "explanation": "O jardim foi projetado por Roberto Burle Marx e inaugurado em 1993."},
+    {"question": "Quem fundou o MAM São Paulo em 1948?", "options": ["Assis Chateaubriand", "Francisco Matarazzo Sobrinho", "Mário de Andrade", "Walther Moreira Salles"], "correct": 1, "explanation": "O industrial Francisco Matarazzo Sobrinho, o Ciccillo, fundou o museu."},
+    {"question": "Qual artista ficou famoso pelas bandeirinhas de festa junina?", "options": ["Alfredo Volpi", "Hélio Oiticica", "Di Cavalcanti", "Leonilson"], "correct": 0, "explanation": "Alfredo Volpi transformou bandeirinhas e fachadas em pintura quase abstrata."},
+    {"question": "Qual é o nome da mostra que o MAM organiza desde 1969 sobre a arte do país?", "options": ["Bienal", "Panorama da Arte Brasileira", "Salão Nacional", "Documenta"], "correct": 1, "explanation": "O Panorama da Arte Brasileira chegou à 39ª edição em 2026."},
+    {"question": "Abraham Palatnik é pioneiro de que tipo de arte?", "options": ["Arte cinética", "Grafite", "Arte digital", "Cerâmica"], "correct": 0, "explanation": "Seus aparelhos cinecromáticos, com luz e movimento, estrearam na 1ª Bienal, em 1951."},
+    {"question": "Com qual material Amilcar de Castro fazia suas esculturas?", "options": ["Mármore", "Chapas de aço cortadas e dobradas", "Bronze fundido", "Papel machê"], "correct": 1, "explanation": "Ele cortava e dobrava chapas de aço, sem soldas."}
+  ]
+}
