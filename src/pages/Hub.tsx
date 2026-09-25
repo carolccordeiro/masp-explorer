@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowRight, ArrowUpRight, Route, ScanLine } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Info, Route, ScanLine } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ArtImage } from "@/components/ArtImage";
 import { KoraWordmark } from "@/components/KoraMark";
@@ -84,7 +84,7 @@ export default function Hub() {
           })}
         </div>
 
-        <div className="mt-6 grid gap-4 md:grid-cols-2">
+        <div className="mt-6 grid gap-4 md:grid-cols-3">
           <Link to="/scanner" className="tap card flex items-center gap-4 p-5">
             <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-ink text-bg">
               <ScanLine size={26} />
@@ -105,12 +105,28 @@ export default function Hub() {
             </span>
             <ArrowUpRight className="text-muted" />
           </Link>
+          <Link to="/sobre" className="tap card flex items-center gap-4 p-5">
+            <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-ink text-bg">
+              <Info size={26} />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-[17px] font-bold">{t("hub.about")}</span>
+              <span className="block text-[14px] text-muted">{t("hub.about.desc")}</span>
+            </span>
+            <ArrowUpRight className="text-muted" />
+          </Link>
         </div>
 
         <footer className="mt-14 flex flex-col items-start gap-3 border-t hairline pt-6 text-[13px] text-muted md:flex-row md:items-center md:justify-between">
           <KoraWordmark size="sm" />
           <p>Plataforma white label para museus · Demonstração com dados públicos · doNEXT 2026</p>
           <div className="flex gap-4">
+            <Link to="/sobre" className="hover:text-ink">
+              {t("nav.about")}
+            </Link>
+            <Link to="/descanso" className="hover:text-ink">
+              {t("attract.title")}
+            </Link>
             <Link to="/privacidade" className="hover:text-ink">
               {t("settings.privacy")}
             </Link>

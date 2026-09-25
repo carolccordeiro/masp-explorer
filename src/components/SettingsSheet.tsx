@@ -1,4 +1,4 @@
-import { Accessibility, Baby, Contrast, Hand, Languages, Minus, MonitorSmartphone, Moon, Plus, Shield, Sun, SunMoon, Wind } from "lucide-react";
+import { Accessibility, Baby, LogOut, Contrast, Hand, Languages, Minus, MonitorSmartphone, Moon, Plus, Shield, Sun, SunMoon, Wind } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useSettings } from "@/context/Settings";
 import type { Lang } from "@/data/types";
@@ -94,6 +94,21 @@ export function SettingsSheet({ open, onClose }: { open: boolean; onClose: () =>
           </span>
           <span className="text-[15px] font-semibold">{t("settings.privacy")}</span>
         </Link>
+        <button
+          onClick={() => {
+            onClose();
+            dispatchEvent(new Event("kora:attract"));
+          }}
+          className="flex w-full items-center gap-3 py-3 text-left"
+        >
+          <span className="grid h-9 w-9 place-items-center rounded-xl bg-accent/10 text-accent">
+            <LogOut size={18} />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-[15px] font-semibold">{t("settings.end")}</span>
+            <span className="block text-[12.5px] leading-snug text-muted">{t("settings.end.desc")}</span>
+          </span>
+        </button>
       </div>
     </Sheet>
   );

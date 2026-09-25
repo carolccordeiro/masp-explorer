@@ -7,9 +7,9 @@ import {
   Grid2x2,
   HelpCircle,
   Home,
+  Info,
   LayoutGrid,
   Map,
-  MessageCircle,
   Route,
   ScanLine,
   Settings2,
@@ -20,7 +20,9 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useMaybeMuseum } from "@/context/Museum";
 import { useSettings } from "@/context/Settings";
 import type { StringKey } from "@/i18n/strings";
+import { resetSession } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
+import { Attract } from "./Attract";
 import { KoraIcon, KoraWordmark } from "./KoraMark";
 import { SettingsSheet } from "./SettingsSheet";
 import { Sheet } from "./Sheet";
@@ -110,6 +112,7 @@ export function BottomNav() {
         { to: "/", icon: <Building2 size={22} />, label: "nav.museums", end: true },
         { to: "/scanner", icon: <ScanLine size={22} />, label: "nav.scan" },
         { to: "/rotas", icon: <Route size={22} />, label: "act.routes" },
+        { to: "/sobre", icon: <Info size={22} />, label: "nav.about" },
       ];
 
   const moreItems: { to: string; icon: ReactNode; label: StringKey; desc: StringKey }[] = museum
@@ -169,27 +172,34 @@ export function BottomNav() {
   );
 }
 
-/** Tela de descanso do totem: aparece após inatividade e volta ao início. */
-export function IdleOverlay({ timeoutMs = 90_000 }: { timeoutMs?: number }) {
-  const { totem, t } = useSettings();
+/** Pede a tela de descanso de qualquer lugar do app (ex.: botão "Encerrar sessão"). */
+export const showAttract = () => dispatchEvent(new Event("kora:attract"));
+
+/**
+ * Tela de descanso: no modo totem aparece sozinha após inatividade;
+ * em qualquer modo pode ser chamada ao encerrar a sessão.
+ */
+export function IdleOverlay({ timeoutMs = 60_000 }: { timeoutMs?: number }) {
+  const { totem } = useSettings();
   const museum = useMaybeMuseum();
   const navigate = useNavigate();
   const [idle, setIdle] = useState(false);
 
   useEffect(() => {
-    if (!totem) return;
+    const open = () => {
+      setIdle(true);
+      resetSession(museum?.id);
+    };
+    addEventListener("kora:attract", open);
+    return () => removeEventListener("kora:attract", open);
+  }, [museum?.id]);
+
+  useEffect(() => {
+    if (!totem || idle) return;
     let timer: ReturnType<typeof setTimeout>;
     const reset = () => {
       clearTimeout(timer);
-      timer = setTimeout(() => {
-        setIdle(true);
-        try {
-          sessionStorage.removeItem("kora-hunt");
-          sessionStorage.removeItem("kora-chat");
-        } catch {
-          /* ignora */
-        }
-      }, timeoutMs);
+      timer = setTimeout(showAttract, timeoutMs);
     };
     const events = ["pointerdown", "keydown", "scroll", "touchstart"];
     events.forEach((e) => addEventListener(e, reset, { passive: true }));
@@ -198,30 +208,18 @@ export function IdleOverlay({ timeoutMs = 90_000 }: { timeoutMs?: number }) {
       clearTimeout(timer);
       events.forEach((e) => removeEventListener(e, reset));
     };
-  }, [totem, timeoutMs]);
+  }, [totem, timeoutMs, idle]);
 
   return (
     <AnimatePresence>
       {idle && (
-        <motion.button
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={() => {
+        <Attract
+          museum={museum?.id}
+          onStart={() => {
             setIdle(false);
             navigate(museum ? `/${museum.id}` : "/");
           }}
-          className="fixed inset-0 z-[80] flex flex-col items-center justify-center gap-6 bg-black text-white"
-        >
-          <motion.div animate={{ scale: [1, 1.06, 1] }} transition={{ duration: 3, repeat: Infinity }}>
-            <KoraIcon size={96} className="text-white" />
-          </motion.div>
-          <p className="text-[42px] font-extrabold tracking-tight">{t("idle.title")}</p>
-          <p className="text-[18px] text-white/60">
-            {museum ? museum.short : "KORA"} · {t("idle.subtitle")}
-          </p>
-          <MessageCircle className="animate-bounce text-white/40" />
-        </motion.button>
+        />
       )}
     </AnimatePresence>
   );

@@ -89,3 +89,15 @@ export function track(e: KoraEvent) {
 if (typeof window !== "undefined") {
   addEventListener("pagehide", () => void flush());
 }
+
+/** Encerra a sessão do visitante: limpa conversa e caça ao tesouro e inicia uma sessão nova. */
+export function resetSession(museum = "hub") {
+  try {
+    for (const k of Object.keys(sessionStorage)) {
+      if (k.startsWith("kora-chat") || k.startsWith("kora-hunt") || k === "kora-sid") sessionStorage.removeItem(k);
+    }
+  } catch {
+    /* ignora */
+  }
+  track({ museum, type: "session_start" });
+}

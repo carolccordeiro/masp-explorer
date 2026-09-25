@@ -229,6 +229,21 @@ const pt = {
   "sensor.stop": "Desligar",
   "sensor.now": "pessoas agora",
   "sensor.peak": "pico",
+
+  "attract.eyebrow": "Guia inteligente de museus",
+  "attract.title": "Toque para explorar",
+  "attract.cta": "Toque em qualquer lugar para começar",
+  "attract.f.scan": "Aponte a câmera e descubra a obra",
+  "attract.f.ask": "Pergunte qualquer coisa à KORA",
+  "attract.f.plan": "Monte seu roteiro em segundos",
+  "attract.f.quiz": "Jogue o quiz e a caça ao tesouro",
+  "attract.qr": "Leve no celular",
+  "attract.qr.desc": "Sem baixar nada",
+  "settings.end": "Encerrar sessão",
+  "settings.end.desc": "Limpa a conversa e mostra a tela de descanso",
+  "nav.about": "Sobre",
+  "hub.about": "Conheça a KORA",
+  "hub.about.desc": "O desafio, a solução e o que nos diferencia",
 };
 
 export type StringKey = keyof typeof pt;
@@ -304,6 +319,13 @@ const en: Partial<Record<StringKey, string>> = {
   "admin.demo": "Demo data (no database connection)", "admin.all": "All museums",
   "sensor.title": "Flow sensor", "sensor.desc": "Counts people in front of the kiosk with on-device AI. No image is stored or sent: only the number.",
   "sensor.start": "Turn on", "sensor.stop": "Turn off", "sensor.now": "people now", "sensor.peak": "peak",
+
+  "attract.eyebrow": "Smart museum guide", "attract.title": "Tap to explore", "attract.cta": "Tap anywhere to start",
+  "attract.f.scan": "Point your camera and discover the work", "attract.f.ask": "Ask KORA anything",
+  "attract.f.plan": "Build your route in seconds", "attract.f.quiz": "Play the quiz and the treasure hunt",
+  "attract.qr": "Take it on your phone", "attract.qr.desc": "Nothing to install",
+  "settings.end": "End session", "settings.end.desc": "Clears the chat and shows the welcome screen",
+  "nav.about": "About", "hub.about": "Meet KORA", "hub.about.desc": "The challenge, the solution and what sets us apart",
 };
 
 const es: Partial<Record<StringKey, string>> = {
@@ -367,6 +389,13 @@ const es: Partial<Record<StringKey, string>> = {
   "admin.demo": "Datos de demostración (sin conexión con la base)", "admin.all": "Todos los museos",
   "sensor.title": "Sensor de flujo", "sensor.desc": "Cuenta personas frente al tótem con IA en el propio dispositivo. Ninguna imagen se guarda ni se envía: solo el número.",
   "sensor.start": "Encender", "sensor.stop": "Apagar", "sensor.now": "personas ahora", "sensor.peak": "pico",
+
+  "attract.eyebrow": "Guía inteligente de museos", "attract.title": "Toca para explorar", "attract.cta": "Toca en cualquier lugar para empezar",
+  "attract.f.scan": "Apunta la cámara y descubre la obra", "attract.f.ask": "Pregúntale lo que quieras a KORA",
+  "attract.f.plan": "Arma tu recorrido en segundos", "attract.f.quiz": "Juega el quiz y la búsqueda del tesoro",
+  "attract.qr": "Llévalo en tu celular", "attract.qr.desc": "Sin descargar nada",
+  "settings.end": "Cerrar sesión", "settings.end.desc": "Borra la conversación y muestra la pantalla de bienvenida",
+  "nav.about": "Acerca", "hub.about": "Conoce KORA", "hub.about.desc": "El desafío, la solución y lo que nos diferencia",
 };
 
 export const STRINGS: Record<Lang, Partial<Record<StringKey, string>>> = { pt, en, es };

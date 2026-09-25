@@ -22,6 +22,8 @@ const Routes_ = lazy(() => import("@/pages/RoutesBetween"));
 const Dashboard = lazy(() => import("@/pages/Dashboard"));
 const Sensor = lazy(() => import("@/pages/Sensor"));
 const Privacy = lazy(() => import("@/pages/Privacy"));
+const About = lazy(() => import("@/pages/About"));
+const Rest = lazy(() => import("@/pages/Rest"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 
 function PageFallback() {
@@ -111,10 +113,12 @@ export default function App() {
             <Route path="/rotas" element={<Routes_ />} />
             <Route path="/privacidade" element={<Privacy />} />
             <Route path="/sensor" element={<Sensor />} />
+            <Route path="/sobre" element={<About />} />
           </Route>
           <Route element={<NetworkLayout nav={false} />}>
             <Route path="/painel" element={<Dashboard />} />
             <Route path="/admin" element={<Navigate to="/painel" replace />} />
+            <Route path="/descanso" element={<Rest />} />
           </Route>
           <Route path="/:museum/roteiro" element={<PhoneLayout />}>
             <Route index element={<Hunt />} />
