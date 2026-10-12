@@ -180,7 +180,7 @@ export default function Assistant() {
                   )}
                 >
                   {msg.instant && (
-                    <p className="mb-1 flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-accent">
+                    <p className="mb-1 flex items-center gap-1 text-[12.5px] font-semibold text-accent">
                       <Zap size={12} /> {t("chat.instant")}
                     </p>
                   )}

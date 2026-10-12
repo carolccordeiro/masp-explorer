@@ -90,7 +90,7 @@ export default function MapPage() {
             ))}
             {selWorks.length > 0 && (
               <>
-                <p className="mb-2 mt-5 flex items-center gap-1.5 text-[13px] font-bold uppercase tracking-wider text-muted">
+                <p className="mb-2 mt-5 flex items-center gap-1.5 text-[13px] font-semibold text-muted">
                   <MapPin size={14} /> {t("map.works")}
                 </p>
                 <div className="grid grid-cols-3 gap-2">

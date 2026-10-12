@@ -114,7 +114,7 @@ export default function Visit() {
               .filter((e) => exhibitionState(e) !== "past")
               .map((e) => (
                 <a key={e.id} href={e.url} target="_blank" rel="noreferrer" className="block p-5 hover:bg-ink/[0.02]">
-                  <p className="flex items-center gap-2 text-[12px] font-bold uppercase tracking-wider">
+                  <p className="flex items-center gap-2 text-[12px] font-semibold">
                     <StatusDot color={exhibitionState(e) === "now" ? "success" : "warning"} />
                     <span className={exhibitionState(e) === "now" ? "text-success" : "text-warning"}>
                       {exhibitionState(e) === "now" ? t("home.exhibitions") : t("home.soon")}

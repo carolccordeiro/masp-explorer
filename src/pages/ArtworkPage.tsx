@@ -192,9 +192,9 @@ export default function ArtworkPage() {
               )}
             </AnimatePresence>
 
-            {(family || tr(art.kids, lang)) && (
+            {family && tr(art.kids, lang) && (
               <div className={cn("mt-6 rounded-3xl p-5", family ? "bg-warning/15" : "bg-ink/[0.04]")}>
-                <p className="mb-1.5 flex items-center gap-2 text-[13px] font-bold uppercase tracking-wider text-warning">
+                <p className="mb-1.5 flex items-center gap-2 text-[13px] font-semibold text-warning">
                   <Baby size={16} /> {t("art.kids")}
                 </p>
                 <p className="body-copy text-[16px]">{tr(art.kids, lang)}</p>
@@ -206,7 +206,7 @@ export default function ArtworkPage() {
                 .filter(([, v]) => v)
                 .map(([k, v], i, arr) => (
                   <div key={k} className={cn("bg-surface p-4", i === 0 && arr.length % 2 === 1 && "col-span-2")}>
-                    <dt className="text-[11.5px] font-bold uppercase tracking-wider text-muted">{k}</dt>
+                    <dt className="text-[12.5px] font-semibold text-muted">{k}</dt>
                     <dd className="mt-1 text-[14.5px] font-semibold leading-snug">{v}</dd>
                   </div>
                 ))}
@@ -227,21 +227,12 @@ export default function ArtworkPage() {
               <Link to={`/${m.id}/mapa?espaco=${space.id}`} className="tap card mt-6 flex items-center gap-3 p-4">
                 <MapPin className="text-accent" />
                 <span className="flex-1">
-                  <span className="block text-[12px] font-bold uppercase tracking-wider text-muted">{t("art.where")}</span>
+                  <span className="block text-[12px] font-semibold text-muted">{t("art.where")}</span>
                   <span className="font-semibold">{space.name}</span>
                 </span>
               </Link>
             )}
 
-            {art.tags?.length > 0 && (
-              <div className="mt-6 flex flex-wrap gap-2">
-                {art.tags.map((tag) => (
-                  <Link key={tag} to={`/${m.id}/acervo?q=${encodeURIComponent(tag)}`} className="chip">
-                    #{tag}
-                  </Link>
-                ))}
-              </div>
-            )}
             {art.source && (
               <a href={art.source} target="_blank" rel="noreferrer" className="mt-6 block text-[12.5px] text-muted underline underline-offset-2">
                 Fonte pública da ficha

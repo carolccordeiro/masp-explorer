@@ -530,7 +530,7 @@ export default function About() {
             {C.stats.map((s) => (
               <div key={tr(s.label, lang)}>
                 <div className="num text-[44px] leading-none md:text-[60px]">{s.value}</div>
-                <div className="mt-2 max-w-[180px] text-[12px] font-semibold uppercase leading-snug tracking-wider text-muted">{tr(s.label, lang)}</div>
+                <div className="mt-2 max-w-[180px] text-[12px] font-semibold leading-snug text-muted">{tr(s.label, lang)}</div>
               </div>
             ))}
           </div>

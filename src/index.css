@@ -76,7 +76,7 @@
 
 @layer components {
   .hairline { border-color: rgb(var(--line) / var(--line-alpha)); }
-  .card { @apply bg-surface rounded-3xl shadow-soft border hairline; }
+  .card { @apply bg-surface rounded-3xl border hairline; }
   .glass {
     background: rgb(var(--surface) / 0.72);
     backdrop-filter: saturate(180%) blur(20px);
@@ -84,7 +84,7 @@
   }
   .tap { @apply transition-transform duration-150 active:scale-[0.97]; }
   .num { font-variant-numeric: tabular-nums; @apply font-display font-extrabold tracking-tighter; }
-  .eyebrow { @apply text-[11px] font-bold uppercase tracking-[0.14em] text-muted; }
+  .eyebrow { @apply text-[13px] font-semibold text-muted; }
   .body-copy { @apply font-body text-[15px] leading-relaxed text-ink/85; }
   .chip { @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] font-semibold border hairline bg-surface transition-colors duration-150; }
   .chip-on { @apply bg-accent text-accent-ink border-transparent; }

@@ -127,13 +127,13 @@ export default function Sensor() {
           </div>
           <div className="grid grid-cols-2 gap-3 md:grid-cols-1">
             <div className="card p-5">
-              <p className="flex items-center gap-2 text-[12px] font-bold uppercase tracking-wider text-muted">
+              <p className="flex items-center gap-2 text-[12px] font-semibold text-muted">
                 {on && <StatusDot />} {t("sensor.now")}
               </p>
               <p className="num mt-2 text-[72px] leading-none">{count}</p>
             </div>
             <div className="card p-5">
-              <p className="text-[12px] font-bold uppercase tracking-wider text-muted">{t("sensor.peak")}</p>
+              <p className="text-[12px] font-semibold text-muted">{t("sensor.peak")}</p>
               <p className="num mt-2 text-[72px] leading-none text-muted">{peak}</p>
             </div>
           </div>

@@ -43,10 +43,10 @@ function onTheWay(stops: MuseumId[]) {
   })
     .filter((x) => x.d <= 1.2)
     .sort((a, b) => a.d - b.d)
-    .slice(0, 4);
+    .slice(0, 3);
 }
 
-const KIND_ICON: Record<PlaceKind, JSX.Element> = { museu: <Landmark size={17} />, galeria: <Palette size={17} />, centro: <Building2 size={17} /> };
+const KIND_ICON: Record<PlaceKind, JSX.Element> = { museu: <Landmark size={15} />, galeria: <Palette size={15} />, centro: <Building2 size={15} /> };
 
 const TXT = {
   way: { pt: "No caminho", en: "On the way", es: "En el camino" },
@@ -132,7 +132,7 @@ function Connections() {
           used.add(p.a.id);
           used.add(p.b.id);
           best.push(p);
-          if (best.length >= 6) break;
+          if (best.length >= 4) break;
         }
         setPairs(best);
       })
@@ -173,17 +173,16 @@ function PlaceCard({ p, note, onHover }: { p: NearbyPlace; note: string; onHover
       rel="noreferrer"
       onMouseEnter={() => onHover?.(p.id)}
       onMouseLeave={() => onHover?.(null)}
-      className="tap card flex h-full flex-col p-4"
+      className="tap flex items-center gap-4 py-3.5"
     >
-      <span className="flex items-center justify-between gap-2">
-        <span className="rounded-full bg-ink/[0.06] px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-muted">{tr(KIND_LABEL[p.kind], lang)}</span>
-        <ArrowUpRight size={16} className="text-muted" />
+      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-ink/[0.05]" title={tr(KIND_LABEL[p.kind], lang)}>
+        {KIND_ICON[p.kind]}
       </span>
-      <span className="mt-2 text-[15.5px] font-extrabold leading-snug">{p.name}</span>
-      <span className="mt-1 flex-1 text-[13px] leading-snug text-muted">{tr(p.desc, lang)}</span>
-      <span className="mt-3 flex items-center gap-1 text-[12px] font-semibold text-muted">
-        <MapPin size={12} /> {p.address} · {note}
+      <span className="min-w-0 flex-1">
+        <span className="block truncate text-[15.5px] font-bold">{p.name}</span>
+        <span className="block truncate text-[13px] text-muted">{tr(p.desc, lang)}</span>
       </span>
+      <span className="shrink-0 text-right text-[12.5px] text-muted">{note}</span>
     </a>
   );
 }
@@ -193,30 +192,22 @@ function WayList({ stops, onHover }: { stops: MuseumId[]; onHover: (id: string |
   const list = onTheWay(stops);
   if (!list.length) return null;
   return (
-    <div className="mt-5">
-      <p className="eyebrow mb-2">{tr(TXT.way, lang)}</p>
-      <div className="grid gap-2 sm:grid-cols-2">
-        {list.map(({ p, d }) => (
-          <a
-            key={p.id}
-            href={mapsUrl(p)}
-            target="_blank"
-            rel="noreferrer"
-            onMouseEnter={() => onHover(p.id)}
-            onMouseLeave={() => onHover(null)}
-            className="tap flex items-center gap-3 rounded-2xl bg-ink/[0.04] p-3"
-          >
-            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-surface" title={tr(KIND_LABEL[p.kind], lang)}>{KIND_ICON[p.kind]}</span>
-            <span className="min-w-0 flex-1">
-              <span className="block truncate text-[14px] font-bold">{p.name}</span>
-              <span className="block truncate text-[12px] text-muted">
-                {d < 0.1 ? "0,1" : d.toFixed(1).replace(".", ",")} km {tr(TXT.fromRoute, lang)} · {p.address}
-              </span>
-            </span>
-            <ArrowUpRight size={15} className="shrink-0 text-muted" />
-          </a>
-        ))}
-      </div>
+    <div className="mt-5 flex flex-wrap items-center gap-2">
+      <span className="mr-1 text-[13px] font-semibold text-muted">{tr(TXT.way, lang)}:</span>
+      {list.map(({ p }) => (
+        <a
+          key={p.id}
+          href={mapsUrl(p)}
+          target="_blank"
+          rel="noreferrer"
+          onMouseEnter={() => onHover(p.id)}
+          onMouseLeave={() => onHover(null)}
+          className="tap chip"
+        >
+          {KIND_ICON[p.kind]}
+          {p.name}
+        </a>
+      ))}
     </div>
   );
 }
@@ -296,7 +287,7 @@ export default function RoutesBetween() {
               </Link>
             );
           })}
-          <span className="absolute bottom-3 left-4 text-[11px] font-semibold uppercase tracking-wider text-muted">São Paulo · esquemático</span>
+          <span className="absolute bottom-3 left-4 text-[12.5px] font-semibold text-muted">São Paulo · esquemático</span>
         </div>
 
         <div className="mt-8 space-y-4">
@@ -361,9 +352,9 @@ export default function RoutesBetween() {
               </Chip>
             ))}
           </div>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid divide-y divide-[rgb(var(--line)/var(--line-alpha))] md:grid-cols-2 md:gap-x-10 md:divide-y-0">
             {places.map(({ p, near }) => (
-              <PlaceCard key={p.id} p={p} onHover={setHoverPlace} note={`${near.d.toFixed(1).replace(".", ",")} km ${tr(TXT.fromMuseum, lang)} ${near.m.short}`} />
+              <PlaceCard key={p.id} p={p} onHover={setHoverPlace} note={`${near.d.toFixed(1).replace(".", ",")} km`} />
             ))}
           </div>
         </section>

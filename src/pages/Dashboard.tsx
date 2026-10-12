@@ -85,7 +85,7 @@ const pct = (a: number, b: number) => (b ? Math.round((a / b) * 100) : 0);
 function Kpi({ icon, label, value, unit, hint, pulse }: { icon: ReactNode; label: string; value: ReactNode; unit?: string; hint?: string; pulse?: boolean }) {
   return (
     <div className="card p-5">
-      <p className="flex items-center gap-2 text-[12px] font-bold uppercase tracking-wider text-muted">
+      <p className="flex items-center gap-2 text-[12px] font-semibold text-muted">
         {pulse ? <StatusDot /> : icon} {label}
       </p>
       <p className="mt-3 flex items-baseline gap-1.5">
@@ -153,7 +153,7 @@ function Heatmap({ data }: { data: Insights }) {
         <div className="grid min-w-[520px] gap-[3px]" style={{ gridTemplateColumns: `40px repeat(${hours.length}, minmax(0,1fr))` }}>
           <span />
           {hours.map((h) => (
-            <span key={h} className="pb-1 text-center text-[11px] font-semibold text-muted">
+            <span key={h} className="pb-1 text-center text-[12.5px] font-semibold text-muted">
               {h}h
             </span>
           ))}
@@ -448,7 +448,7 @@ export default function Dashboard() {
         {insights.length > 0 && (
           <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
             {insights.map((x, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="flex gap-3 rounded-3xl bg-ink p-4 text-bg">
+              <motion.div key={i} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="flex gap-3 rounded-3xl bg-ink/[0.04] p-4">
                 <span className="mt-0.5 shrink-0 opacity-70">{x.icon}</span>
                 <p className="text-[13.5px] leading-snug [&_b]:font-extrabold">{x.text}</p>
               </motion.div>
@@ -656,7 +656,7 @@ export default function Dashboard() {
                   },
                 ].map((k) => (
                   <div key={k.label} className="rounded-2xl bg-ink/[0.04] p-4">
-                    <p className="text-[11.5px] font-bold uppercase tracking-wider text-muted">{k.label}</p>
+                    <p className="text-[12.5px] font-semibold text-muted">{k.label}</p>
                     <p className="num mt-1 text-[28px] leading-none md:text-[34px]">{k.v}</p>
                   </div>
                 ))}
@@ -664,7 +664,7 @@ export default function Dashboard() {
               <div className="no-scrollbar -mx-1 mt-4 overflow-x-auto">
                 <table className="w-full min-w-[520px] text-left text-[13.5px]">
                   <thead>
-                    <tr className="text-[11.5px] uppercase tracking-wider text-muted">
+                    <tr className="text-[11.5px] text-muted">
                       <th className="px-2 pb-2 font-bold">Parceiro</th>
                       <th className="px-2 pb-2 font-bold">Museu</th>
                       <th className="px-2 pb-2 text-right font-bold">Impressões</th>
@@ -701,7 +701,7 @@ export default function Dashboard() {
             <div className="no-scrollbar -mx-1 overflow-x-auto">
               <table className="w-full min-w-[640px] text-left text-[13.5px]">
                 <thead>
-                  <tr className="text-[11.5px] uppercase tracking-wider text-muted">
+                  <tr className="text-[11.5px] text-muted">
                     <th className="px-2 pb-2 font-bold">Museu</th>
                     <th className="px-2 pb-2 text-right font-bold">Visitantes</th>
                     <th className="px-2 pb-2 text-right font-bold">Tempo médio</th>

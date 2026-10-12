@@ -131,7 +131,7 @@ export function Stat({ value, label, className }: { value: ReactNode; label: Rea
   return (
     <div className={cn("min-w-0", className)}>
       <div className="num text-[34px] leading-none md:text-[44px]">{value}</div>
-      <div className="mt-1.5 text-[12px] font-semibold uppercase tracking-wider text-muted">{label}</div>
+      <div className="mt-1.5 text-[12px] font-semibold text-muted">{label}</div>
     </div>
   );
 }
