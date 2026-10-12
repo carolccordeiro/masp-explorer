@@ -1,38 +1,35 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>KORA · MASP · Totem Interativo</title>
-    <meta name="description" content="KORA, totem interativo inteligente do MASP. Roteiro personalizado, assistente de IA, caça ao tesouro e acervo em transformação." />
-    <meta name="author" content="Equipe KORA · Flexmedia · FIAP 2026" />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>KORA · Museus inteligentes</title>
+    <meta name="description" content="KORA é um guia inteligente para museus: scanner de obras com IA, roteiros personalizados, assistente, acessibilidade e painel de métricas. Demonstração com MASP, IMS e MAM." />
+    <meta name="theme-color" content="#F5F5F7" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="KORA" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="KORA · MASP · Totem Interativo" />
-    <meta property="og:description" content="O concierge inteligente do Museu de Arte de São Paulo." />
-    <meta property="og:site_name" content="MASP · KORA" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="KORA · MASP · Totem Interativo" />
-    <meta name="twitter:description" content="O concierge inteligente do Museu de Arte de São Paulo." />
-
-  <script>
-    // Companion of public/404.html — converts the ?/path query the 404 page produced
-    // back into a real history entry, so React Router can pick the right route on load.
-    (function () {
-      var l = window.location;
-      if (l.search.indexOf("?/") === 0) {
-        var decoded = l.search.slice(2).split("&").map(function (s, i) {
-          return (i === 0 ? "" : "&") + s.replace(/~and~/g, "&");
-        }).join("");
-        window.history.replaceState(null, "", l.pathname.slice(0, -1) + decoded + l.hash);
-      }
-    })();
-  </script>
-</head>
-
+    <meta property="og:title" content="KORA · Museus inteligentes" />
+    <meta property="og:description" content="Scanner de obras, roteiros, assistente de IA e acessibilidade para museus." />
+    <meta property="og:image" content="/icons/og.png" />
+    <script>
+      // Evita "flash" de tema claro antes do React carregar
+      (function () {
+        try {
+          var s = JSON.parse(localStorage.getItem("kora-settings-v2") || "{}");
+          var dark = s.appearance === "dark" || (s.appearance !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+          if (dark) document.documentElement.classList.add("dark");
+          if (s.fontScale) document.documentElement.style.setProperty("--font-scale", s.fontScale);
+        } catch (e) {}
+      })();
+    </script>
+  </head>
   <body>
     <div id="root"></div>
+    <noscript>A KORA precisa de JavaScript para funcionar.</noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

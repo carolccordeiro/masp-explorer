@@ -1,0 +1,323 @@
+{
+ "about": "Fundado em 1947 por Assis Chateaubriand e Pietro Maria Bardi, o MASP tem a coleção de arte europeia mais importante do hemisfério sul, com mais de 11 mil obras de diferentes épocas e origens. O edifício de Lina Bo Bardi, inaugurado em 1968 na Avenida Paulista, é um ícone da arquitetura moderna, com seu vão livre de 74 metros e os cavaletes de cristal que expõem as obras como se flutuassem.",
+ "metro": "Linha 2 Verde, estação Trianon-MASP. Estacionamento conveniado na Alameda Casa Branca, 41.",
+ "phone": "+55 11 3149-5959",
+ "site": "https://masp.org.br",
+ "hours": [
+  {
+   "days": "Terça",
+   "time": "10h às 20h",
+   "note": "Grátis para todos (entrada até 19h)"
+  },
+  {
+   "days": "Quarta, quinta, sábado e domingo",
+   "time": "10h às 18h",
+   "note": "Entrada até 17h"
+  },
+  {
+   "days": "Sexta",
+   "time": "10h às 21h",
+   "note": "Grátis das 18h às 21h (entrada até 20h)"
+  },
+  {
+   "days": "Segunda",
+   "time": "Fechado"
+  }
+ ],
+ "tickets": [
+  {
+   "label": "Inteira",
+   "price": "R$ 85,00"
+  },
+  {
+   "label": "Meia-entrada (estudantes, professores e maiores de 60 anos)",
+   "price": "R$ 42,00"
+  }
+ ],
+ "free": [
+  "Terças-feiras, o dia inteiro, para todos os visitantes",
+  "Sextas-feiras, das 18h às 21h",
+  "Crianças de até 10 anos",
+  "Pessoas com deficiência e um acompanhante",
+  "Amigos MASP",
+  "O agendamento online é obrigatório, inclusive nos dias gratuitos"
+ ],
+ "accessibility": [
+  "Entrada gratuita para pessoas com deficiência e acompanhante",
+  "Visitas em Libras ou descritivas mediante solicitação: acessibilidade@masp.org.br",
+  "Textos e legendas em fonte ampliada e conteúdos com audiodescrição, legendagem e Libras",
+  "Cães-guia são permitidos",
+  "Na KORA: áudio-guia, Libras (VLibras), alto contraste e texto ampliado"
+ ],
+ "services": [
+  "Visitas mediadas gratuitas às terças (16h) e sextas (19h), mediante reserva",
+  "Loja e restaurante no museu",
+  "Menores de 14 anos devem estar acompanhados",
+  "Pagamento por Pix e cartões de crédito e débito"
+ ],
+ "timeline": [
+  {
+   "year": "1947",
+   "text": "Assis Chateaubriand e Pietro Maria Bardi fundam o MASP no centro de São Paulo."
+  },
+  {
+   "year": "1950",
+   "text": "Nos anos 1950, o museu forma em poucos anos uma coleção de obras-primas europeias sem paralelo no hemisfério sul."
+  },
+  {
+   "year": "1968",
+   "text": "Inauguração do edifício de Lina Bo Bardi na Avenida Paulista, com o vão livre de 74 metros e os cavaletes de cristal."
+  },
+  {
+   "year": "1996",
+   "text": "Os cavaletes de cristal são retirados e a pinacoteca passa a ser dividida por paredes."
+  },
+  {
+   "year": "2015",
+   "text": "Os cavaletes voltam ao segundo andar com a exposição Acervo em transformação."
+  },
+  {
+   "year": "2024",
+   "text": "Inauguração do edifício Pietro Maria Bardi, que amplia os espaços expositivos do museu."
+  },
+  {
+   "year": "2026",
+   "text": "Ciclo curatorial Histórias latino-americanas ocupa os dois edifícios."
+  }
+ ],
+ "exhibitions": [
+  {
+   "id": "historias-latino-americanas",
+   "title": "Histórias latino-americanas",
+   "dates": "4.9.2026 a 31.1.2027",
+   "start": "2026-09-04",
+   "end": "2027-01-31",
+   "location": "Edifício Pietro Maria Bardi",
+   "space": "pmb",
+   "url": "https://masp.org.br/exposicoes/historias-latino-americanas",
+   "description": "Grande coletiva internacional em cinco andares que investiga como a ideia de América Latina foi criada e disputada ao longo do tempo, da colonização aos dias de hoje."
+  },
+  {
+   "id": "acervo-em-transformacao",
+   "title": "Acervo em transformação",
+   "dates": "Desde 2015",
+   "start": "2015-12-11",
+   "location": "2º andar, Edifício Lina Bo Bardi",
+   "space": "acervo",
+   "url": "https://masp.org.br/exposicoes/acervo-em-transformacao-2020",
+   "description": "A coleção do MASP nos cavaletes de cristal de Lina Bo Bardi, em fileiras sem paredes, com as obras mais recentes à frente e as mais antigas ao fundo."
+  },
+  {
+   "id": "sol-calero",
+   "title": "Sol Calero: Casa María Lionza",
+   "artist": "Sol Calero",
+   "dates": "Desde 3.7.2026",
+   "start": "2026-07-03",
+   "location": "MASP",
+   "space": "vao",
+   "url": "https://masp.org.br/exposicoes/sol-calero",
+   "description": "Ambiente imersivo da artista venezuelana inspirado nas arquiteturas populares latino-americanas, com fachadas coloridas, padrões pintados à mão e mosaicos."
+  },
+  {
+   "id": "curruchich",
+   "title": "Rosa Elena Curruchich: crônicas de Comalapa",
+   "artist": "Rosa Elena Curruchich",
+   "dates": "30.10.2026 a 4.4.2027",
+   "start": "2026-10-30",
+   "end": "2027-04-04",
+   "location": "Edifício Lina Bo Bardi",
+   "space": "subsolo1",
+   "url": "https://masp.org.br/exposicoes/rosa-elena-curruchich-cronicas-de-comalapa",
+   "description": "Primeira retrospectiva no Brasil da pintora autodidata maia kaqchikel, da Guatemala, com mais de 80 obras de pequeno formato."
+  },
+  {
+   "id": "pablo-delano",
+   "title": "Pablo Delano: Museu da Antiga Colônia",
+   "artist": "Pablo Delano",
+   "dates": "30.10.2026 a 31.1.2027",
+   "start": "2026-10-30",
+   "end": "2027-01-31",
+   "location": "Edifício Lina Bo Bardi",
+   "space": "1andar",
+   "url": "https://masp.org.br/exposicoes/pablo-delano-museu-da-antiga-colonia",
+   "description": "Grande instalação com objetos, fotografias, jornais e filmes que examina as estruturas coloniais a partir da história de Porto Rico."
+  },
+  {
+   "id": "jesus-soto",
+   "title": "Jesús Soto",
+   "artist": "Jesús Soto",
+   "dates": "27.11.2026 a 4.4.2027",
+   "start": "2026-11-27",
+   "end": "2027-04-04",
+   "location": "Edifício Lina Bo Bardi",
+   "space": "1andar",
+   "url": "https://masp.org.br/exposicoes/jesus-soto",
+   "description": "Mostra dedicada a um dos nomes mais importantes da arte cinética, que convidava o público a participar das obras, como nos Penetráveis."
+  }
+ ],
+ "spaces": [
+  {
+   "id": "pmb",
+   "name": "Edifício Pietro Maria Bardi",
+   "level": 3,
+   "description": "Edifício inaugurado em 2024, ligado ao prédio original, com cinco andares de galerias para grandes exposições."
+  },
+  {
+   "id": "acervo",
+   "name": "2º andar · Pinacoteca",
+   "level": 2,
+   "description": "Acervo em transformação: a coleção do MASP exposta nos cavaletes de cristal de Lina Bo Bardi."
+  },
+  {
+   "id": "1andar",
+   "name": "1º andar",
+   "level": 1,
+   "description": "Galerias de exposições temporárias do Edifício Lina Bo Bardi."
+  },
+  {
+   "id": "vao",
+   "name": "Vão livre e térreo",
+   "level": 0,
+   "description": "Praça pública de 74 metros sob o edifício suspenso, ponto de encontro da Avenida Paulista, com acesso ao museu."
+  },
+  {
+   "id": "subsolo1",
+   "name": "1º subsolo",
+   "level": -1,
+   "description": "Galerias de exposições temporárias."
+  },
+  {
+   "id": "subsolo2",
+   "name": "2º subsolo",
+   "level": -2,
+   "description": "Galerias de exposições temporárias, sala de vídeo e serviços ao visitante."
+  }
+ ],
+ "stats": [
+  {
+   "value": "11 mil+",
+   "label": "obras no acervo"
+  },
+  {
+   "value": "74 m",
+   "label": "de vão livre"
+  },
+  {
+   "value": "1947",
+   "label": "ano de fundação"
+  }
+ ],
+ "cover_from": "renoir-rosa-e-azul",
+ "quiz": [
+  {
+   "question": "Em que ano o MASP foi fundado?",
+   "options": [
+    "1922",
+    "1947",
+    "1968",
+    "1985"
+   ],
+   "correct": 1,
+   "explanation": "O MASP foi fundado em 1947 por Assis Chateaubriand e Pietro Maria Bardi."
+  },
+  {
+   "question": "Quem projetou o edifício do MASP na Avenida Paulista?",
+   "options": [
+    "Oscar Niemeyer",
+    "Lina Bo Bardi",
+    "Paulo Mendes da Rocha",
+    "Lúcio Costa"
+   ],
+   "correct": 1,
+   "explanation": "A arquiteta Lina Bo Bardi projetou o edifício, inaugurado em 1968."
+  },
+  {
+   "question": "Quanto mede o vão livre do MASP?",
+   "options": [
+    "24 metros",
+    "50 metros",
+    "74 metros",
+    "100 metros"
+   ],
+   "correct": 2,
+   "explanation": "O vão livre tem 74 metros, uma praça pública sob o prédio suspenso."
+  },
+  {
+   "question": "Como se chamam os suportes de vidro criados por Lina Bo Bardi para expor as pinturas?",
+   "options": [
+    "Cavaletes de cristal",
+    "Painéis flutuantes",
+    "Vitrines suspensas",
+    "Molduras de aço"
+   ],
+   "correct": 0,
+   "explanation": "Os cavaletes de cristal são placas de vidro encaixadas em blocos de concreto; voltaram ao museu em 2015."
+  },
+  {
+   "question": "Em que dia da semana a entrada no MASP é gratuita o dia inteiro?",
+   "options": [
+    "Segunda",
+    "Terça",
+    "Quarta",
+    "Domingo"
+   ],
+   "correct": 1,
+   "explanation": "Às terças a entrada é gratuita para todos, mas é preciso agendar online."
+  },
+  {
+   "question": "Quantas obras tem, aproximadamente, o acervo do MASP?",
+   "options": [
+    "Mil",
+    "5 mil",
+    "Mais de 11 mil",
+    "50 mil"
+   ],
+   "correct": 2,
+   "explanation": "O acervo reúne mais de 11 mil obras de diferentes épocas e origens."
+  },
+  {
+   "question": "Quem são as meninas do quadro Rosa e Azul, de Renoir?",
+   "options": [
+    "Filhas de um banqueiro de Paris",
+    "Princesas da Espanha",
+    "Filhas do pintor",
+    "Bailarinas da Ópera"
+   ],
+   "correct": 0,
+   "explanation": "São Alice e Elisabeth, filhas do banqueiro Louis Cahen d'Anvers."
+  },
+  {
+   "question": "O pintor Frans Post veio ao Brasil acompanhando quem?",
+   "options": [
+    "Dom Pedro I",
+    "Maurício de Nassau",
+    "Pedro Álvares Cabral",
+    "Dom João VI"
+   ],
+   "correct": 1,
+   "explanation": "Frans Post chegou com Maurício de Nassau, durante o domínio holandês no Nordeste (1637 a 1644)."
+  },
+  {
+   "question": "Qual escultura de Degas no MASP usa uma saia de tecido de verdade?",
+   "options": [
+    "O pensador",
+    "Pequena bailarina de catorze anos",
+    "A banhista",
+    "O beijo"
+   ],
+   "correct": 1,
+   "explanation": "A Pequena bailarina de catorze anos combina bronze com saia de tule e fita de cetim."
+  },
+  {
+   "question": "Qual é o tema do ciclo curatorial do MASP em 2026?",
+   "options": [
+    "Histórias afro-atlânticas",
+    "Histórias latino-americanas",
+    "Histórias da infância",
+    "Histórias indígenas"
+   ],
+   "correct": 1,
+   "explanation": "Em 2026 o MASP dedica sua programação às Histórias latino-americanas."
+  }
+ ]
+}

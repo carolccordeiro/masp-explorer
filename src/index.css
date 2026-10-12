@@ -1,265 +1,100 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import "@fontsource/aileron/latin-300.css";
+@import "@fontsource/aileron/latin-400.css";
+@import "@fontsource/aileron/latin-600.css";
+@import "@fontsource/aileron/latin-700.css";
+@import "@fontsource/aileron/latin-800.css";
+
+@import "@fontsource/hanken-grotesk/latin-400.css";
+@import "@fontsource/hanken-grotesk/latin-500.css";
+@import "@fontsource/hanken-grotesk/latin-600.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Tokens em RGB (sem vírgula) para aceitar opacidade: rgb(var(--x) / .5) */
 @layer base {
   :root {
-    /* Off-white de concreto, sem calor; ligeiramente mais frio pra dialogar com cimento bruto */
-    --background: 30 6% 95%;
-    --foreground: 0 0% 6%;
-
-    --card: 30 6% 95%;
-    --card-foreground: 0 0% 6%;
-
-    --popover: 30 6% 95%;
-    --popover-foreground: 0 0% 6%;
-
-    /* Vermelho cavalete MASP, #B7252A em HSL aproximado */
-    --primary: 357 67% 43%;
-    --primary-foreground: 30 6% 95%;
-
-    --secondary: 30 4% 92%;
-    --secondary-foreground: 0 0% 6%;
-
-    --muted: 30 4% 90%;
-    --muted-foreground: 0 0% 32%;
-
-    --accent: 30 4% 92%;
-    --accent-foreground: 0 0% 6%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 0 0% 82%;
-    --input: 0 0% 82%;
-    --ring: 357 67% 43%;
-
-    --radius: 0px;
-
-    --masp-red: 357 67% 43%;
-    --masp-red-deep: 357 72% 32%;
-    --masp-black: 0 0% 6%;
-    --masp-white: 30 6% 95%;
-    --masp-gray: 0 0% 42%;
-    --masp-light: 30 4% 92%;
-    --masp-concrete: 30 3% 80%;
-
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 0 0% 8%;
-    --sidebar-primary: 0 88% 45%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 0% 96%;
-    --sidebar-accent-foreground: 0 0% 8%;
-    --sidebar-border: 0 0% 90%;
-    --sidebar-ring: 0 88% 45%;
+    --bg: 245 245 247;
+    --surface: 255 255 255;
+    --elevated: 255 255 255;
+    --ink: 29 29 31;
+    --muted: 110 110 115;
+    --line: 0 0 0;
+    --accent: 10 10 12;          /* sobrescrito pelo museu ativo */
+    --accent-ink: 255 255 255;
+    --success: 52 199 89;
+    --warning: 255 159 10;
+    --danger: 255 59 48;
+    --line-alpha: 0.08;
+    --font-scale: 1;
+    color-scheme: light;
   }
-}
-
-@layer base {
-  * {
-    @apply border-border;
+  .dark {
+    --bg: 0 0 0;
+    --surface: 22 22 24;
+    --elevated: 34 34 38;
+    --ink: 245 245 247;
+    --muted: 152 152 157;
+    --line: 255 255 255;
+    --line-alpha: 0.10;
+    color-scheme: dark;
+  }
+  /* Alto contraste: bordas e textos mais fortes */
+  .hc {
+    --muted: 60 60 64;
+    --line-alpha: 0.35;
+  }
+  .dark.hc {
+    --muted: 210 210 215;
+    --line-alpha: 0.5;
   }
 
+  html {
+    font-size: calc(16px * var(--font-scale));
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
   body {
-    @apply bg-background text-foreground font-sans antialiased;
-    font-family: 'Inter', 'Helvetica Neue', 'Arial', sans-serif;
-    font-feature-settings: 'ss01', 'cv11', 'tnum';
+    @apply bg-bg text-ink font-sans antialiased;
+    font-feature-settings: "ss01", "cv11";
+    min-height: 100dvh;
+    overscroll-behavior-y: none;
   }
+  h1, h2, h3, h4 { @apply font-display tracking-tight; }
+  ::selection { background: rgb(var(--accent) / 0.25); }
+  :focus-visible { outline: 3px solid rgb(var(--accent) / 0.6); outline-offset: 2px; border-radius: 12px; }
+  img { -webkit-user-drag: none; }
 
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Inter', 'Helvetica Neue', 'Arial', sans-serif;
-    font-weight: 900;
-    letter-spacing: -0.035em;
-    line-height: 0.94;
-  }
-
-  /* Display headline brutalist, weight 900, tracking ultra-apertado, tudo em caixa alta
-     ou misto sem ornamento. Aliases mantidos pra compatibilidade. */
-  .font-display,
-  .font-display-italic {
-    font-family: 'Inter', 'Helvetica Neue', 'Arial', sans-serif;
-    font-weight: 900;
-    letter-spacing: -0.045em;
-    line-height: 0.92;
-    font-style: normal;
+  .reduce-motion *, .reduce-motion *::before, .reduce-motion *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
-@layer utilities {
-  .masp-gradient {
-    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--masp-red-deep)) 100%);
+@layer components {
+  .hairline { border-color: rgb(var(--line) / var(--line-alpha)); }
+  .card { @apply bg-surface rounded-3xl shadow-soft border hairline; }
+  .glass {
+    background: rgb(var(--surface) / 0.72);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
   }
-
-  /* Brutalist building blocks, inspired by Lina Bo Bardi's concrete + glass approach.
-     Use heavy 2-4px rules, solid blocks and rigid grids; no rounded corners anywhere. */
-  .brutalist-rule {
-    height: 4px;
-    background: hsl(var(--foreground));
-    width: 100%;
-  }
-  .brutalist-rule-red {
-    height: 4px;
-    background: hsl(var(--primary));
-    width: 100%;
-  }
-  .brutalist-border {
-    border: 2px solid hsl(var(--foreground));
-  }
-  .brutalist-border-red {
-    border: 2px solid hsl(var(--primary));
-  }
-  .brutalist-shadow {
-    box-shadow: 6px 6px 0 0 hsl(var(--foreground));
-  }
-  .brutalist-shadow-red {
-    box-shadow: 6px 6px 0 0 hsl(var(--primary));
-  }
-  /* Concrete texture, simulates raw cement of Lina's facade */
-  .bg-concrete {
-    background-color: hsl(var(--masp-concrete));
-    background-image:
-      radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1.5px),
-      radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 2px);
-    background-size: 8px 8px, 17px 17px;
-    background-position: 0 0, 4px 5px;
-  }
-  /* Tabular numerics for any numeric chrome (counters, times, percentages) */
-  .tnum {
-    font-variant-numeric: tabular-nums;
-    font-feature-settings: 'tnum';
-  }
-}
-
-/* Accessibility overrides applied at html-level by AccessibilityContext */
-html.a11y-high-contrast {
-  --background: 0 0% 100%;
-  --foreground: 0 0% 0%;
-  --primary: 357 100% 36%;
-  --primary-foreground: 0 0% 100%;
-  --muted: 0 0% 88%;
-  --muted-foreground: 0 0% 18%;
-  --border: 0 0% 0%;
-  --ring: 357 100% 36%;
-}
-html.a11y-high-contrast * {
-  text-shadow: none;
-}
-html.a11y-high-contrast img {
-  filter: contrast(1.1);
-}
-html.a11y-reduce-motion *,
-html.a11y-reduce-motion *::before,
-html.a11y-reduce-motion *::after {
-  animation-duration: 0.001ms !important;
-  animation-delay: 0ms !important;
-  animation-iteration-count: 1 !important;
-  transition-duration: 0.001ms !important;
-}
-
-@layer utilities {
-
-  /* Editorial accents */
-  .hairline-top {
-    border-top: 1px solid hsl(var(--border));
-  }
-  .hairline-bottom {
-    border-bottom: 1px solid hsl(var(--border));
-  }
-  .editorial-eyebrow {
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: hsl(var(--primary));
-    display: inline-flex;
-    align-items: center;
-  }
-  .editorial-rule {
-    display: inline-block;
-    width: 24px;
-    height: 1.5px;
-    background: hsl(var(--primary));
-    margin-right: 12px;
-    vertical-align: middle;
-  }
-  .editorial-rule-long {
-    display: inline-block;
-    width: 48px;
-    height: 1.5px;
-    background: hsl(var(--primary));
-    margin-right: 12px;
-    vertical-align: middle;
-  }
-  .hover-lift {
-    transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1), border-color 200ms ease, background-color 200ms ease;
-  }
-  .hover-lift:hover {
-    transform: translateY(-2px);
-  }
-  .marquee-fade {
-    -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-  }
-  /* Decorative drop cap for the first letter of an editorial paragraph. */
-  .drop-cap::first-letter {
-    font-family: 'DM Serif Display', 'Georgia', serif;
-    float: left;
-    font-size: 3.4em;
-    line-height: 0.85;
-    margin-right: 0.08em;
-    margin-top: 0.08em;
-    color: hsl(var(--primary));
-  }
-  /* Subtle film-grain texture for hero areas. Pure CSS, no extra HTTP request. */
-  .grain {
-    position: relative;
-  }
-  .grain::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    opacity: 0.05;
-    mix-blend-mode: overlay;
-    background-image:
-      radial-gradient(rgba(0, 0, 0, 0.6) 1px, transparent 1px),
-      radial-gradient(rgba(255, 255, 255, 0.6) 1px, transparent 1px);
-    background-size: 3px 3px, 5px 5px;
-    background-position: 0 0, 1.5px 1.5px;
-  }
-
-  .text-masp-red {
-    color: hsl(var(--primary));
-  }
-
-  .bg-masp-red {
-    background-color: hsl(var(--primary));
-  }
-
-  .bg-masp-black {
-    background-color: hsl(var(--masp-black));
-  }
-
-  .text-masp-gray {
-    color: hsl(var(--masp-gray));
-  }
-
-  .bg-masp-light {
-    background-color: hsl(var(--masp-light));
-  }
-
-  .voice-pulse {
-    animation: voicePulse 1.5s ease-in-out infinite;
-  }
-
-  @keyframes voicePulse {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.15); opacity: 0.7; }
-  }
-
-  .totem-shadow {
-    box-shadow: 0 8px 40px -12px rgba(0, 0, 0, 0.15);
+  .tap { @apply transition-transform duration-150 active:scale-[0.97]; }
+  .num { font-variant-numeric: tabular-nums; @apply font-display font-extrabold tracking-tighter; }
+  .eyebrow { @apply text-[11px] font-bold uppercase tracking-[0.14em] text-muted; }
+  .body-copy { @apply font-body text-[15px] leading-relaxed text-ink/85; }
+  .chip { @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] font-semibold border hairline bg-surface transition-colors duration-150; }
+  .chip-on { @apply bg-accent text-accent-ink border-transparent; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { scrollbar-width: none; }
+  .safe-bottom { padding-bottom: max(env(safe-area-inset-bottom), 0px); }
+  .skeleton { @apply relative overflow-hidden bg-ink/5; }
+  .skeleton::after {
+    content: ""; position: absolute; inset: 0; transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgb(var(--surface) / 0.6), transparent);
+    animation: shimmer 1.4s infinite;
   }
 }
