@@ -83,7 +83,7 @@ export function analyze(events: Ev[], index: Map<string, ArtIndexItem>) {
   const visitors = sessions.length;
   const durations = sessions.filter((s) => s.n >= 2).map((s) => (s.end - s.start) / 60000);
   const avgMinutes = Math.round(median(durations));
-  const nonView = events.filter((e) => !["view", "session_start", "people", "pref", "scan"].includes(e.type));
+  const nonView = events.filter((e) => !["view", "session_start", "people", "pref", "scan", "ad_view", "ad_click"].includes(e.type));
   const perVisitor = visitors ? nonView.length / visitors : 0;
 
   // scanner
@@ -112,12 +112,16 @@ export function analyze(events: Ev[], index: Map<string, ArtIndexItem>) {
 
   // uso dos recursos
   const features = top(countBy(nonView, (e) => e.type));
-  const reach = (types: string[]) => sessions.filter((s) => types.some((t) => s.types.has(t))).length;
+  // funil aninhado: cada etapa conta só quem passou pela anterior
+  const has = (s: Session, types: string[]) => types.some((t) => s.types.has(t));
+  const st1 = sessions.filter((s) => has(s, ["artwork_view", "scan_match"]));
+  const st2 = st1.filter((s) => has(s, ["scan_match", "chat", "audio", "plan", "quiz_done", "hunt_found"]));
+  const st3 = st2.filter((s) => has(s, ["favorite"]));
   const funnel = [
     { key: "enter", v: visitors },
-    { key: "artwork", v: reach(["artwork_view", "scan_match"]) },
-    { key: "feature", v: reach(["scan_match", "chat", "audio", "plan", "quiz_done", "hunt_found"]) },
-    { key: "favorite", v: reach(["favorite"]) },
+    { key: "artwork", v: st1.length },
+    { key: "feature", v: st2.length },
+    { key: "favorite", v: st3.length },
   ];
 
   // preferências de conteúdo
@@ -141,7 +145,21 @@ export function analyze(events: Ev[], index: Map<string, ArtIndexItem>) {
   const quiz = events.filter((e) => e.type === "quiz_done" && e.value != null).map((e) => e.value!);
   const quizAvg = quiz.length ? quiz.reduce((a, b) => a + b, 0) / quiz.length : null;
 
+  // mídia: impressões e cliques (cupons) por parceiro
+  const adMap: Record<string, { views: number; clicks: number }> = {};
+  for (const e of events) {
+    if ((e.type === "ad_view" || e.type === "ad_click") && e.path) {
+      const a = (adMap[e.path] ??= { views: 0, clicks: 0 });
+      if (e.type === "ad_view") a.views++;
+      else a.clicks++;
+    }
+  }
+  const ads = Object.entries(adMap)
+    .map(([id, v]) => ({ id, ...v, ctr: v.views ? (v.clicks / v.views) * 100 : 0 }))
+    .sort((a, b) => b.views - a.views);
+
   return {
+    ads,
     sessions,
     visitors,
     avgMinutes,
@@ -197,7 +215,7 @@ function rng(seed: number) {
   };
 }
 
-export function generateDemo(index: ArtIndexItem[], museums: MuseumMeta[], now = Date.now()): Ev[] {
+export function generateDemo(index: ArtIndexItem[], museums: MuseumMeta[], now = Date.now(), partners: { id: string; museum: string }[] = []): Ev[] {
   const r = rng(20261024);
   const pick = <T,>(xs: [T, number][]) => {
     const total = xs.reduce((a, [, w]) => a + w, 0);
@@ -274,6 +292,15 @@ export function generateDemo(index: ArtIndexItem[], museums: MuseumMeta[], now =
             push("audio", { artwork_id: a.id });
           }
           if (r() < 0.12) push("favorite", { artwork_id: a.id });
+        }
+        // espaço de mídia na página do museu
+        const mine = partners.filter((x) => x.museum === m.id);
+        if (mine.length && r() < 0.82) {
+          step(0.3, 1.5);
+          const ad = mine[Math.floor(r() * mine.length)];
+          push("ad_view", { path: ad.id });
+          if (r() < 0.35) push("ad_view", { path: mine[(mine.indexOf(ad) + 1) % mine.length].id });
+          if (r() < 0.075) push("ad_click", { path: ad.id });
         }
         if (r() < 0.42) {
           const q = 1 + Math.floor(r() * 4);

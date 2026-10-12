@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { ArtImage } from "@/components/ArtImage";
 import { ArtworkCard } from "@/components/ArtworkCard";
 import { Header } from "@/components/Shell";
+import { PartnerCard } from "@/components/PartnerCard";
 import { Page, SectionTitle, StatusDot } from "@/components/ui";
 import { useMuseum } from "@/context/Museum";
 import { useSettings } from "@/context/Settings";
@@ -145,6 +146,8 @@ export default function MuseumHome() {
             </div>
           </section>
         )}
+
+        <PartnerCard museum={m.id} className="mt-10" />
 
         <section className="mt-12">
           <SectionTitle

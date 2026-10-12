@@ -7,8 +7,6 @@ import {
   FlaskConical,
   Globe2,
   Lightbulb,
-  Lock,
-  LogOut,
   MessageSquareText,
   MousePointerClick,
   Radio,
@@ -22,7 +20,8 @@ import { ArtImage } from "@/components/ArtImage";
 import { KoraWordmark } from "@/components/KoraMark";
 import { Button, Page, Segmented, StatusDot } from "@/components/ui";
 import { useSettings } from "@/context/Settings";
-import { loadArtIndex, MUSEUMS, museumMeta, type ArtIndexItem } from "@/data/museums";
+import { accentOn, loadArtIndex, MUSEUMS, museumMeta, type ArtIndexItem } from "@/data/museums";
+import { PARTNERS } from "@/data/partners";
 import type { Theme } from "@/data/types";
 import type { StringKey } from "@/i18n/strings";
 import { backendReady, supabase } from "@/lib/analytics";
@@ -35,6 +34,8 @@ const TYPE_LABEL: Record<string, string> = {
   artwork_view: "Obra aberta",
   scan: "Tentativa de scanner",
   scan_match: "Obra reconhecida no scanner",
+  ad_view: "Anúncio exibido",
+  ad_click: "Cupom de parceiro gerado",
   scan_ai: "Scanner com IA",
   chat: "Pergunta à IA",
   plan: "Roteiro criado",
@@ -70,55 +71,6 @@ type Period = "today" | "7d" | "30d";
 type Source = "live" | "demo";
 
 /* ---------------- peças visuais ---------------- */
-
-function Gate({ onOk }: { onOk: () => void }) {
-  const { t } = useSettings();
-  const [v, setV] = useState("");
-  const [err, setErr] = useState(false);
-  return (
-    <div className="grid min-h-[100dvh] place-items-center px-4">
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (v === PASS) {
-            try {
-              sessionStorage.setItem("kora-admin", "1");
-            } catch {
-              /* ignora */
-            }
-            onOk();
-          } else setErr(true);
-        }}
-        className="card w-full max-w-sm p-7 text-center"
-      >
-        <KoraWordmark className="justify-center" />
-        <p className="mt-6 flex items-center justify-center gap-2 text-[20px] font-extrabold">
-          <Lock size={18} /> {t("admin.title")}
-        </p>
-        <p className="mt-1 text-[13px] text-muted">Indicadores do público em tempo real</p>
-        <input
-          autoFocus
-          type="password"
-          inputMode="numeric"
-          value={v}
-          onChange={(e) => {
-            setV(e.target.value);
-            setErr(false);
-          }}
-          placeholder={t("admin.password")}
-          className={cn("num mt-5 h-14 w-full rounded-2xl border hairline bg-bg text-center text-[26px] tracking-[0.5em] outline-none focus:ring-2 focus:ring-accent/40", err && "ring-2 ring-danger")}
-        />
-        {err && <p className="mt-2 text-[13px] text-danger">{t("admin.wrong")}</p>}
-        <Button className="mt-5 w-full" size="lg" variant="secondary">
-          {t("admin.enter")}
-        </Button>
-        <Link to="/museus" className="mt-4 inline-flex items-center gap-1 text-[13px] text-muted">
-          <ArrowLeft size={14} /> KORA
-        </Link>
-      </form>
-    </div>
-  );
-}
 
 function ago(iso: string) {
   const s = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 1000));
@@ -320,13 +272,7 @@ function toCsv(events: Ev[]) {
 
 export default function Dashboard() {
   const { t, isDark } = useSettings();
-  const [ok, setOk] = useState(() => {
-    try {
-      return sessionStorage.getItem("kora-admin") === "1";
-    } catch {
-      return false;
-    }
-  });
+  const ok = true; // painel aberto (sem senha) para demonstração
   const [events, setEvents] = useState<Ev[]>([]);
   const [museum, setMuseum] = useState<string>("all");
   const [period, setPeriod] = useState<Period>("7d");
@@ -339,7 +285,7 @@ export default function Dashboard() {
     loadArtIndex().then(setIndexList);
   }, []);
   const index = useMemo(() => new Map(indexList.map((x) => [x.id, x])), [indexList]);
-  const demo = useMemo(() => (indexList.length ? generateDemo(indexList, MUSEUMS) : []), [indexList]);
+  const demo = useMemo(() => (indexList.length ? generateDemo(indexList, MUSEUMS, Date.now(), PARTNERS) : []), [indexList]);
 
   useEffect(() => {
     if (!ok) return;
@@ -402,11 +348,9 @@ export default function Dashboard() {
   const peopleNow = peopleEvents.length ? peopleEvents.reduce((a, e) => a + (e.value ?? 0), 0) : null;
   const insights = buildInsights(d, t);
 
-  if (!ok) return <Gate onOk={() => setOk(true)} />;
-
   const grid = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)";
   const tick = { fill: isDark ? "#98989D" : "#6E6E73", fontSize: 12 };
-  const accent = museum === "all" ? (isDark ? "#F5F5F7" : "#1D1D1F") : (museumMeta(museum)?.accent ?? "#1D1D1F");
+  const accent = museum === "all" ? (isDark ? "#F5F5F7" : "#1D1D1F") : (accentOn(museumMeta(museum), isDark) ?? "#1D1D1F");
   const featMax = d.features[0]?.[1] ?? 1;
 
   const download = () => {
@@ -443,20 +387,9 @@ export default function Dashboard() {
               "…"
             )}
           </span>
-          <button
-            onClick={() => {
-              try {
-                sessionStorage.removeItem("kora-admin");
-              } catch {
-                /* ignora */
-              }
-              setOk(false);
-            }}
-            className="tap grid h-10 w-10 place-items-center rounded-full bg-ink/[0.06]"
-            aria-label="Sair"
-          >
-            <LogOut size={17} />
-          </button>
+          <Link to="/museus" className="tap grid h-10 w-10 place-items-center rounded-full bg-ink/[0.06]" aria-label="Voltar">
+            <ArrowLeft size={17} />
+          </Link>
         </div>
       </header>
 
@@ -709,6 +642,59 @@ export default function Dashboard() {
           </Card>
         </div>
 
+        {/* mídia e parceiros */}
+        <Card className="mt-3" title="Mídia e parceiros" desc="Receita extra para o museu: anúncios de parceiros do entorno com cupom de desconto">
+          {d.ads.length ? (
+            <>
+              <div className="grid grid-cols-3 gap-3">
+                {[
+                  { label: "Impressões", v: fmt(d.ads.reduce((a, x) => a + x.views, 0)) },
+                  { label: "Cupons gerados", v: fmt(d.ads.reduce((a, x) => a + x.clicks, 0)) },
+                  {
+                    label: "Taxa de clique",
+                    v: `${((d.ads.reduce((a, x) => a + x.clicks, 0) / Math.max(1, d.ads.reduce((a, x) => a + x.views, 0))) * 100).toFixed(1).replace(".", ",")}%`,
+                  },
+                ].map((k) => (
+                  <div key={k.label} className="rounded-2xl bg-ink/[0.04] p-4">
+                    <p className="text-[11.5px] font-bold uppercase tracking-wider text-muted">{k.label}</p>
+                    <p className="num mt-1 text-[28px] leading-none md:text-[34px]">{k.v}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="no-scrollbar -mx-1 mt-4 overflow-x-auto">
+                <table className="w-full min-w-[520px] text-left text-[13.5px]">
+                  <thead>
+                    <tr className="text-[11.5px] uppercase tracking-wider text-muted">
+                      <th className="px-2 pb-2 font-bold">Parceiro</th>
+                      <th className="px-2 pb-2 font-bold">Museu</th>
+                      <th className="px-2 pb-2 text-right font-bold">Impressões</th>
+                      <th className="px-2 pb-2 text-right font-bold">Cupons</th>
+                      <th className="px-2 pb-2 text-right font-bold">Taxa de clique</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {d.ads.map((a) => {
+                      const p = PARTNERS.find((x) => x.id === a.id);
+                      return (
+                        <tr key={a.id} className="border-t hairline">
+                          <td className="px-2 py-2.5 font-bold">{p?.name ?? a.id}</td>
+                          <td className="px-2 py-2.5">{museumMeta(p?.museum ?? "")?.short ?? "–"}</td>
+                          <td className="num px-2 py-2.5 text-right">{fmt(a.views)}</td>
+                          <td className="num px-2 py-2.5 text-right">{fmt(a.clicks)}</td>
+                          <td className="num px-2 py-2.5 text-right">{a.ctr.toFixed(1).replace(".", ",")}%</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              <p className="mt-3 text-[12px] text-muted">Parceiros de exemplo. Cada museu cadastra os seus anunciantes e recebe este relatório para renovar e precificar os contratos.</p>
+            </>
+          ) : (
+            <Empty />
+          )}
+        </Card>
+
         {/* comparativo da rede */}
         {museum === "all" && network.some((n) => n.visitors) && (
           <Card className="mt-3" title="Comparativo da rede" desc="Cada museu lado a lado no mesmo período">
@@ -754,7 +740,7 @@ export default function Dashboard() {
           <ul className="grid gap-x-6 md:grid-cols-2">
             <AnimatePresence initial={false}>
               {filtered
-                .filter((e) => e.type !== "view" && e.type !== "people")
+                .filter((e) => !["view", "people", "ad_view", "pref"].includes(e.type))
                 .slice(0, 10)
                 .map((e) => {
                   const m = museumMeta(e.museum);

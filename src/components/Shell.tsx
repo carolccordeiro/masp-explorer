@@ -63,7 +63,7 @@ export function Header({ back, title, right }: { back?: boolean | string; title?
             </IconButton>
           ) : museum ? (
             <Link to="/museus" className="tap" aria-label="KORA">
-              <KoraIcon size={30} className="text-ink" />
+              <KoraIcon size={40} className="text-ink" />
             </Link>
           ) : (
             <Link to="/museus" className="tap">

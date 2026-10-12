@@ -18,7 +18,9 @@ export type EventType =
   | "audio"
   | "qr"
   | "people"
-  | "pref";
+  | "pref"
+  | "ad_view"
+  | "ad_click";
 
 export interface KoraEvent {
   museum: string;

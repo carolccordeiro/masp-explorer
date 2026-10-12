@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { loadMuseum, museumMeta } from "@/data/museums";
+import { useSettings } from "@/context/Settings";
+import { accentOn, inkOn, loadMuseum, museumMeta } from "@/data/museums";
 import type { Museum, MuseumId } from "@/data/types";
 import { hexToRgb } from "@/lib/utils";
 
@@ -21,10 +22,14 @@ export function MuseumProvider({ id, children, fallback }: { id: MuseumId; child
   const [museum, setMuseum] = useState<Museum | null>(null);
   const [error, setError] = useState(false);
 
+  const { isDark } = useSettings();
+  useEffect(() => {
+    const meta = museumMeta(id);
+    applyAccent(accentOn(meta, isDark), inkOn(meta, isDark));
+  }, [id, isDark]);
+
   useEffect(() => {
     let alive = true;
-    const meta = museumMeta(id);
-    applyAccent(meta?.accent, meta?.accentInk);
     setMuseum(null);
     loadMuseum(id)
       .then((m) => alive && setMuseum(m))

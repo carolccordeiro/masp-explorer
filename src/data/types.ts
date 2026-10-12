@@ -67,6 +67,9 @@ export interface Museum {
   about: I18n;
   accent: string; // hex
   accentInk: string; // cor do texto sobre o acento
+  /** variante para o modo escuro (ex.: IMS, identidade preto e branco) */
+  accentDark?: string;
+  accentDarkInk?: string;
   cover: string; // imagem de capa
   address: string;
   coords: [number, number];
@@ -91,4 +94,4 @@ export interface Museum {
 }
 
 /** Metadados leves, usados na tela inicial antes de carregar o acervo. */
-export type MuseumMeta = Pick<Museum, "id" | "name" | "short" | "city" | "tagline" | "accent" | "accentInk" | "cover" | "address" | "coords" | "week" | "freeDays">;
+export type MuseumMeta = Pick<Museum, "id" | "name" | "short" | "city" | "tagline" | "accent" | "accentInk" | "accentDark" | "accentDarkInk" | "cover" | "address" | "coords" | "week" | "freeDays">;

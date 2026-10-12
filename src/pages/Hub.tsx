@@ -93,7 +93,7 @@ export default function Hub() {
                   alt=""
                   aria-hidden
                   loading={i === 0 ? "eager" : "lazy"}
-                  className="absolute inset-0 h-full w-full object-cover opacity-55 mix-blend-luminosity transition-transform duration-700 group-hover:scale-[1.05]"
+                  className={cn("absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.05]", m.accentDark ? "opacity-80 grayscale" : "opacity-55 mix-blend-luminosity")}
                 />
                 <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, ${m.accent}cc 0%, ${m.accent}33 45%, rgba(0,0,0,0.75) 100%)` }} />
 

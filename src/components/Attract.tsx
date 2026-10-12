@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Compass, HelpCircle, ScanLine, Sparkles, Smartphone } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { loadArtIndex, museumMeta, type ArtIndexItem } from "@/data/museums";
+import { accentOn, inkOn, loadArtIndex, museumMeta, type ArtIndexItem } from "@/data/museums";
 import type { Lang, MuseumId } from "@/data/types";
 import { useSettings } from "@/context/Settings";
 import { STRINGS, type StringKey } from "@/i18n/strings";
@@ -152,10 +152,10 @@ export function Attract({ museum, onStart }: { museum?: MuseumId; onStart: () =>
       {/* conteúdo */}
       <div className="relative flex h-full flex-col justify-between p-6 md:w-[52%] md:p-12 lg:p-16">
         <div className="flex items-center gap-3">
-          <KoraIcon size={40} className="text-white" />
+          <KoraIcon size={64} className="text-white" />
           <span className="text-[24px] font-extrabold tracking-[-0.04em]">kora</span>
           {museum && meta && (
-            <span className="ml-2 rounded-lg px-2 py-0.5 text-[15px] font-extrabold" style={{ backgroundColor: museumMeta(museum)?.accent }}>
+            <span className="ml-2 rounded-lg px-2 py-0.5 text-[15px] font-extrabold" style={{ backgroundColor: accentOn(museumMeta(museum), true), color: inkOn(museumMeta(museum), true) }}>
               {museumMeta(museum)?.short}
             </span>
           )}
@@ -173,7 +173,7 @@ export function Attract({ museum, onStart }: { museum?: MuseumId; onStart: () =>
                 transition={{ duration: 0.5, ease: [0.2, 0.8, 0.2, 1] }}
               >
                 {say(cycleLang, "attract.title")}
-                <span style={{ color: meta?.accent ?? "#fff" }}>.</span>
+                <span style={{ color: accentOn(meta, true) ?? "#fff" }}>.</span>
               </motion.h1>
             </AnimatePresence>
           </div>
@@ -188,7 +188,7 @@ export function Attract({ museum, onStart }: { museum?: MuseumId; onStart: () =>
               >
                 <span
                   className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl transition-colors duration-500"
-                  style={{ backgroundColor: k === feature ? meta?.accent ?? "#fff" : "rgba(255,255,255,0.1)" }}
+                  style={{ backgroundColor: k === feature ? (accentOn(meta, true) ?? "#fff") : "rgba(255,255,255,0.1)", color: k === feature ? inkOn(meta, true) : "#fff" }}
                 >
                   {f.icon}
                 </span>
@@ -217,7 +217,7 @@ export function Attract({ museum, onStart }: { museum?: MuseumId; onStart: () =>
                   exit={{ opacity: 0 }}
                   className="mt-5 flex items-center gap-2 truncate text-[13px] text-white/70"
                 >
-                  <span className="rounded-md px-1.5 py-0.5 text-[11px] font-extrabold text-white" style={{ backgroundColor: meta?.accent }}>
+                  <span className="rounded-md px-1.5 py-0.5 text-[11px] font-extrabold" style={{ backgroundColor: accentOn(meta, true), color: inkOn(meta, true) }}>
                     {meta?.short}
                   </span>
                   <span className="truncate">

@@ -30,8 +30,11 @@ export const MUSEUMS: MuseumMeta[] = [
       en: "Brazil in photographs, from the 19th century to now",
       es: "Brasil en fotografías, del siglo XIX al presente",
     },
-    accent: "#D55E09",
+    // identidade do IMS: preto e branco
+    accent: "#111111",
     accentInk: "#FFFFFF",
+    accentDark: "#F2F2F2",
+    accentDarkInk: "#000000",
     cover: "/museums/ims/cover.webp",
     address: "Avenida Paulista, 2424, Consolação, São Paulo, SP",
     coords: [-23.5557, -46.6622],
@@ -59,6 +62,10 @@ export const MUSEUMS: MuseumMeta[] = [
 ];
 
 export const museumMeta = (id: string) => MUSEUMS.find((m) => m.id === id);
+
+/** Cor do museu que aparece bem no fundo atual (claro ou escuro). */
+export const accentOn = (m: Pick<MuseumMeta, "accent" | "accentDark"> | undefined, dark: boolean) => (m ? (dark && m.accentDark ? m.accentDark : m.accent) : undefined);
+export const inkOn = (m: Pick<MuseumMeta, "accentInk" | "accentDarkInk" | "accentDark"> | undefined, dark: boolean) => (m ? (dark && m.accentDark ? (m.accentDarkInk ?? "#000") : m.accentInk) : "#fff");
 export const isMuseumId = (id: string | undefined): id is MuseumId => !!id && MUSEUMS.some((m) => m.id === id);
 
 const loaders: Record<MuseumId, () => Promise<{ default: unknown }>> = {

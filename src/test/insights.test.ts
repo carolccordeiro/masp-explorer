@@ -20,6 +20,8 @@ describe("painel", () => {
     expect(d.peak.hour).toBeLessThanOrEqual(20);
     expect(d.heat[1].reduce((a, b) => a + b, 0)).toBe(0); // segunda: museus fechados
     expect(d.funnel[0].v).toBeGreaterThanOrEqual(d.funnel[1].v);
+    expect(d.funnel[1].v).toBeGreaterThanOrEqual(d.funnel[2].v);
+    expect(d.ads.length).toBe(0);
     expect(d.langs[0][0]).toBe("pt");
   });
 });

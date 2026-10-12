@@ -11,6 +11,7 @@ import {
   Layers,
   LayoutDashboard,
   Mail,
+  Megaphone,
   MessageSquareText,
   Network,
   Palette,
@@ -369,6 +370,36 @@ const C = {
       },
     ] as { name: T; for: T; items: T; featured?: boolean }[],
     price: { pt: "Sob consulta", en: "On request", es: "A consultar" },
+    revenueTitle: { pt: "Como a KORA gera receita", en: "How KORA makes money", es: "Cómo KORA genera ingresos" },
+    revenue: [
+      {
+        icon: <Layers size={20} />,
+        title: { pt: "Assinatura", en: "Subscription", es: "Suscripción" },
+        text: {
+          pt: "Mensalidade por museu, com implantação inicial do acervo e da identidade visual.",
+          en: "Monthly fee per museum, with initial setup of the collection and visual identity.",
+          es: "Mensualidad por museo, con implementación inicial de la colección y la identidad visual.",
+        },
+      },
+      {
+        icon: <Megaphone size={20} />,
+        title: { pt: "Mídia e parceiros", en: "Media and partners", es: "Medios y socios" },
+        text: {
+          pt: "Anúncios de cafés, restaurantes e lojas do entorno, com cupom de desconto. O museu ganha uma nova receita e recebe o relatório de impressões e cupons.",
+          en: "Ads from nearby cafés, restaurants and shops, with a discount coupon. The museum gains new revenue and gets a report of impressions and coupons.",
+          es: "Anuncios de cafés, restaurantes y tiendas cercanas, con cupón de descuento. El museo gana un nuevo ingreso y recibe el informe de impresiones y cupones.",
+        },
+      },
+      {
+        icon: <Sparkles size={20} />,
+        title: { pt: "Patrocínio de experiências", en: "Sponsored experiences", es: "Patrocinio de experiencias" },
+        text: {
+          pt: "Marcas podem assinar roteiros, o audioguia, o quiz ou a caça ao tesouro, com métricas reais de alcance.",
+          en: "Brands can sponsor routes, the audio guide, the quiz or the treasure hunt, with real reach metrics.",
+          es: "Las marcas pueden patrocinar recorridos, la audioguía, el quiz o la búsqueda del tesoro, con métricas reales de alcance.",
+        },
+      },
+    ] as Card[],
     model: {
       pt: "Assinatura mensal por museu mais implantação. O museu não precisa comprar equipamento: a experiência roda no celular do visitante.",
       en: "Monthly subscription per museum plus setup. No hardware purchase needed: the experience runs on the visitor's phone.",
@@ -599,6 +630,13 @@ export default function About() {
             ))}
           </div>
           <p className="body-copy mt-6 max-w-2xl text-[15px] text-muted">{tr(C.business.model, lang)}</p>
+
+          <h3 className="mt-14 text-[22px] font-extrabold">{tr(C.business.revenueTitle, lang)}</h3>
+          <div className="mt-5 grid gap-4 md:grid-cols-3">
+            {C.business.revenue.map((c, i) => (
+              <IconCard key={i} c={c} lang={lang} i={i} />
+            ))}
+          </div>
         </Section>
 
         {/* chamada final */}

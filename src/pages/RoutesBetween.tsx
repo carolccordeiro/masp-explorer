@@ -1,12 +1,14 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Bus, Footprints, Lightbulb, MapPin } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ArrowRight, ArrowUpRight, Building2, Bus, Footprints, Landmark, Lightbulb, MapPin, Palette } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArtImage } from "@/components/ArtImage";
 import { Header } from "@/components/Shell";
-import { Page, SectionTitle, Skeleton } from "@/components/ui";
+import { PartnerCard } from "@/components/PartnerCard";
+import { Chip, Page, SectionTitle, Skeleton } from "@/components/ui";
 import { useSettings } from "@/context/Settings";
-import { loadArtIndex, MUSEUMS, museumMeta, type ArtIndexItem } from "@/data/museums";
+import { accentOn, inkOn, loadArtIndex, MUSEUMS, museumMeta, type ArtIndexItem } from "@/data/museums";
+import { KIND_LABEL, mapsUrl, NEARBY, type NearbyPlace, type PlaceKind } from "@/data/nearby";
 import type { I18n, MuseumId } from "@/data/types";
 import { dot, loadEmbeddings } from "@/lib/clip";
 import { tr } from "@/lib/utils";
@@ -18,6 +20,43 @@ function km(a: [number, number], b: [number, number]) {
   const x = Math.sin(dLat / 2) ** 2 + Math.cos((a[0] * Math.PI) / 180) * Math.cos((b[0] * Math.PI) / 180) * Math.sin(dLon / 2) ** 2;
   return 2 * R * Math.asin(Math.sqrt(x));
 }
+
+/** Distância (km) de um ponto ao trecho a-b, em projeção plana local (suficiente para a escala da cidade). */
+function kmToSegment(p: [number, number], a: [number, number], b: [number, number]) {
+  const k = [110.57, 111.32 * Math.cos((a[0] * Math.PI) / 180)];
+  const P = [p[0] * k[0], p[1] * k[1]];
+  const A = [a[0] * k[0], a[1] * k[1]];
+  const B = [b[0] * k[0], b[1] * k[1]];
+  const AB = [B[0] - A[0], B[1] - A[1]];
+  const t = Math.max(0, Math.min(1, ((P[0] - A[0]) * AB[0] + (P[1] - A[1]) * AB[1]) / (AB[0] ** 2 + AB[1] ** 2 || 1)));
+  return Math.hypot(P[0] - (A[0] + t * AB[0]), P[1] - (A[1] + t * AB[1]));
+}
+
+/** Lugares no caminho de um roteiro: até 1,2 km do trajeto, os mais próximos primeiro. */
+function onTheWay(stops: MuseumId[]) {
+  const pts = stops.map((s) => museumMeta(s)!.coords);
+  return NEARBY.map((p) => {
+    let d = Infinity;
+    for (let i = 0; i < pts.length - 1; i++) d = Math.min(d, kmToSegment(p.coords, pts[i], pts[i + 1]));
+    for (const q of pts) d = Math.min(d, km(p.coords, q));
+    return { p, d };
+  })
+    .filter((x) => x.d <= 1.2)
+    .sort((a, b) => a.d - b.d)
+    .slice(0, 4);
+}
+
+const KIND_ICON: Record<PlaceKind, JSX.Element> = { museu: <Landmark size={17} />, galeria: <Palette size={17} />, centro: <Building2 size={17} /> };
+
+const TXT = {
+  way: { pt: "No caminho", en: "On the way", es: "En el camino" },
+  more: { pt: "Mais arte por perto", en: "More art nearby", es: "Más arte cerca" },
+  moreDesc: { pt: "Museus, galerias e centros culturais perto da rede KORA", en: "Museums, galleries and cultural centers near the KORA network", es: "Museos, galerías y centros culturales cerca de la red KORA" },
+  all: { pt: "Todos", en: "All", es: "Todos" },
+  fromRoute: { pt: "do trajeto", en: "from the route", es: "del trayecto" },
+  fromMuseum: { pt: "do", en: "from", es: "del" },
+  stop: { pt: "Pare no caminho", en: "Stop along the way", es: "Para en el camino" },
+};
 
 const ROUTES: { id: string; title: I18n; desc: I18n; stops: MuseumId[]; tip: I18n }[] = [
   {
@@ -125,20 +164,88 @@ function Connections() {
   );
 }
 
+function PlaceCard({ p, note, onHover }: { p: NearbyPlace; note: string; onHover?: (id: string | null) => void }) {
+  const { lang } = useSettings();
+  return (
+    <a
+      href={mapsUrl(p)}
+      target="_blank"
+      rel="noreferrer"
+      onMouseEnter={() => onHover?.(p.id)}
+      onMouseLeave={() => onHover?.(null)}
+      className="tap card flex h-full flex-col p-4"
+    >
+      <span className="flex items-center justify-between gap-2">
+        <span className="rounded-full bg-ink/[0.06] px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-muted">{tr(KIND_LABEL[p.kind], lang)}</span>
+        <ArrowUpRight size={16} className="text-muted" />
+      </span>
+      <span className="mt-2 text-[15.5px] font-extrabold leading-snug">{p.name}</span>
+      <span className="mt-1 flex-1 text-[13px] leading-snug text-muted">{tr(p.desc, lang)}</span>
+      <span className="mt-3 flex items-center gap-1 text-[12px] font-semibold text-muted">
+        <MapPin size={12} /> {p.address} · {note}
+      </span>
+    </a>
+  );
+}
+
+function WayList({ stops, onHover }: { stops: MuseumId[]; onHover: (id: string | null) => void }) {
+  const { lang } = useSettings();
+  const list = onTheWay(stops);
+  if (!list.length) return null;
+  return (
+    <div className="mt-5">
+      <p className="eyebrow mb-2">{tr(TXT.way, lang)}</p>
+      <div className="grid gap-2 sm:grid-cols-2">
+        {list.map(({ p, d }) => (
+          <a
+            key={p.id}
+            href={mapsUrl(p)}
+            target="_blank"
+            rel="noreferrer"
+            onMouseEnter={() => onHover(p.id)}
+            onMouseLeave={() => onHover(null)}
+            className="tap flex items-center gap-3 rounded-2xl bg-ink/[0.04] p-3"
+          >
+            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-surface" title={tr(KIND_LABEL[p.kind], lang)}>{KIND_ICON[p.kind]}</span>
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-[14px] font-bold">{p.name}</span>
+              <span className="block truncate text-[12px] text-muted">
+                {d < 0.1 ? "0,1" : d.toFixed(1).replace(".", ",")} km {tr(TXT.fromRoute, lang)} · {p.address}
+              </span>
+            </span>
+            <ArrowUpRight size={15} className="shrink-0 text-muted" />
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function RoutesBetween() {
   const { t, lang } = useSettings();
   // mini mapa: projeção simples das coordenadas
-  const lats = MUSEUMS.map((m) => m.coords[0]);
-  const lngs = MUSEUMS.map((m) => m.coords[1]);
+  const { isDark } = useSettings();
+  const [kind, setKind] = useState<PlaceKind | "all">("all");
+  const [hoverPlace, setHoverPlace] = useState<string | null>(null);
+  const lats = [...MUSEUMS.map((m) => m.coords[0]), ...NEARBY.map((p) => p.coords[0])];
+  const lngs = [...MUSEUMS.map((m) => m.coords[1]), ...NEARBY.map((p) => p.coords[1])];
+  const places = useMemo(() => {
+    return NEARBY.filter((p) => kind === "all" || p.kind === kind)
+      .map((p) => {
+        const near = MUSEUMS.map((m) => ({ m, d: km(p.coords, m.coords) })).sort((a, b) => a.d - b.d)[0];
+        return { p, near };
+      })
+      .sort((a, b) => a.near.d - b.near.d);
+  }, [kind]);
   const [minLat, maxLat, minLng, maxLng] = [Math.min(...lats), Math.max(...lats), Math.min(...lngs), Math.max(...lngs)];
   const pos = (c: [number, number]) => ({
-    x: 18 + ((c[1] - minLng) / (maxLng - minLng || 1)) * 64,
-    y: 12 + ((maxLat - c[0]) / (maxLat - minLat || 1)) * 76,
+    x: 8 + ((c[1] - minLng) / (maxLng - minLng || 1)) * 84,
+    y: 10 + ((maxLat - c[0]) / (maxLat - minLat || 1)) * 78,
   });
 
   return (
     <>
-      <Header back="/" title={t("routes.title")} />
+      <Header back="/museus" title={t("routes.title")} />
       <Page>
         <h1 className="text-[34px] font-extrabold leading-tight tracking-tight md:text-[44px]">{t("routes.title")}</h1>
         <p className="mt-1 text-[15px] text-muted">{t("routes.subtitle")}</p>
@@ -151,6 +258,28 @@ export default function RoutesBetween() {
               return <line key={a + b} x1={pa.x} y1={pa.y} x2={pb.x} y2={pb.y} stroke="rgb(var(--ink) / 0.25)" strokeWidth="0.6" strokeDasharray="1.5 1.2" vectorEffect="non-scaling-stroke" />;
             })}
           </svg>
+          {NEARBY.map((pl) => {
+            const p = pos(pl.coords);
+            const on = hoverPlace === pl.id;
+            return (
+              <a
+                key={pl.id}
+                href={mapsUrl(pl)}
+                target="_blank"
+                rel="noreferrer"
+                onMouseEnter={() => setHoverPlace(pl.id)}
+                onMouseLeave={() => setHoverPlace(null)}
+                className="group absolute z-10 -translate-x-1/2 -translate-y-1/2"
+                style={{ left: `${p.x}%`, top: `${p.y}%` }}
+                aria-label={pl.name}
+              >
+                <span className={`block rounded-full border-2 border-surface bg-ink/55 transition-transform duration-150 ${on ? "h-4 w-4 bg-ink" : "h-2.5 w-2.5"}`} />
+                <span className={`pointer-events-none absolute left-1/2 top-4 -translate-x-1/2 whitespace-nowrap rounded-lg bg-ink px-2 py-1 text-[11px] font-bold text-bg shadow-lift transition-opacity duration-150 ${on ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}>
+                  {pl.name}
+                </span>
+              </a>
+            );
+          })}
           {MUSEUMS.map((m, i) => {
             const p = pos(m.coords);
             return (
@@ -159,8 +288,8 @@ export default function RoutesBetween() {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.1 * i, type: "spring" }}
-                  className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] font-extrabold text-white shadow-lift"
-                  style={{ backgroundColor: m.accent, boxShadow: `0 0 0 6px ${m.accent}33, 0 0 28px ${m.accent}88` }}
+                  className="relative z-20 flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] font-extrabold shadow-lift"
+                  style={{ backgroundColor: accentOn(m, isDark), color: inkOn(m, isDark), boxShadow: `0 0 0 6px ${accentOn(m, isDark)}33, 0 0 28px ${accentOn(m, isDark)}88` }}
                 >
                   <MapPin size={13} /> {m.short}
                 </motion.span>
@@ -188,7 +317,7 @@ export default function RoutesBetween() {
                     const leg = legs[i];
                     return (
                       <div key={s} className="flex items-center gap-2">
-                        <Link to={`/${s}`} className="tap rounded-xl px-3 py-2 text-[15px] font-extrabold text-white" style={{ backgroundColor: m.accent }}>
+                        <Link to={`/${s}`} className="tap rounded-xl px-3 py-2 text-[15px] font-extrabold" style={{ backgroundColor: accentOn(m, isDark), color: inkOn(m, isDark) }}>
                           {m.short}
                         </Link>
                         {leg && (
@@ -211,6 +340,7 @@ export default function RoutesBetween() {
                     );
                   })}
                 </div>
+                <WayList stops={r.stops} onHover={setHoverPlace} />
                 <p className="mt-4 flex gap-2 rounded-2xl bg-ink/[0.04] p-3 text-[14px] font-medium">
                   <Lightbulb size={17} className="mt-0.5 shrink-0 text-warning" /> {tr(r.tip, lang)}
                 </p>
@@ -218,6 +348,30 @@ export default function RoutesBetween() {
             );
           })}
         </div>
+
+        <section className="mt-12">
+          <SectionTitle title={tr(TXT.more, lang)} eyebrow={tr(TXT.moreDesc, lang)} />
+          <div className="no-scrollbar -mx-4 mb-4 flex gap-2 overflow-x-auto px-4">
+            <Chip on={kind === "all"} onClick={() => setKind("all")}>
+              {tr(TXT.all, lang)}
+            </Chip>
+            {(Object.keys(KIND_LABEL) as PlaceKind[]).map((k) => (
+              <Chip key={k} on={kind === k} onClick={() => setKind(k)}>
+                {tr(KIND_LABEL[k], lang)}
+              </Chip>
+            ))}
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {places.map(({ p, near }) => (
+              <PlaceCard key={p.id} p={p} onHover={setHoverPlace} note={`${near.d.toFixed(1).replace(".", ",")} km ${tr(TXT.fromMuseum, lang)} ${near.m.short}`} />
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-12">
+          <SectionTitle title={tr(TXT.stop, lang)} />
+          <PartnerCard />
+        </section>
 
         <section className="mt-12">
           <SectionTitle title={t("routes.connections")} eyebrow={t("art.similar.desc")} />
