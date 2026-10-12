@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { KoraWordmark } from "@/components/KoraMark";
+import { KoraLogo } from "@/components/KoraMark";
 import { Header } from "@/components/Shell";
 import { Page } from "@/components/ui";
 import { useSettings } from "@/context/Settings";
@@ -682,7 +682,7 @@ export default function About() {
 
         {/* chamada final */}
         <motion.section {...fade} className="dark mt-6 overflow-hidden rounded-4xl bg-black p-8 text-white md:p-14">
-          <KoraWordmark size="md" className="text-white" />
+          <KoraLogo size={84} className="text-white" />
           <h2 className="mt-8 max-w-2xl text-[34px] font-extrabold leading-[1.05] tracking-[-0.03em] md:text-[52px]">{tr(C.final.title, lang)}</h2>
           <p className="mt-4 max-w-xl text-[17px] text-white/70">{tr(C.final.text, lang)}</p>
           <Ctas lang={lang} invert />
