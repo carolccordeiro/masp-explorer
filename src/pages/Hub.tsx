@@ -84,21 +84,11 @@ export default function Hub() {
             >
               <Link
                 to={`/${m.id}`}
-                className="tap group relative flex h-full flex-col justify-between overflow-hidden rounded-4xl p-5 text-white shadow-lift md:p-7"
-                style={{ backgroundColor: m.accent }}
+                className="tap group relative flex h-full flex-col justify-between overflow-hidden rounded-4xl p-5 md:p-7"
+                style={{ backgroundColor: m.accent, color: m.accentInk }}
               >
-                {/* capa com a cor do museu por cima */}
-                <img
-                  src={m.cover}
-                  alt=""
-                  aria-hidden
-                  loading={i === 0 ? "eager" : "lazy"}
-                  className={cn("absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.05]", m.accentDark ? "opacity-80 grayscale" : "opacity-55 mix-blend-luminosity")}
-                />
-                <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, ${m.accent}cc 0%, ${m.accent}33 45%, rgba(0,0,0,0.75) 100%)` }} />
-
                 <div className="relative">
-                  <span className="inline-flex items-center gap-2 rounded-full bg-black/35 px-3 py-1.5 text-[12px] font-semibold backdrop-blur">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-black/20 px-3 py-1.5 text-[12px] font-semibold">
                     <StatusDot color={st.open ? "success" : "danger"} />
                     {st.open ? t("home.openNow") : t("home.closedNow")}
                     {st.freeToday && <span className="text-[#7CF29A]">· {t("common.free")}</span>}
@@ -107,10 +97,10 @@ export default function Hub() {
                 </div>
 
                 <div className="relative">
-                  <p className="hidden text-[13px] font-semibold text-white/80 md:block">{m.name}</p>
+                  <p className="hidden text-[13px] font-semibold opacity-75 md:block">{m.name}</p>
                   <p className="mt-1 max-w-md text-[18px] font-extrabold leading-tight md:text-[24px]">{tr(m.tagline, lang)}</p>
                   <div className="mt-3 flex items-center justify-between gap-3 md:mt-4">
-                    <span className="text-[12.5px] text-white/70">{m.city}</span>
+                    <span className="text-[12.5px] opacity-70">{m.city}</span>
                     <span
                       className="inline-flex items-center gap-1.5 rounded-full bg-white px-5 py-2.5 text-[15px] font-bold transition-transform duration-150 group-hover:translate-x-0.5"
                       style={{ color: m.accent }}

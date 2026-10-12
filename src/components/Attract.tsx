@@ -93,24 +93,6 @@ export function Attract({ museum, onStart }: { museum?: MuseumId; onStart: () =>
       exit={{ opacity: 0, transition: { duration: 0.25 } }}
       className="dark fixed inset-0 z-[80] cursor-pointer select-none overflow-hidden bg-black text-white"
     >
-      {/* fundo desfocado da obra atual */}
-      <AnimatePresence>
-        {art && (
-          <motion.img
-            key={"bg" + art.id}
-            src={full(art)}
-            alt=""
-            aria-hidden
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.5 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.2 }}
-            className="absolute inset-0 h-full w-full scale-125 object-cover blur-3xl saturate-150"
-          />
-        )}
-      </AnimatePresence>
-      <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-black/20" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40" />
 
       {/* obra em destaque */}
       <div className="absolute inset-y-0 right-0 hidden w-[52%] items-center justify-center p-12 md:flex lg:p-16">
@@ -128,25 +110,6 @@ export function Attract({ museum, onStart }: { museum?: MuseumId; onStart: () =>
             />
           )}
         </AnimatePresence>
-      </div>
-
-      {/* obra em tela cheia no celular */}
-      <div className="absolute inset-0 md:hidden">
-        <AnimatePresence>
-          {art && (
-            <motion.img
-              key={"m" + art.id}
-              src={full(art)}
-              alt={art.title}
-              initial={{ opacity: 0, scale: 1 }}
-              animate={{ opacity: 0.55, scale: 1.08 }}
-              exit={{ opacity: 0 }}
-              transition={{ opacity: { duration: 1 }, scale: { duration: SLIDE_MS / 1000, ease: "linear" } }}
-              className="absolute inset-0 h-full w-full object-cover"
-            />
-          )}
-        </AnimatePresence>
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/30" />
       </div>
 
       {/* conteúdo */}

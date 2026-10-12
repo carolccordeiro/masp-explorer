@@ -98,3 +98,21 @@
     animation: shimmer 1.4s infinite;
   }
 }
+
+/* mapa dos roteiros (Leaflet) */
+.kora-tiles { filter: grayscale(1) contrast(0.85) brightness(1.06); }
+.kora-tiles-dark { filter: grayscale(1) invert(1) contrast(0.9) brightness(0.85); }
+.leaflet-container { font-family: inherit; background: rgb(var(--surface)); }
+.kora-museum span {
+  display: inline-flex; align-items: center; justify-content: center; height: 30px; padding: 0 12px;
+  border-radius: 999px; font-weight: 800; font-size: 13px; white-space: nowrap; transform: translateX(-50%); margin-left: 50%;
+}
+.kora-place span {
+  display: block; width: 12px; height: 12px; border-radius: 999px; background: rgb(var(--ink) / 0.6);
+  border: 2px solid rgb(var(--surface)); transition: transform 150ms;
+}
+.kora-place.is-on span, .kora-place:hover span { transform: scale(1.5); background: rgb(var(--ink)); }
+.kora-tip { border-radius: 10px; border: none; font-weight: 700; font-size: 12px; padding: 4px 8px; box-shadow: 0 6px 20px rgba(0,0,0,.15); }
+.leaflet-control-attribution { font-size: 10px; background: rgb(var(--surface) / 0.8) !important; color: rgb(var(--muted)); }
+.leaflet-control-attribution a { color: inherit; }
+.leaflet-control-zoom a { background: rgb(var(--surface)); color: rgb(var(--ink)); border-color: rgb(var(--line) / var(--line-alpha)) !important; }

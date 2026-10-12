@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { ArrowRight, Baby, CalendarClock, ChevronRight, Compass, HelpCircle, LayoutGrid, Map as MapIcon, Route, ScanLine, Sparkles } from "lucide-react";
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { ArtImage } from "@/components/ArtImage";
 import { ArtworkCard } from "@/components/ArtworkCard";
 import { Header } from "@/components/Shell";
 import { PartnerCard } from "@/components/PartnerCard";
@@ -64,26 +63,25 @@ export default function MuseumHome() {
     <>
       <Header />
       <Page className="pt-2">
-        <motion.section initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="relative overflow-hidden rounded-4xl">
-          <ArtImage src={m.cover} alt={m.name} eager className="aspect-[4/3] sm:aspect-[16/9] md:aspect-[21/8]" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/5" />
-          <div className="absolute inset-x-0 bottom-0 p-5 text-white md:p-8">
-            <div className="mb-3 flex flex-wrap items-center gap-2">
-              <span className="glass flex items-center gap-2 rounded-full px-3 py-1.5 text-[12px] font-semibold text-ink">
-                <StatusDot color={st.open ? "success" : "danger"} />
-                {st.open ? t("home.openNow") : t("home.closedNow")}
-                {st.today && <span className="text-muted">{st.today[0]} às {st.today[1]}</span>}
+        <motion.section initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="rounded-4xl bg-accent p-6 text-accent-ink md:p-10">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="flex items-center gap-2 rounded-full bg-black/20 px-3 py-1.5 text-[12.5px] font-semibold">
+              <StatusDot color={st.open ? "success" : "danger"} />
+              {st.open ? t("home.openNow") : t("home.closedNow")}
+              {st.today && <span className="opacity-75">{st.today[0]} às {st.today[1]}</span>}
+            </span>
+            {st.freeToday && (
+              <span className="rounded-full bg-success px-3 py-1.5 text-[12.5px] font-bold text-white">
+                {t("home.freeToday")}
+                {st.freeFrom ? ` · ${st.freeFrom}` : ""}
               </span>
-              {st.freeToday && (
-                <span className="rounded-full bg-success px-3 py-1.5 text-[12px] font-bold text-white">
-                  {t("home.freeToday")}
-                  {st.freeFrom ? ` · ${st.freeFrom}` : ""}
-                </span>
-              )}
-            </div>
-            <h1 className="max-w-3xl text-[32px] font-extrabold leading-[1.05] tracking-[-0.03em] md:text-[52px]">{tr(m.tagline, lang)}</h1>
+            )}
           </div>
+          <p className="mt-6 text-[64px] font-extrabold leading-[0.85] tracking-[-0.05em] md:text-[110px]">{m.short}</p>
+          <h1 className="mt-4 max-w-2xl text-[22px] font-extrabold leading-[1.15] tracking-[-0.02em] md:text-[30px]">{tr(m.tagline, lang)}</h1>
         </motion.section>
+
+        <PartnerCard museum={m.id} className="mt-4" />
 
         {family && (
           <Link to={`${base}/planejar`} className="tap mt-4 flex items-center gap-3 rounded-3xl bg-warning/15 p-4 text-[14px] font-semibold">
@@ -148,7 +146,6 @@ export default function MuseumHome() {
           </div>
         </section>
 
-        <PartnerCard museum={m.id} className="mt-12" />
       </Page>
     </>
   );

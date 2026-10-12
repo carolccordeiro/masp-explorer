@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { ArtImage } from "@/components/ArtImage";
 import { Header } from "@/components/Shell";
 import { PartnerCard } from "@/components/PartnerCard";
+import { RoutesMap } from "@/components/RoutesMap";
 import { Chip, Page, SectionTitle, Skeleton } from "@/components/ui";
 import { useSettings } from "@/context/Settings";
 import { accentOn, inkOn, loadArtIndex, MUSEUMS, museumMeta, type ArtIndexItem } from "@/data/museums";
@@ -218,8 +219,6 @@ export default function RoutesBetween() {
   const { isDark } = useSettings();
   const [kind, setKind] = useState<PlaceKind | "all">("all");
   const [hoverPlace, setHoverPlace] = useState<string | null>(null);
-  const lats = [...MUSEUMS.map((m) => m.coords[0]), ...NEARBY.map((p) => p.coords[0])];
-  const lngs = [...MUSEUMS.map((m) => m.coords[1]), ...NEARBY.map((p) => p.coords[1])];
   const places = useMemo(() => {
     return NEARBY.filter((p) => kind === "all" || p.kind === kind)
       .map((p) => {
@@ -228,12 +227,6 @@ export default function RoutesBetween() {
       })
       .sort((a, b) => a.near.d - b.near.d);
   }, [kind]);
-  const [minLat, maxLat, minLng, maxLng] = [Math.min(...lats), Math.max(...lats), Math.min(...lngs), Math.max(...lngs)];
-  const pos = (c: [number, number]) => ({
-    x: 8 + ((c[1] - minLng) / (maxLng - minLng || 1)) * 84,
-    y: 10 + ((maxLat - c[0]) / (maxLat - minLat || 1)) * 78,
-  });
-
   return (
     <>
       <Header back="/museus" title={t("routes.title")} />
@@ -241,54 +234,7 @@ export default function RoutesBetween() {
         <h1 className="text-[34px] font-extrabold leading-tight tracking-tight md:text-[44px]">{t("routes.title")}</h1>
         <p className="mt-1 text-[15px] text-muted">{t("routes.subtitle")}</p>
 
-        <div className="card relative mt-6 aspect-[4/3] overflow-hidden md:aspect-[21/9]">
-          <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 h-full w-full">
-            {[["masp", "ims"], ["masp", "mam"]].map(([a, b]) => {
-              const pa = pos(museumMeta(a)!.coords);
-              const pb = pos(museumMeta(b)!.coords);
-              return <line key={a + b} x1={pa.x} y1={pa.y} x2={pb.x} y2={pb.y} stroke="rgb(var(--ink) / 0.25)" strokeWidth="0.6" strokeDasharray="1.5 1.2" vectorEffect="non-scaling-stroke" />;
-            })}
-          </svg>
-          {NEARBY.map((pl) => {
-            const p = pos(pl.coords);
-            const on = hoverPlace === pl.id;
-            return (
-              <a
-                key={pl.id}
-                href={mapsUrl(pl)}
-                target="_blank"
-                rel="noreferrer"
-                onMouseEnter={() => setHoverPlace(pl.id)}
-                onMouseLeave={() => setHoverPlace(null)}
-                className="group absolute z-10 -translate-x-1/2 -translate-y-1/2"
-                style={{ left: `${p.x}%`, top: `${p.y}%` }}
-                aria-label={pl.name}
-              >
-                <span className={`block rounded-full border-2 border-surface bg-ink/55 transition-transform duration-150 ${on ? "h-4 w-4 bg-ink" : "h-2.5 w-2.5"}`} />
-                <span className={`pointer-events-none absolute left-1/2 top-4 -translate-x-1/2 whitespace-nowrap rounded-lg bg-ink px-2 py-1 text-[11px] font-bold text-bg shadow-lift transition-opacity duration-150 ${on ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}>
-                  {pl.name}
-                </span>
-              </a>
-            );
-          })}
-          {MUSEUMS.map((m, i) => {
-            const p = pos(m.coords);
-            return (
-              <Link key={m.id} to={`/${m.id}`} className="absolute -translate-x-1/2 -translate-y-1/2" style={{ left: `${p.x}%`, top: `${p.y}%` }}>
-                <motion.span
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 0.1 * i, type: "spring" }}
-                  className="relative z-20 flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] font-extrabold shadow-lift"
-                  style={{ backgroundColor: accentOn(m, isDark), color: inkOn(m, isDark), boxShadow: `0 0 0 6px ${accentOn(m, isDark)}33, 0 0 28px ${accentOn(m, isDark)}88` }}
-                >
-                  <MapPin size={13} /> {m.short}
-                </motion.span>
-              </Link>
-            );
-          })}
-          <span className="absolute bottom-3 left-4 text-[12.5px] font-semibold text-muted">São Paulo · esquemático</span>
-        </div>
+        <RoutesMap links={[["ims", "masp"], ["masp", "mam"]]} highlight={hoverPlace} className="card relative z-0 mt-6 aspect-[4/5] overflow-hidden sm:aspect-[4/3] md:aspect-[21/9]" />
 
         <div className="mt-8 space-y-4">
           {ROUTES.map((r) => {
