@@ -1,12 +1,14 @@
-import { ArrowUpRight, BookOpen, CalendarCheck, Check, Clock, Copy, Library, MapPin, Search } from "lucide-react";
-import { useState } from "react";
+import { ArrowUpRight, BookOpen, CalendarCheck, Check, Clock, Library, MapPin, Search } from "lucide-react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Header } from "@/components/Shell";
 import { Button, Chip, Page } from "@/components/ui";
 import { useSettings } from "@/context/Settings";
 import type { I18n } from "@/data/types";
 import { track } from "@/lib/analytics";
-import { tr } from "@/lib/utils";
+import { normalize, tr } from "@/lib/utils";
+import { ArtImage } from "@/components/ArtImage";
+import { useMuseum } from "@/context/Museum";
 
 /** Fontes: ims.com.br/acervos/biblioteca-ims-paulista e ims.com.br/acessibilidade/informacoes-ims-paulista (out/2026). */
 const CATALOG = "https://biblioteca.sophia.com.br/terminal/7273";
@@ -48,9 +50,23 @@ const T = {
   seeMap: { pt: "Ver no mapa do IMS", en: "See on the IMS map", es: "Ver en el mapa del IMS" },
   search: { pt: "Pesquise no catálogo", en: "Search the catalog", es: "Busca en el catálogo" },
   searchDesc: {
-    pt: "Busque por título, autor ou fotógrafo, assunto, país, editora ou ano. O catálogo abre em outra aba com o termo já copiado: é só colar na busca.",
-    en: "Search by title, author or photographer, subject, country, publisher or year. The catalog opens in a new tab with your term copied: just paste it in the search box.",
-    es: "Busca por título, autor o fotógrafo, tema, país, editorial o año. El catálogo se abre en otra pestaña con el término copiado: solo pégalo en la búsqueda.",
+    pt: "Busque por fotógrafo, tema ou lugar. A KORA mostra na hora as fotografias do acervo do IMS e leva você aos livros da biblioteca.",
+    en: "Search by photographer, subject or place. KORA instantly shows photographs from the IMS collection and takes you to the library's books.",
+    es: "Busca por fotógrafo, tema o lugar. KORA muestra al instante las fotografías del acervo del IMS y te lleva a los libros de la biblioteca.",
+  },
+  inApp: { pt: "No acervo do IMS", en: "In the IMS collection", es: "En el acervo del IMS" },
+  none: { pt: "Nenhuma fotografia do acervo na KORA com esse termo.", en: "No photograph in KORA's collection matches this term.", es: "Ninguna fotografía del acervo en KORA coincide con este término." },
+  books: { pt: "Livros na biblioteca", en: "Books in the library", es: "Libros en la biblioteca" },
+  booksDesc: {
+    pt: "O catálogo de livros abre em outra aba com o termo já copiado: é só colar na busca.",
+    en: "The book catalog opens in a new tab with your term copied: just paste it in the search.",
+    es: "El catálogo de libros se abre en otra pestaña con el término copiado: solo pégalo en la búsqueda.",
+  },
+  booksBtn: { pt: "Buscar livros sobre", en: "Search books on", es: "Buscar libros sobre" },
+  integration: {
+    pt: "Com o acesso ao catálogo liberado pelo IMS, os livros passam a aparecer aqui dentro, com a localização na estante.",
+    en: "Once IMS grants access to its catalog, books will show up right here, with their shelf location.",
+    es: "Cuando el IMS libere el acceso a su catálogo, los libros aparecerán aquí mismo, con su ubicación en el estante.",
   },
   placeholder: { pt: "Ex.: Thomaz Farkas, fotolivro, Amazônia", en: "E.g. Thomaz Farkas, photobook, Amazon", es: "Ej.: Thomaz Farkas, fotolibro, Amazonia" },
   go: { pt: "Abrir no catálogo", en: "Open in the catalog", es: "Abrir en el catálogo" },
@@ -87,6 +103,16 @@ export default function ImsLibrary() {
   const { lang } = useSettings();
   const [q, setQ] = useState("");
   const [copied, setCopied] = useState(false);
+  const m = useMuseum();
+  const hits = useMemo(() => {
+    const nq = normalize(q.trim());
+    if (nq.length < 2) return [];
+    const words = nq.split(/\s+/);
+    return m.artworks.filter((a) => {
+      const hay = normalize([a.title.pt, tr(a.title, lang), a.artist, a.year, ...(a.tags ?? []), tr(a.description, lang)].join(" "));
+      return words.every((w) => hay.includes(w));
+    });
+  }, [q, m, lang]);
 
   const open = async (term: string) => {
     const t = term.trim();
@@ -119,37 +145,61 @@ export default function ImsLibrary() {
             <Search size={20} /> {tr(T.search, lang)}
           </h2>
           <p className="mt-1 text-[14px] text-muted">{tr(T.searchDesc, lang)}</p>
-          <form
-            className="mt-4 flex flex-col gap-2 sm:flex-row"
-            onSubmit={(e) => {
-              e.preventDefault();
-              void open(q);
-            }}
-          >
+          <label className="mt-4 flex h-12 items-center gap-2 rounded-2xl border hairline bg-surface px-4 focus-within:ring-2 focus-within:ring-ink/20">
+            <Search size={18} className="text-muted" />
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder={tr(T.placeholder, lang)}
               aria-label={tr(T.search, lang)}
-              className="h-12 w-full rounded-2xl border hairline bg-surface px-4 text-[16px] outline-none focus:ring-2 focus:ring-ink/20 sm:flex-1"
+              className="h-full flex-1 bg-transparent text-[16px] outline-none placeholder:text-muted"
             />
-            <Button size="lg" icon={<ArrowUpRight size={18} />}>
-              {tr(T.go, lang)}
-            </Button>
-          </form>
-          {copied && (
-            <p className="mt-2 flex items-center gap-1.5 text-[13.5px] font-semibold text-success">
-              <Check size={15} /> {tr(T.copied, lang)}
-            </p>
-          )}
-          <p className="mb-2 mt-5 text-[13.5px] font-semibold text-muted">{tr(T.ideas, lang)}</p>
-          <div className="flex flex-wrap gap-2">
+          </label>
+          <div className="mt-3 flex flex-wrap gap-2">
             {IDEAS.map((i) => (
-              <Chip key={i} onClick={() => { setQ(i); void open(i); }}>
-                <Copy size={13} /> {i}
+              <Chip key={i} on={q === i} onClick={() => setQ(i)}>
+                {i}
               </Chip>
             ))}
           </div>
+
+          {q.trim().length >= 2 && (
+            <div className="mt-6 space-y-6">
+              <div>
+                <p className="text-[14px] font-bold">
+                  {tr(T.inApp, lang)} <span className="font-semibold text-muted">· {hits.length}</span>
+                </p>
+                {hits.length ? (
+                  <div className="no-scrollbar -mx-5 mt-3 flex gap-3 overflow-x-auto px-5 md:-mx-7 md:px-7">
+                    {hits.map((a) => (
+                      <Link key={a.id} to={`/ims/obra/${a.id}`} className="tap w-32 shrink-0">
+                        <ArtImage src={a.thumb} alt={tr(a.title, lang)} color={a.color} className="aspect-square rounded-2xl" />
+                        <p className="mt-1.5 line-clamp-2 text-[12.5px] font-semibold leading-tight">{tr(a.title, lang)}</p>
+                        <p className="truncate text-[11.5px] text-muted">{a.artist}</p>
+                      </Link>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="mt-2 text-[13.5px] text-muted">{tr(T.none, lang)}</p>
+                )}
+              </div>
+              <div className="rounded-2xl bg-surface p-4">
+                <p className="flex items-center gap-2 text-[14px] font-bold">
+                  <BookOpen size={16} /> {tr(T.books, lang)}
+                </p>
+                <p className="mt-1 text-[13.5px] text-muted">{tr(T.booksDesc, lang)}</p>
+                <Button className="mt-3" icon={<ArrowUpRight size={17} />} onClick={() => void open(q)}>
+                  {tr(T.booksBtn, lang)} “{q.trim()}”
+                </Button>
+                {copied && (
+                  <p className="mt-2 flex items-center gap-1.5 text-[13.5px] font-semibold text-success">
+                    <Check size={15} /> {tr(T.copied, lang)}
+                  </p>
+                )}
+                <p className="mt-3 text-[12px] text-muted">{tr(T.integration, lang)}</p>
+              </div>
+            </div>
+          )}
         </section>
 
         {/* onde fica */}
@@ -180,7 +230,7 @@ export default function ImsLibrary() {
             <p className="mt-1 text-[14px] text-muted">{tr(T.specialDesc, lang)}</p>
             <div className="mt-3 flex flex-wrap gap-2">
               {SPECIAL.map((s) => (
-                <Chip key={s} onClick={() => { setQ(s); void open(s); }}>
+                <Chip key={s} onClick={() => { setQ(s); scrollTo({ top: 0, behavior: "smooth" }); }}>
                   {s}
                 </Chip>
               ))}
