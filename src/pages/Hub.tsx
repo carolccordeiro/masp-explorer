@@ -1,141 +1,153 @@
 import { motion } from "framer-motion";
-import { ArrowRight, ArrowUpRight, Info, Route, ScanLine } from "lucide-react";
+import { ArrowRight, BarChart3, Info, Route, ScanLine, Settings2 } from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { ArtImage } from "@/components/ArtImage";
 import { KoraWordmark } from "@/components/KoraMark";
-import { Header } from "@/components/Shell";
-import { Page, StatusDot } from "@/components/ui";
+import { SettingsSheet } from "@/components/SettingsSheet";
+import { StatusDot } from "@/components/ui";
 import { useSettings } from "@/context/Settings";
+import type { Lang } from "@/data/types";
 import { MUSEUMS } from "@/data/museums";
 import { openStatus } from "@/lib/hours";
-import { tr } from "@/lib/utils";
+import { cn, tr } from "@/lib/utils";
 
+/**
+ * Escolha do museu: a primeira tela depois da tela de descanso.
+ * Cada museu aparece com a sua própria identidade (cor, capa e nome).
+ */
 export default function Hub() {
-  const { t, lang } = useSettings();
+  const { t, lang, set } = useSettings();
+  const [hover, setHover] = useState<string | null>(null);
+  const [settings, setSettings] = useState(false);
+  const [, tick] = useState(0);
+
+  // atualiza o "aberto agora" a cada minuto (o totem fica ligado o dia todo)
+  useEffect(() => {
+    const id = setInterval(() => tick((x) => x + 1), 60_000);
+    return () => clearInterval(id);
+  }, []);
+
   return (
-    <>
-      <Header />
-      <Page className="pt-2">
-        <section className="pb-8 pt-4 md:pb-12 md:pt-10">
-          <motion.p initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="eyebrow mb-3">
-            {t("hub.network")} · São Paulo
-          </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.05 }}
-            className="max-w-3xl text-[40px] font-extrabold leading-[1.02] tracking-[-0.035em] md:text-[68px]"
-          >
-            {t("app.tagline")}
-            <span className="text-muted">.</span>
-          </motion.h1>
-          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.12 }} className="body-copy mt-4 max-w-xl text-[17px] text-muted">
-            {t("hub.subtitle")}
-          </motion.p>
-          <div className="mt-8 grid max-w-2xl grid-cols-3 gap-4 border-t hairline pt-6">
-            <div>
-              <div className="num text-[40px] leading-none md:text-[52px]">3</div>
-              <div className="mt-1 text-[12px] font-semibold uppercase tracking-wider text-muted">{t("nav.museums")}</div>
-            </div>
-            <div>
-              <div className="num text-[40px] leading-none md:text-[52px]">150</div>
-              <div className="mt-1 text-[12px] font-semibold uppercase tracking-wider text-muted">{t("hub.works")}</div>
-            </div>
-            <div>
-              <div className="num text-[40px] leading-none md:text-[52px]">3</div>
-              <div className="mt-1 text-[12px] font-semibold uppercase tracking-wider text-muted">{t("hub.languages")}</div>
-            </div>
-          </div>
-        </section>
-
-        <h2 className="mb-4 text-[22px] font-extrabold md:text-[26px]">{t("hub.title")}</h2>
-        <div className="grid gap-4 md:grid-cols-3">
-          {MUSEUMS.map((m, i) => {
-            const st = openStatus(m);
-            return (
-              <motion.div key={m.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 * i }}>
-                <Link
-                  to={`/${m.id}`}
-                  className="tap group relative block overflow-hidden rounded-4xl shadow-lift"
-                  style={{ ["--card-accent" as string]: m.accent }}
-                >
-                  <ArtImage src={m.cover} alt={m.name} className="aspect-[4/5] md:aspect-[3/4]" imgClassName="transition-transform duration-700 group-hover:scale-[1.04]" eager={i === 0} />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/0" />
-                  <div className="absolute inset-x-0 top-0 flex items-center justify-between p-4">
-                    <span className="rounded-xl px-2.5 py-1 text-[20px] font-extrabold tracking-tight text-white" style={{ backgroundColor: m.accent }}>
-                      {m.short}
-                    </span>
-                    <span className="glass flex items-center gap-2 rounded-full px-3 py-1.5 text-[12px] font-semibold text-ink">
-                      <StatusDot color={st.open ? "success" : "danger"} />
-                      {st.open ? t("home.openNow") : t("home.closedNow")}
-                      {st.freeToday && <span className="text-success">· {t("common.free")}</span>}
-                    </span>
-                  </div>
-                  <div className="absolute inset-x-0 bottom-0 p-5 text-white">
-                    <p className="text-[12px] font-semibold uppercase tracking-wider text-white/70">{m.city}</p>
-                    <p className="mt-1 text-[22px] font-extrabold leading-tight">{tr(m.tagline, lang)}</p>
-                    <span className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-[14px] font-bold text-black transition-transform group-hover:translate-x-0.5">
-                      {t("hub.enter")} <ArrowRight size={16} />
-                    </span>
-                  </div>
-                </Link>
-              </motion.div>
-            );
-          })}
-        </div>
-
-        <div className="mt-6 grid gap-4 md:grid-cols-3">
-          <Link to="/scanner" className="tap card flex items-center gap-4 p-5">
-            <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-ink text-bg">
-              <ScanLine size={26} />
-            </span>
-            <span className="min-w-0 flex-1">
-              <span className="block text-[17px] font-bold">{t("hub.scanAll")}</span>
-              <span className="block text-[14px] text-muted">{t("hub.scanAll.desc")}</span>
-            </span>
-            <ArrowUpRight className="text-muted" />
-          </Link>
-          <Link to="/rotas" className="tap card flex items-center gap-4 p-5">
-            <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-ink text-bg">
-              <Route size={26} />
-            </span>
-            <span className="min-w-0 flex-1">
-              <span className="block text-[17px] font-bold">{t("hub.routes")}</span>
-              <span className="block text-[14px] text-muted">{t("hub.routes.desc")}</span>
-            </span>
-            <ArrowUpRight className="text-muted" />
-          </Link>
-          <Link to="/sobre" className="tap card flex items-center gap-4 p-5">
-            <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-ink text-bg">
-              <Info size={26} />
-            </span>
-            <span className="min-w-0 flex-1">
-              <span className="block text-[17px] font-bold">{t("hub.about")}</span>
-              <span className="block text-[14px] text-muted">{t("hub.about.desc")}</span>
-            </span>
-            <ArrowUpRight className="text-muted" />
-          </Link>
-        </div>
-
-        <footer className="mt-14 flex flex-col items-start gap-3 border-t hairline pt-6 text-[13px] text-muted md:flex-row md:items-center md:justify-between">
+    <div className="flex min-h-[100dvh] flex-col bg-bg">
+      <header className="mx-auto flex w-full max-w-[1600px] items-center gap-3 px-4 pb-2 pt-4 md:px-8 md:pt-6">
+        <Link to="/" aria-label="KORA">
           <KoraWordmark size="sm" />
-          <p>Plataforma white label para museus · Demonstração com dados públicos · doNEXT 2026</p>
-          <div className="flex gap-4">
-            <Link to="/sobre" className="hover:text-ink">
-              {t("nav.about")}
-            </Link>
-            <Link to="/descanso" className="hover:text-ink">
-              {t("attract.title")}
-            </Link>
-            <Link to="/privacidade" className="hover:text-ink">
-              {t("settings.privacy")}
-            </Link>
-            <Link to="/painel" className="hover:text-ink">
-              {t("admin.title")}
-            </Link>
-          </div>
-        </footer>
-      </Page>
-    </>
+        </Link>
+        <div className="ml-auto flex items-center gap-1 rounded-full bg-ink/[0.06] p-1">
+          {(["pt", "en", "es"] as Lang[]).map((l) => (
+            <button
+              key={l}
+              onClick={() => set("lang", l)}
+              className={cn(
+                "tap h-8 rounded-full px-3 text-[13px] font-bold uppercase transition-colors duration-150",
+                lang === l ? "bg-ink text-bg" : "text-muted hover:text-ink",
+              )}
+              aria-pressed={lang === l}
+            >
+              {l}
+            </button>
+          ))}
+        </div>
+        <button onClick={() => setSettings(true)} className="tap grid h-10 w-10 place-items-center rounded-full bg-ink/[0.06]" aria-label={t("settings.title")}>
+          <Settings2 size={18} />
+        </button>
+      </header>
+
+      <div className="mx-auto w-full max-w-[1600px] px-4 pb-4 pt-4 md:px-8 md:pb-6 md:pt-6">
+        <motion.h1
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-[38px] font-extrabold leading-[1.02] tracking-[-0.035em] md:text-[60px]"
+        >
+          {t("hub.title")}
+          <span className="text-muted">.</span>
+        </motion.h1>
+        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.08 }} className="mt-2 text-[16px] text-muted md:text-[18px]">
+          {t("hub.pick")}
+        </motion.p>
+      </div>
+
+      {/* os três museus */}
+      <div className="mx-auto flex w-full max-w-[1600px] flex-1 flex-col gap-3 px-4 md:flex-row md:gap-4 md:px-8">
+        {MUSEUMS.map((m, i) => {
+          const st = openStatus(m);
+          const active = hover === m.id;
+          return (
+            <motion.div
+              key={m.id}
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0, flexGrow: hover ? (active ? 1.5 : 0.85) : 1 }}
+              transition={{ delay: hover ? 0 : 0.08 * i, duration: 0.35, ease: [0.2, 0.8, 0.2, 1] }}
+              className="min-h-[248px] min-w-0 basis-0 md:min-h-[460px]"
+              onMouseEnter={() => setHover(m.id)}
+              onMouseLeave={() => setHover(null)}
+            >
+              <Link
+                to={`/${m.id}`}
+                className="tap group relative flex h-full flex-col justify-between overflow-hidden rounded-4xl p-5 text-white shadow-lift md:p-7"
+                style={{ backgroundColor: m.accent }}
+              >
+                {/* capa com a cor do museu por cima */}
+                <img
+                  src={m.cover}
+                  alt=""
+                  aria-hidden
+                  loading={i === 0 ? "eager" : "lazy"}
+                  className="absolute inset-0 h-full w-full object-cover opacity-55 mix-blend-luminosity transition-transform duration-700 group-hover:scale-[1.05]"
+                />
+                <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, ${m.accent}cc 0%, ${m.accent}33 45%, rgba(0,0,0,0.75) 100%)` }} />
+
+                <div className="relative">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-black/35 px-3 py-1.5 text-[12px] font-semibold backdrop-blur">
+                    <StatusDot color={st.open ? "success" : "danger"} />
+                    {st.open ? t("home.openNow") : t("home.closedNow")}
+                    {st.freeToday && <span className="text-[#7CF29A]">· {t("common.free")}</span>}
+                  </span>
+                  <p className="mt-3 text-[56px] font-extrabold leading-[0.85] tracking-[-0.05em] md:text-[84px] lg:text-[104px]">{m.short}</p>
+                </div>
+
+                <div className="relative">
+                  <p className="hidden text-[13px] font-semibold text-white/80 md:block">{m.name}</p>
+                  <p className="mt-1 max-w-md text-[18px] font-extrabold leading-tight md:text-[24px]">{tr(m.tagline, lang)}</p>
+                  <div className="mt-3 flex items-center justify-between gap-3 md:mt-4">
+                    <span className="text-[12.5px] text-white/70">{m.city}</span>
+                    <span
+                      className="inline-flex items-center gap-1.5 rounded-full bg-white px-5 py-2.5 text-[15px] font-bold transition-transform duration-150 group-hover:translate-x-0.5"
+                      style={{ color: m.accent }}
+                    >
+                      {t("hub.enter")} <ArrowRight size={17} />
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {/* atalhos da rede */}
+      <nav className="mx-auto grid w-full max-w-[1600px] grid-cols-2 gap-2 px-4 pb-6 pt-4 md:flex md:flex-wrap md:items-center md:gap-3 md:px-8">
+        <Shortcut to="/scanner" icon={<ScanLine size={18} />} label={t("hub.scanAll")} />
+        <Shortcut to="/rotas" icon={<Route size={18} />} label={t("hub.routes")} />
+        <Shortcut to="/sobre" icon={<Info size={18} />} label={t("hub.about")} />
+        <Shortcut to="/painel" icon={<BarChart3 size={18} />} label={t("admin.title")} />
+        <span className="hidden text-[12.5px] text-muted md:ml-auto md:block">
+          <Link to="/privacidade" className="hover:text-ink">
+            {t("settings.privacy")}
+          </Link>
+        </span>
+      </nav>
+
+      <SettingsSheet open={settings} onClose={() => setSettings(false)} />
+    </div>
+  );
+}
+
+function Shortcut({ to, icon, label }: { to: string; icon: ReactNode; label: string }) {
+  return (
+    <Link to={to} className="tap chip h-11 justify-center px-4 text-[14px] md:justify-start">
+      {icon}
+      {label}
+    </Link>
   );
 }

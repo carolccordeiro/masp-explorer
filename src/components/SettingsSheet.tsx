@@ -1,4 +1,4 @@
-import { Accessibility, Baby, LogOut, Contrast, Hand, Languages, Minus, MonitorSmartphone, Moon, Plus, Shield, Sun, SunMoon, Wind } from "lucide-react";
+import { Accessibility, Baby, BarChart3, LogOut, Contrast, Hand, Languages, Minus, MonitorSmartphone, Moon, Plus, Shield, Sun, SunMoon, Wind } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useSettings } from "@/context/Settings";
 import type { Lang } from "@/data/types";
@@ -93,6 +93,12 @@ export function SettingsSheet({ open, onClose }: { open: boolean; onClose: () =>
             <Shield size={18} />
           </span>
           <span className="text-[15px] font-semibold">{t("settings.privacy")}</span>
+        </Link>
+        <Link to="/painel" onClick={onClose} className="flex items-center gap-3 py-3">
+          <span className="grid h-9 w-9 place-items-center rounded-xl bg-ink/[0.06]">
+            <BarChart3 size={18} />
+          </span>
+          <span className="text-[15px] font-semibold">{t("admin.title")}</span>
         </Link>
         <button
           onClick={() => {

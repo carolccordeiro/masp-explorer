@@ -108,7 +108,6 @@ export default function App() {
         <LibrasWidget />
         <Routes>
           <Route element={<NetworkLayout />}>
-            <Route path="/" element={<Hub />} />
             <Route path="/scanner" element={<Scanner />} />
             <Route path="/rotas" element={<Routes_ />} />
             <Route path="/privacidade" element={<Privacy />} />
@@ -119,6 +118,8 @@ export default function App() {
             <Route path="/painel" element={<Dashboard />} />
             <Route path="/admin" element={<Navigate to="/painel" replace />} />
             <Route path="/descanso" element={<Rest />} />
+            <Route path="/" element={<Rest />} />
+            <Route path="/museus" element={<Hub />} />
           </Route>
           <Route path="/:museum/roteiro" element={<PhoneLayout />}>
             <Route index element={<Hunt />} />

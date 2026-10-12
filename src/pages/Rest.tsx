@@ -14,7 +14,7 @@ export default function Rest() {
       museum={museum}
       onStart={() => {
         resetSession(museum);
-        navigate(museum ? `/${museum}` : "/");
+        navigate("/museus");
       }}
     />
   );

@@ -16,7 +16,7 @@ export default defineConfig({
         short_name: "KORA",
         description: "Guia inteligente para museus: scanner de obras, roteiros, assistente de IA e acessibilidade.",
         lang: "pt-BR",
-        start_url: "/",
+        start_url: "/museus",
         scope: "/",
         display: "standalone",
         orientation: "portrait",

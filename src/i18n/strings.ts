@@ -243,6 +243,7 @@ const pt = {
   "settings.end.desc": "Limpa a conversa e mostra a tela de descanso",
   "nav.about": "Sobre",
   "hub.about": "Conheça a KORA",
+  "hub.pick": "Toque no museu que você quer visitar",
   "hub.about.desc": "O desafio, a solução e o que nos diferencia",
 };
 
@@ -325,7 +326,7 @@ const en: Partial<Record<StringKey, string>> = {
   "attract.f.plan": "Build your route in seconds", "attract.f.quiz": "Play the quiz and the treasure hunt",
   "attract.qr": "Take it on your phone", "attract.qr.desc": "Nothing to install",
   "settings.end": "End session", "settings.end.desc": "Clears the chat and shows the welcome screen",
-  "nav.about": "About", "hub.about": "Meet KORA", "hub.about.desc": "The challenge, the solution and what sets us apart",
+  "nav.about": "About", "hub.pick": "Tap the museum you want to visit", "hub.about": "Meet KORA", "hub.about.desc": "The challenge, the solution and what sets us apart",
 };
 
 const es: Partial<Record<StringKey, string>> = {
@@ -395,7 +396,7 @@ const es: Partial<Record<StringKey, string>> = {
   "attract.f.plan": "Arma tu recorrido en segundos", "attract.f.quiz": "Juega el quiz y la búsqueda del tesoro",
   "attract.qr": "Llévalo en tu celular", "attract.qr.desc": "Sin descargar nada",
   "settings.end": "Cerrar sesión", "settings.end.desc": "Borra la conversación y muestra la pantalla de bienvenida",
-  "nav.about": "Acerca", "hub.about": "Conoce KORA", "hub.about.desc": "El desafío, la solución y lo que nos diferencia",
+  "nav.about": "Acerca", "hub.pick": "Toca el museo que quieres visitar", "hub.about": "Conoce KORA", "hub.about.desc": "El desafío, la solución y lo que nos diferencia",
 };
 
 export const STRINGS: Record<Lang, Partial<Record<StringKey, string>>> = { pt, en, es };

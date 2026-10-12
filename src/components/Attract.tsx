@@ -79,7 +79,7 @@ export function Attract({ museum, onStart }: { museum?: MuseumId; onStart: () =>
   const meta = art ? museumMeta(art.museum) : undefined;
   const cycleLang = LANGS[(LANGS.indexOf(lang) + i) % LANGS.length];
   const feature = i % FEATURES.length;
-  const qrUrl = useMemo(() => `${location.origin}/${museum ?? ""}`, [museum]);
+  const qrUrl = useMemo(() => `${location.origin}/${museum ?? "museus"}`, [museum]);
 
   return (
     <motion.div

@@ -1,3 +1,4 @@
+import { track } from "@/lib/analytics";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Lang } from "@/data/types";
 import { translate, type StringKey } from "@/i18n/strings";
@@ -90,6 +91,9 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
 
   const set = useCallback(<K extends keyof SettingsState>(key: K, value: SettingsState[K]) => {
     setState((s) => ({ ...s, [key]: value }));
+    // preferência de acessibilidade/idioma vira métrica anônima para o painel
+    const seg = location.pathname.split("/")[1];
+    track({ museum: ["masp", "ims", "mam"].includes(seg) ? seg : "hub", type: "pref", path: `${String(key)}:${String(value)}` });
   }, []);
 
   const t = useCallback((key: StringKey) => translate(state.lang, key), [state.lang]);

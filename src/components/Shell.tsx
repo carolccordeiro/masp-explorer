@@ -45,7 +45,7 @@ export function Header({ back, title, right }: { back?: boolean | string; title?
   const goBack = () => {
     if (typeof back === "string") navigate(back);
     else if (history.length > 1) navigate(-1);
-    else navigate(museum ? `/${museum.id}` : "/");
+    else navigate(museum ? `/${museum.id}` : "/museus");
   };
 
   return (
@@ -62,11 +62,11 @@ export function Header({ back, title, right }: { back?: boolean | string; title?
               <ArrowLeft size={19} />
             </IconButton>
           ) : museum ? (
-            <Link to="/" className="tap" aria-label="KORA">
+            <Link to="/museus" className="tap" aria-label="KORA">
               <KoraIcon size={30} className="text-ink" />
             </Link>
           ) : (
-            <Link to="/" className="tap">
+            <Link to="/museus" className="tap">
               <KoraWordmark size="sm" />
             </Link>
           )}
@@ -109,7 +109,7 @@ export function BottomNav() {
         { to: `${base}/kora`, icon: <Sparkles size={22} />, label: "nav.assistant" },
       ]
     : [
-        { to: "/", icon: <Building2 size={22} />, label: "nav.museums", end: true },
+        { to: "/museus", icon: <Building2 size={22} />, label: "nav.museums", end: true },
         { to: "/scanner", icon: <ScanLine size={22} />, label: "nav.scan" },
         { to: "/rotas", icon: <Route size={22} />, label: "act.routes" },
         { to: "/sobre", icon: <Info size={22} />, label: "nav.about" },
@@ -122,7 +122,7 @@ export function BottomNav() {
         { to: `${base}/quiz`, icon: <HelpCircle size={20} />, label: "act.quiz", desc: "act.quiz.desc" },
         { to: `${base}/visite`, icon: <CalendarClock size={20} />, label: "act.info", desc: "act.info.desc" },
         { to: "/rotas", icon: <Route size={20} />, label: "act.routes", desc: "act.routes.desc" },
-        { to: "/", icon: <Building2 size={20} />, label: "nav.museums", desc: "hub.subtitle" },
+        { to: "/museus", icon: <Building2 size={20} />, label: "nav.museums", desc: "hub.subtitle" },
       ]
     : [];
 
@@ -217,7 +217,7 @@ export function IdleOverlay({ timeoutMs = 60_000 }: { timeoutMs?: number }) {
           museum={museum?.id}
           onStart={() => {
             setIdle(false);
-            navigate(museum ? `/${museum.id}` : "/");
+            navigate("/museus");
           }}
         />
       )}

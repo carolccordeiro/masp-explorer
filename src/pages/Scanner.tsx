@@ -206,7 +206,7 @@ export default function Scanner() {
   return (
     <div className="min-h-[100dvh] bg-black text-white">
       <div className="dark">
-        <Header back={museum ? `/${museum.id}` : "/"} title={t("scan.title")} />
+        <Header back={museum ? `/${museum.id}` : "/museus"} title={t("scan.title")} />
       </div>
       <div className="mx-auto flex max-w-xl flex-col items-center px-4 pb-40">
         <div className="relative mt-2 aspect-square w-full overflow-hidden rounded-4xl bg-neutral-900">

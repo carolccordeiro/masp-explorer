@@ -50,6 +50,7 @@ const C = {
     es: "KORA es una plataforma white label que convierte cualquier museo en una experiencia guiada por inteligencia artificial. El visitante la abre en el navegador, sin descargar nada. El museo obtiene datos reales sobre lo que el público vive adentro.",
   },
   demo: { pt: "Ver a demonstração", en: "See the demo", es: "Ver la demostración" },
+  panel: { pt: "Ver o painel do museu", en: "See the museum dashboard", es: "Ver el panel del museo" },
   contact: { pt: "Falar com a equipe", en: "Talk to the team", es: "Hablar con el equipo" },
 
   stats: [
@@ -428,7 +429,7 @@ function Ctas({ lang, invert }: { lang: "pt" | "en" | "es"; invert?: boolean }) 
   return (
     <div className="mt-8 flex flex-wrap gap-3">
       <Link
-        to="/"
+        to="/museus"
         className={
           invert
             ? "tap inline-flex h-12 items-center gap-2 rounded-full bg-white px-6 text-[15px] font-bold text-black"
@@ -436,6 +437,16 @@ function Ctas({ lang, invert }: { lang: "pt" | "en" | "es"; invert?: boolean }) 
         }
       >
         {tr(C.demo, lang)} <ArrowRight size={17} />
+      </Link>
+      <Link
+        to="/painel"
+        className={
+          invert
+            ? "tap inline-flex h-12 items-center gap-2 rounded-full border border-white/30 px-6 text-[15px] font-bold text-white"
+            : "tap inline-flex h-12 items-center gap-2 rounded-full border hairline bg-surface px-6 text-[15px] font-bold"
+        }
+      >
+        <BarChart3 size={17} /> {tr(C.panel, lang)}
       </Link>
       {CONTACT && (
         <a
