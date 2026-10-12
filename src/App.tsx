@@ -24,6 +24,9 @@ const Sensor = lazy(() => import("@/pages/Sensor"));
 const Privacy = lazy(() => import("@/pages/Privacy"));
 const MyVisit = lazy(() => import("@/pages/MyVisit"));
 const Builder = lazy(() => import("@/pages/Builder"));
+const MaspHistory = lazy(() => import("@/pages/MaspHistory"));
+const ImsLibrary = lazy(() => import("@/pages/ImsLibrary"));
+const MamCourses = lazy(() => import("@/pages/MamCourses"));
 const About = lazy(() => import("@/pages/About"));
 const Rest = lazy(() => import("@/pages/Rest"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
@@ -77,6 +80,12 @@ function MuseumLayout({ children }: { children?: ReactNode }) {
       <IdleOverlay />
     </MuseumProvider>
   );
+}
+
+/** Página exclusiva de um museu (o "plus"): nos outros museus, vira 404. */
+function OnlyFor({ museum, children }: { museum: string; children: ReactNode }) {
+  const params = useParams();
+  return params.museum === museum ? <>{children}</> : <NotFound />;
 }
 
 function PhoneLayout() {
@@ -138,6 +147,9 @@ export default function App() {
             <Route path="quiz" element={<Quiz />} />
             <Route path="visite" element={<Visit />} />
             <Route path="visita" element={<MyVisit />} />
+            <Route path="historia" element={<OnlyFor museum="masp"><MaspHistory /></OnlyFor>} />
+            <Route path="biblioteca" element={<OnlyFor museum="ims"><ImsLibrary /></OnlyFor>} />
+            <Route path="cursos" element={<OnlyFor museum="mam"><MamCourses /></OnlyFor>} />
           </Route>
           <Route
             path="*"

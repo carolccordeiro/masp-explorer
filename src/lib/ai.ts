@@ -1,5 +1,6 @@
 import type { Lang, Museum } from "@/data/types";
 import { backendReady } from "./analytics";
+import { MAM_COURSES } from "@/data/extras/mamCourses";
 import { normalize, tr } from "./utils";
 
 const FN_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/kora-ai`;
@@ -20,6 +21,12 @@ export function museumContext(m: Museum, lang: Lang): string {
   lines.push("Exposições: " + m.exhibitions.map((e) => `${e.title}${e.artist ? ` (${e.artist})` : ""}, ${e.dates}, ${e.location ?? ""}: ${tr(e.description, lang)}`).join(" | "));
   lines.push("Espaços: " + m.spaces.map((s) => `${s.name}: ${tr(s.description, lang)}`).join(" | "));
   lines.push("História: " + m.timeline.map((t) => `${t.year} ${tr(t.text, lang)}`).join("; "));
+  if (m.id === "mam") {
+    lines.push("CURSOS DO MAM (programação publicada): " + MAM_COURSES.map((c) => `${c.title} com ${c.teacher}, ${c.start} a ${c.end}, ${c.time}, ${c.sessions} encontros, ${c.price} + taxas`).join(" | "));
+  }
+  if (m.id === "ims") {
+    lines.push("BIBLIOTECA DE FOTOGRAFIA: fica no 1º andar do IMS Paulista. Suba pela escada rolante até o 5º andar (balcão e guarda-volumes) e pegue o elevador ou as escadas até o 1º andar. Entrada gratuita, terça a domingo e feriados, 10h às 20h. Catálogo online: biblioteca.sophia.com.br/terminal/7273. No app: seção Biblioteca.");
+  }
   lines.push("ACERVO (obras disponíveis no app):");
   for (const a of m.artworks) {
     lines.push(`- ${tr(a.title, lang)} | ${a.artist} | ${a.year ?? ""} | ${tr(a.medium, lang)} | ${tr(a.description, lang).slice(0, 180)}`);

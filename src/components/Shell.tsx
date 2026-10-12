@@ -22,7 +22,8 @@ import { useMaybeMuseum } from "@/context/Museum";
 import { useSettings } from "@/context/Settings";
 import type { StringKey } from "@/i18n/strings";
 import { resetSession } from "@/lib/analytics";
-import { cn } from "@/lib/utils";
+import { EXTRAS } from "@/data/extras";
+import { cn, tr } from "@/lib/utils";
 import { Attract } from "./Attract";
 import { KoraIcon, KoraWordmark } from "./KoraMark";
 import { SettingsSheet } from "./SettingsSheet";
@@ -149,7 +150,7 @@ type Tab = { to: string; icon: ReactNode; label: StringKey; end?: boolean };
 
 export function BottomNav() {
   const museum = useMaybeMuseum();
-  const { t } = useSettings();
+  const { t, lang } = useSettings();
   const [more, setMore] = useState(false);
   const loc = useLocation();
   useEffect(() => setMore(false), [loc.pathname]);
@@ -214,6 +215,15 @@ export function BottomNav() {
       </nav>
       <Sheet open={more} onClose={() => setMore(false)} title={t("nav.more")}>
         <div className="grid grid-cols-2 gap-3">
+          {museum && EXTRAS[museum.id] && (
+            <Link to={`${base}/${EXTRAS[museum.id].path}`} className="tap col-span-2 flex items-center gap-3 rounded-3xl bg-accent p-4 text-accent-ink">
+              <Sparkles size={20} />
+              <span className="min-w-0 flex-1">
+                <span className="block text-[15px] font-bold leading-tight">{tr(EXTRAS[museum.id].title, lang)}</span>
+                <span className="block text-[12.5px] opacity-85">{tr(EXTRAS[museum.id].desc, lang)}</span>
+              </span>
+            </Link>
+          )}
           {moreItems.map((i) => (
             <Link key={i.to + i.label} to={i.to} className="tap card flex flex-col gap-2 p-4">
               <span className="grid h-10 w-10 place-items-center rounded-xl bg-accent/10 text-accent">{i.icon}</span>

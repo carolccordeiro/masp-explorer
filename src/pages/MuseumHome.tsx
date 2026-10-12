@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Baby, CalendarClock, ChevronRight, Compass, HelpCircle, LayoutGrid, Map as MapIcon, Route, ScanLine, Sparkles } from "lucide-react";
+import { ArrowRight, Baby, CalendarClock, ChevronRight, Compass, GraduationCap, HelpCircle, Landmark, LayoutGrid, Library, Map as MapIcon, Route, ScanLine, Sparkles } from "lucide-react";
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { ArtworkCard } from "@/components/ArtworkCard";
@@ -9,6 +9,7 @@ import { CrowdChip } from "@/components/CrowdChip";
 import { MuseumMark } from "@/components/MuseumMark";
 import { openLine } from "@/components/OpenLine";
 import { brandColors } from "@/data/museums";
+import { EXTRAS } from "@/data/extras";
 import { Page, SectionTitle, StatusDot, Switch } from "@/components/ui";
 import { useMuseum } from "@/context/Museum";
 import { useSettings } from "@/context/Settings";
@@ -61,6 +62,7 @@ export default function MuseumHome() {
   const base = `/${m.id}`;
   const exhibitions = m.exhibitions.filter((e) => exhibitionState(e) !== "past");
   const highlights = m.artworks.slice(0, 4);
+  const extra = EXTRAS[m.id];
   const A = (k: StringKey) => t(k);
 
   return (
@@ -92,6 +94,26 @@ export default function MuseumHome() {
           <Action to={`${base}/kora`} icon={<Sparkles size={22} />} title={A("act.assistant")} desc={A("act.assistant.desc")} />
           <Action to={`${base}/planejar`} icon={<Compass size={22} />} title={A("act.plan")} desc={A("act.plan.desc")} />
         </section>
+
+        {extra && (
+          <Link
+            to={`${base}/${extra.path}`}
+            className="tap mt-3 flex items-center gap-4 rounded-3xl border-2 p-4 md:p-5"
+            style={{ borderColor: "rgb(var(--accent))" }}
+          >
+            <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-accent text-accent-ink">
+              {extra.icon === "history" ? <Landmark size={22} /> : extra.icon === "library" ? <Library size={22} /> : <GraduationCap size={22} />}
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-[12.5px] font-semibold text-accent">
+                {{ pt: "Só no", en: "Only at", es: "Solo en" }[lang]} {m.short}
+              </span>
+              <span className="block text-[17px] font-extrabold leading-tight">{tr(extra.title, lang)}</span>
+              <span className="mt-0.5 block text-[13.5px] text-muted">{tr(extra.desc, lang)}</span>
+            </span>
+            <ChevronRight size={18} className="shrink-0 opacity-40" />
+          </Link>
+        )}
 
         <nav className="mt-3 grid grid-cols-5 gap-1" aria-label={t("home.actions")}>
           <Mini to={`${base}/acervo`} icon={<LayoutGrid size={19} />} title={t("nav.collection")} />
