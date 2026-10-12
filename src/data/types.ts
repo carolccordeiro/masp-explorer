@@ -70,6 +70,11 @@ export interface Museum {
   /** variante para o modo escuro (ex.: IMS, identidade preto e branco) */
   accentDark?: string;
   accentDarkInk?: string;
+  /** fundo e texto do bloco da marca, quando diferentes do acento (ex.: MAM, preto sobre branco com o "A" vermelho) */
+  brandBg?: string;
+  brandInk?: string;
+  /** posição da letra da sigla pintada com o acento (MAM: 1) */
+  brandMark?: number;
   cover: string; // imagem de capa
   address: string;
   coords: [number, number];
@@ -94,4 +99,4 @@ export interface Museum {
 }
 
 /** Metadados leves, usados na tela inicial antes de carregar o acervo. */
-export type MuseumMeta = Pick<Museum, "id" | "name" | "short" | "city" | "tagline" | "accent" | "accentInk" | "accentDark" | "accentDarkInk" | "cover" | "address" | "coords" | "week" | "freeDays">;
+export type MuseumMeta = Pick<Museum, "id" | "name" | "short" | "city" | "tagline" | "accent" | "accentInk" | "accentDark" | "accentDarkInk" | "brandBg" | "brandInk" | "brandMark" | "cover" | "address" | "coords" | "week" | "freeDays">;

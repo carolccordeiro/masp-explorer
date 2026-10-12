@@ -1,6 +1,8 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Check, Gift, RotateCcw, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { Award, Check, RotateCcw, X } from "lucide-react";
+import { Link } from "react-router-dom";
+import { addBadge } from "@/lib/visit";
+import { useEffect, useMemo, useState } from "react";
 import { ArtImage } from "@/components/ArtImage";
 import { Header } from "@/components/Shell";
 import { Button, Page } from "@/components/ui";
@@ -64,7 +66,10 @@ export default function Quiz() {
     setScore(0);
     setPicked(null);
   };
-  const code = `KORA-${m.short}-${(seed * 7).toString(36).toUpperCase().slice(-4)}`;
+  const won = done && score >= questions.length - 1;
+  useEffect(() => {
+    if (won) addBadge(m.id, "quiz");
+  }, [won, m.id]);
 
   return (
     <>
@@ -76,7 +81,7 @@ export default function Quiz() {
             <h1 className="mt-4 text-[30px] font-extrabold">{t("quiz.title")} {m.short}</h1>
             <p className="mt-2 text-muted">{t("quiz.intro")}</p>
             <p className="mt-1 flex items-center justify-center gap-1.5 text-[14px] font-semibold text-accent">
-              <Gift size={16} /> {t("quiz.prize")}
+              <Award size={16} /> {t("quiz.prize")}
             </p>
             <Button size="lg" className="mt-8" onClick={() => setI(0)}>
               {t("common.start")}
@@ -136,11 +141,12 @@ export default function Quiz() {
             <p className="mt-1 font-semibold text-muted">{t("quiz.score")}</p>
             {score >= questions.length - 1 ? (
               <div className="mt-6 rounded-3xl bg-accent p-6 text-accent-ink shadow-lift">
-                <Gift className="mx-auto" size={36} />
+                <Award className="mx-auto" size={40} />
                 <p className="mt-2 text-[22px] font-extrabold">{t("quiz.win")}</p>
-                <p className="opacity-90">{t("quiz.prize")}</p>
-                <p className="num mt-4 rounded-2xl bg-white/20 py-3 text-[26px] tracking-widest">{code}</p>
-                <p className="mt-2 text-[12px] opacity-80">{t("quiz.code")}</p>
+                <p className="mt-1 text-[14px] opacity-80">{t("quiz.code")}</p>
+                <Link to={`/${m.id}/visita`} className="tap mt-4 inline-flex rounded-full bg-white/20 px-5 py-2.5 text-[14px] font-bold">
+                  {t("visit.title")}
+                </Link>
               </div>
             ) : (
               <p className="mt-6 text-[18px] font-semibold">{t("quiz.almost")}</p>

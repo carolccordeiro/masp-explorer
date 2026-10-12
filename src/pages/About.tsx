@@ -51,6 +51,34 @@ const C = {
     es: "KORA es una plataforma white label que convierte cualquier museo en una experiencia guiada por inteligencia artificial. El visitante la abre en el navegador, sin descargar nada. El museo obtiene datos reales sobre lo que el público vive adentro.",
   },
   demo: { pt: "Ver a demonstração", en: "See the demo", es: "Ver la demostración" },
+  build: { pt: "Monte o seu museu", en: "Build your museum", es: "Arma tu museo" },
+  summaryTitle: { pt: "Em 30 segundos", en: "In 30 seconds", es: "En 30 segundos" },
+  summary: [
+    {
+      k: { pt: "O problema", en: "The problem", es: "El problema" },
+      v: {
+        pt: "O visitante sai do museu sabendo pouco sobre o que viu, e o museu não sabe o que acontece nas salas.",
+        en: "Visitors leave knowing little about what they saw, and the museum can't see what happens in the galleries.",
+        es: "El visitante sale sabiendo poco de lo que vio, y el museo no sabe qué pasa en las salas.",
+      },
+    },
+    {
+      k: { pt: "A solução", en: "The solution", es: "La solución" },
+      v: {
+        pt: "Um guia com IA que abre por QR code, reconhece as obras pela câmera, fala 3 idiomas e Libras.",
+        en: "An AI guide that opens from a QR code, recognizes works with the camera, and speaks 3 languages plus sign language.",
+        es: "Una guía con IA que se abre con un QR, reconoce obras con la cámara y habla 3 idiomas y lengua de señas.",
+      },
+    },
+    {
+      k: { pt: "O negócio", en: "The business", es: "El negocio" },
+      v: {
+        pt: "Assinatura por museu, mais mídia de parceiros do entorno, com um painel que mostra o público em tempo real.",
+        en: "A subscription per museum plus local partner media, with a dashboard that shows the audience in real time.",
+        es: "Suscripción por museo más medios de socios cercanos, con un panel que muestra al público en tiempo real.",
+      },
+    },
+  ] as { k: T; v: T }[],
   panel: { pt: "Ver o painel do museu", en: "See the museum dashboard", es: "Ver el panel del museo" },
   contact: { pt: "Falar com a equipe", en: "Talk to the team", es: "Hablar con el equipo" },
 
@@ -479,6 +507,11 @@ function Ctas({ lang, invert }: { lang: "pt" | "en" | "es"; invert?: boolean }) 
       >
         <BarChart3 size={17} /> {tr(C.panel, lang)}
       </Link>
+      {!invert && (
+        <Link to="/monte" className="tap inline-flex h-12 items-center gap-2 rounded-full border hairline bg-surface px-6 text-[15px] font-bold">
+          <Palette size={17} /> {tr(C.build, lang)}
+        </Link>
+      )}
       {CONTACT && (
         <a
           href={`mailto:${CONTACT}?subject=${encodeURIComponent("KORA para o meu museu")}`}
@@ -524,6 +557,14 @@ export default function About() {
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.12 }} className="body-copy mt-5 max-w-2xl text-[18px] text-muted">
             {tr(C.lead, lang)}
           </motion.p>
+          <div className="mt-8 grid gap-3 md:grid-cols-3">
+            {C.summary.map((x) => (
+              <div key={x.k.pt} className="rounded-3xl bg-ink/[0.04] p-5">
+                <p className="text-[13px] font-semibold text-muted">{tr(x.k, lang)}</p>
+                <p className="mt-1.5 text-[15.5px] font-semibold leading-snug">{tr(x.v, lang)}</p>
+              </div>
+            ))}
+          </div>
           <Ctas lang={lang} />
 
           <div className="mt-12 grid grid-cols-2 gap-x-4 gap-y-8 border-t hairline pt-8 md:grid-cols-4">

@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Check, Gift, ScanLine, Trophy } from "lucide-react";
+import { addBadge } from "@/lib/visit";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ArtImage } from "@/components/ArtImage";
@@ -23,20 +24,26 @@ export default function Hunt() {
   useEffect(() => store.set(key, found), [key, found]);
 
   const done = stops.length > 0 && found.length >= stops.length;
-  const code = useMemo(() => `KORA-${m.short}-${(ids.join("").length * 97 + 1000).toString(36).toUpperCase().slice(-4)}`, [ids, m.short]);
 
   useEffect(() => {
-    if (done) track({ museum: m.id, type: "hunt_found", value: stops.length });
+    if (!done) return;
+    track({ museum: m.id, type: "hunt_found", value: stops.length });
+    addBadge(m.id, "hunt");
   }, [done, m.id, stops.length]);
 
   if (!stops.length) {
     return (
       <>
-        <Header back={`/${m.id}`} />
-        <Page>
-          <p className="text-muted">Roteiro vazio.</p>
-          <Link to={`/${m.id}/planejar`} className="mt-4 inline-block">
-            <Button>{t("act.plan")}</Button>
+        <Header back={`/${m.id}`} title={t("plan.hunt")} />
+        <Page className="max-w-xl pt-10 text-center">
+          <Trophy className="mx-auto text-accent" size={44} />
+          <h1 className="mt-4 text-[28px] font-extrabold">{t("plan.hunt")}</h1>
+          <p className="body-copy mx-auto mt-2 max-w-sm text-muted">{t("hunt.empty.desc")}</p>
+          <Link to={`/${m.id}/roteiro?obras=${m.artworks.slice(0, 5).map((a) => a.id).join(",")}`} className="mt-6 inline-block">
+            <Button size="lg">{t("hunt.empty.cta")}</Button>
+          </Link>
+          <Link to={`/${m.id}/planejar`} className="mt-3 block text-[14px] font-semibold text-accent">
+            {t("act.plan")}
           </Link>
         </Page>
       </>
@@ -65,9 +72,10 @@ export default function Hunt() {
           <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="mt-4 rounded-3xl bg-accent p-6 text-center text-accent-ink shadow-lift">
             <Trophy className="mx-auto" size={40} />
             <p className="mt-2 text-[24px] font-extrabold">{t("plan.done")}</p>
-            <p className="mt-1 opacity-90">{t("quiz.prize")}</p>
-            <p className="num mt-4 rounded-2xl bg-white/20 py-3 text-[26px] tracking-widest">{code}</p>
-            <p className="mt-2 text-[12px] opacity-80">{t("quiz.code")}</p>
+            <p className="mt-1 opacity-90">{t("badge.hunt")}</p>
+            <Link to={`/${m.id}/visita`} className="tap mt-4 inline-flex rounded-full bg-white/20 px-5 py-2.5 text-[14px] font-bold">
+              {t("visit.title")}
+            </Link>
           </motion.div>
         )}
 

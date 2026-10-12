@@ -7,7 +7,9 @@ import { SettingsSheet } from "@/components/SettingsSheet";
 import { StatusDot } from "@/components/ui";
 import { useSettings } from "@/context/Settings";
 import type { Lang } from "@/data/types";
-import { MUSEUMS } from "@/data/museums";
+import { brandColors, MUSEUMS } from "@/data/museums";
+import { MuseumMark } from "@/components/MuseumMark";
+import { openLine } from "@/components/OpenLine";
 import { openStatus } from "@/lib/hours";
 import { cn, tr } from "@/lib/utils";
 
@@ -84,16 +86,16 @@ export default function Hub() {
             >
               <Link
                 to={`/${m.id}`}
-                className="tap group relative flex h-full flex-col justify-between overflow-hidden rounded-4xl p-5 md:p-7"
-                style={{ backgroundColor: m.accent, color: m.accentInk }}
+                className={cn("tap group relative flex h-full flex-col justify-between overflow-hidden rounded-4xl p-5 md:p-7", m.brandBg && "border hairline")}
+                style={{ backgroundColor: brandColors(m).bg, color: brandColors(m).ink }}
               >
                 <div className="relative">
-                  <span className="inline-flex items-center gap-2 rounded-full bg-black/20 px-3 py-1.5 text-[12px] font-semibold">
+                  <span className={cn("inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[12px] font-semibold", m.brandBg ? "bg-black/[0.06]" : "bg-black/20")}>
                     <StatusDot color={st.open ? "success" : "danger"} />
-                    {st.open ? t("home.openNow") : t("home.closedNow")}
-                    {st.freeToday && <span className="text-[#7CF29A]">· {t("common.free")}</span>}
+                    {openLine(m, t, lang)}
+                    {st.freeToday && <span className={m.brandBg ? "text-success" : "text-[#7CF29A]"}>· {t("common.free")}</span>}
                   </span>
-                  <p className="mt-3 text-[56px] font-extrabold leading-[0.85] tracking-[-0.05em] md:text-[84px] lg:text-[104px]">{m.short}</p>
+                  <MuseumMark m={m} className="mt-3 block text-[56px] font-extrabold leading-[0.85] tracking-[-0.05em] md:text-[84px] lg:text-[104px]" />
                 </div>
 
                 <div className="relative">
@@ -102,8 +104,8 @@ export default function Hub() {
                   <div className="mt-3 flex items-center justify-between gap-3 md:mt-4">
                     <span className="text-[12.5px] opacity-70">{m.city}</span>
                     <span
-                      className="inline-flex items-center gap-1.5 rounded-full bg-white px-5 py-2.5 text-[15px] font-bold transition-transform duration-150 group-hover:translate-x-0.5"
-                      style={{ color: m.accent }}
+                      className="inline-flex items-center gap-1.5 rounded-full px-5 py-2.5 text-[15px] font-bold transition-transform duration-150 group-hover:translate-x-0.5"
+                      style={m.brandBg ? { backgroundColor: brandColors(m).ink, color: brandColors(m).bg } : { backgroundColor: "#fff", color: m.accent }}
                     >
                       {t("hub.enter")} <ArrowRight size={17} />
                     </span>

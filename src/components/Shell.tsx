@@ -5,6 +5,7 @@ import {
   CalendarClock,
   Compass,
   Grid2x2,
+  Heart,
   HelpCircle,
   Home,
   Info,
@@ -81,6 +82,7 @@ export function Header({ back, title, right }: { back?: boolean | string; title?
             ) : null}
           </div>
           {right}
+          <LangMenu />
           <IconButton label={t("settings.title")} onClick={() => setSettings(true)}>
             <Settings2 size={18} />
           </IconButton>
@@ -88,6 +90,58 @@ export function Header({ back, title, right }: { back?: boolean | string; title?
       </header>
       <SettingsSheet open={settings} onClose={() => setSettings(false)} />
     </>
+  );
+}
+
+/** Idioma sempre à mão: o turista não precisa achar as preferências. */
+function LangMenu() {
+  const { lang, set, t } = useSettings();
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        aria-label={t("lang.label")}
+        aria-expanded={open}
+        className="tap grid h-10 min-w-10 place-items-center rounded-full bg-ink/[0.06] px-2.5 text-[13px] font-bold uppercase hover:bg-ink/10"
+      >
+        {lang}
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -4, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -4, scale: 0.97 }}
+            transition={{ duration: 0.15 }}
+            className="card absolute right-0 top-12 z-50 w-40 overflow-hidden p-1 shadow-lift"
+            role="menu"
+          >
+            {(
+              [
+                ["pt", "Português"],
+                ["en", "English"],
+                ["es", "Español"],
+              ] as const
+            ).map(([code, name]) => (
+              <button
+                key={code}
+                role="menuitemradio"
+                aria-checked={lang === code}
+                onClick={() => {
+                  set("lang", code);
+                  setOpen(false);
+                }}
+                className={cn("flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-[14.5px] font-semibold hover:bg-ink/[0.05]", lang === code && "text-accent")}
+              >
+                {name}
+                <span className="text-[12px] font-bold uppercase text-muted">{code}</span>
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
 
@@ -105,8 +159,8 @@ export function BottomNav() {
     ? [
         { to: base, icon: <Home size={22} />, label: "nav.home", end: true },
         { to: `${base}/scanner`, icon: <ScanLine size={22} />, label: "nav.scan" },
-        { to: `${base}/acervo`, icon: <LayoutGrid size={22} />, label: "nav.collection" },
         { to: `${base}/kora`, icon: <Sparkles size={22} />, label: "nav.assistant" },
+        { to: `${base}/visita`, icon: <Heart size={22} />, label: "visit.title" },
       ]
     : [
         { to: "/museus", icon: <Building2 size={22} />, label: "nav.museums", end: true },
@@ -117,6 +171,7 @@ export function BottomNav() {
 
   const moreItems: { to: string; icon: ReactNode; label: StringKey; desc: StringKey }[] = museum
     ? [
+        { to: `${base}/acervo`, icon: <LayoutGrid size={20} />, label: "act.collection", desc: "act.collection.desc" },
         { to: `${base}/planejar`, icon: <Compass size={20} />, label: "act.plan", desc: "act.plan.desc" },
         { to: `${base}/mapa`, icon: <Map size={20} />, label: "act.map", desc: "act.map.desc" },
         { to: `${base}/quiz`, icon: <HelpCircle size={20} />, label: "act.quiz", desc: "act.quiz.desc" },

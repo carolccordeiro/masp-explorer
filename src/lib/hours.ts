@@ -29,3 +29,22 @@ export function openStatus(m: Pick<MuseumMeta, "week" | "freeDays">, d = new Dat
   const freeNow = !!free && (!free.from || minutes >= toMin(free.from));
   return { open, today, freeToday: !!free, freeNow, freeFrom: free?.from };
 }
+
+/** Próxima abertura: hoje mais tarde, amanhã ou em outro dia da semana. */
+export function nextOpen(m: Pick<MuseumMeta, "week">, d = new Date()): { inDays: number; day: number; time: string } | null {
+  const { day, minutes } = spNow(d);
+  for (let k = 0; k < 8; k++) {
+    const dd = (day + k) % 7;
+    const w = m.week[dd];
+    if (!w) continue;
+    if (k === 0 && minutes >= toMin(w[0])) continue;
+    return { inDays: k, day: dd, time: w[0] };
+  }
+  return null;
+}
+
+/** "10h" ou "10h30" a partir de "10:00". */
+export const hhmm = (s: string) => {
+  const [h, m] = s.split(":");
+  return m && m !== "00" ? `${Number(h)}h${m}` : `${Number(h)}h`;
+};

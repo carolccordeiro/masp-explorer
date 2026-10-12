@@ -73,6 +73,24 @@ export function localAnswer(q: string, m: Museum, lang: Lang): string {
   return `${intro}\n\n${tr(m.about, lang)}\n\n${more}\n${picks}`;
 }
 
+/** Tema da pergunta (só a categoria vai para as métricas, nunca o texto). */
+export function topicOf(q: string, m: Museum): string {
+  const s = normalize(q);
+  const has = (...w: string[]) => w.some((x) => s.includes(x));
+  if (has("horario", "abre", "fecha", "hours", "open", "abierto", "cierra")) return "horarios";
+  if (has("ingresso", "preco", "quanto custa", "gratis", "ticket", "price", "free", "precio", "entrada")) return "ingressos";
+  if (has("acessib", "cadeira", "libras", "accessib", "wheelchair", "accesib")) return "acessibilidade";
+  if (has("banheiro", "toilet", "bathroom", "bano", "chapelaria", "guarda-volume")) return "servicos";
+  if (has("cafe", "restaurante", "comer", "food", "eat", "comida", "lanchonete")) return "comida";
+  if (has("chegar", "metro", "onde fica", "endereco", "estacion", "address", "llegar")) return "como_chegar";
+  if (has("crianca", "filho", "kid", "child", "nino", "familia", "family")) return "criancas";
+  if (has("exposic", "exhibit", "em cartaz", "on view")) return "exposicoes";
+  if (has("roteiro", "o que ver", "tenho 1 hora", "imperdive", "must see", "que ver")) return "o_que_ver";
+  const words = s.split(/[^a-z0-9]+/).filter((w) => w.length > 3);
+  if (m.artworks.some((a) => words.some((w) => normalize(`${a.title.pt} ${a.artist}`).includes(w)))) return "obras_artistas";
+  return "outros";
+}
+
 export async function* chatStream(opts: {
   museum: Museum;
   lang: Lang;

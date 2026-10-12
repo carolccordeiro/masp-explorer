@@ -22,6 +22,8 @@ const Routes_ = lazy(() => import("@/pages/RoutesBetween"));
 const Dashboard = lazy(() => import("@/pages/Dashboard"));
 const Sensor = lazy(() => import("@/pages/Sensor"));
 const Privacy = lazy(() => import("@/pages/Privacy"));
+const MyVisit = lazy(() => import("@/pages/MyVisit"));
+const Builder = lazy(() => import("@/pages/Builder"));
 const About = lazy(() => import("@/pages/About"));
 const Rest = lazy(() => import("@/pages/Rest"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
@@ -113,6 +115,7 @@ export default function App() {
             <Route path="/privacidade" element={<Privacy />} />
             <Route path="/sensor" element={<Sensor />} />
             <Route path="/sobre" element={<About />} />
+            <Route path="/monte" element={<Builder />} />
           </Route>
           <Route element={<NetworkLayout nav={false} />}>
             <Route path="/painel" element={<Dashboard />} />
@@ -134,6 +137,7 @@ export default function App() {
             <Route path="mapa" element={<MapPage />} />
             <Route path="quiz" element={<Quiz />} />
             <Route path="visite" element={<Visit />} />
+            <Route path="visita" element={<MyVisit />} />
           </Route>
           <Route
             path="*"

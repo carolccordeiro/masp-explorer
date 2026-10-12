@@ -93,11 +93,11 @@ export function Switch({ checked, onChange, label }: { checked: boolean; onChang
       aria-checked={checked}
       aria-label={label}
       onClick={() => onChange(!checked)}
-      className={cn("relative h-[31px] w-[51px] shrink-0 rounded-full transition-colors duration-150", checked ? "bg-success" : "bg-ink/15")}
+      className={cn("relative h-[31px] w-[51px] shrink-0 rounded-full transition-colors duration-150", checked ? "bg-success" : "bg-ink/30")}
     >
       <span
         className={cn(
-          "absolute top-[2px] h-[27px] w-[27px] rounded-full bg-white shadow transition-transform duration-150",
+          "absolute top-[2px] h-[27px] w-[27px] rounded-full bg-white shadow-[0_2px_6px_rgba(0,0,0,0.25)] transition-transform duration-150",
           checked ? "translate-x-[22px]" : "translate-x-[2px]",
         )}
       />

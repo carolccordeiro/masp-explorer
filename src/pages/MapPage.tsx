@@ -1,6 +1,5 @@
-import { motion } from "framer-motion";
 import { Layers, MapPin, Navigation } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ArtImage } from "@/components/ArtImage";
 import { Header } from "@/components/Shell";
@@ -9,6 +8,7 @@ import { Page } from "@/components/ui";
 import { useMuseum } from "@/context/Museum";
 import { useSettings } from "@/context/Settings";
 import { cn, tr } from "@/lib/utils";
+import { setFloor, useVisit } from "@/lib/visit";
 import { exhibitionState } from "./MuseumHome";
 
 export default function MapPage() {
@@ -16,7 +16,7 @@ export default function MapPage() {
   const { t, lang } = useSettings();
   const [params, setParams] = useSearchParams();
   const selected = params.get("espaco");
-  const [here] = useState(() => [...m.spaces].sort((a, b) => Math.abs(a.level) - Math.abs(b.level))[0]?.id);
+  const here = useVisit(m.id).floor;
 
   const spaces = useMemo(() => [...m.spaces].sort((a, b) => b.level - a.level), [m]);
   const counts = useMemo(() => {
@@ -36,41 +36,49 @@ export default function MapPage() {
         <h1 className="text-[34px] font-extrabold tracking-tight">{t("map.title")}</h1>
         <p className="mt-1 text-[15px] text-muted">{t("map.subtitle")}</p>
 
-        <div className="relative mt-8 [perspective:1400px]">
-          <div className="space-y-3 [transform:rotateX(18deg)] [transform-style:preserve-3d]">
-            {spaces.map((s, i) => {
-              const n = counts.get(s.id) ?? 0;
-              const hasExpo = m.exhibitions.some((e) => e.space === s.id && exhibitionState(e) === "now");
-              return (
-                <motion.button
-                  key={s.id}
-                  initial={{ opacity: 0, y: -16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.05 }}
+        <p className="mt-6 rounded-2xl bg-ink/[0.04] p-3 text-[13.5px] text-muted">{t("map.pickFloor")}</p>
+        <ul className="mt-4 space-y-2">
+          {spaces.map((s) => {
+            const n = counts.get(s.id) ?? 0;
+            const hasExpo = m.exhibitions.some((e) => e.space === s.id && exhibitionState(e) === "now");
+            const isHere = here === s.id;
+            return (
+              <li key={s.id}>
+                <button
                   onClick={() => setParams({ espaco: s.id }, { replace: true })}
                   className={cn(
-                    "tap relative flex w-full items-center gap-4 rounded-3xl border hairline bg-surface p-4 text-left shadow-soft transition-shadow hover:shadow-lift",
+                    "tap flex w-full items-center gap-4 rounded-3xl border hairline bg-surface p-4 text-left transition-colors duration-150",
+                    isHere && "border-transparent ring-2 ring-success",
                     selected === s.id && "ring-2 ring-accent",
                   )}
-                  style={{ marginLeft: `${(i % 2) * 4}%`, width: `${96 - (i % 2) * 4}%` }}
                 >
                   <span className="num grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-ink text-[17px] text-bg">{s.badge ?? levelLabel(s.level)}</span>
                   <span className="min-w-0 flex-1">
-                    <span className="block text-[16px] font-bold leading-tight">{s.name}</span>
-                    <span className="mt-0.5 line-clamp-1 block text-[13px] text-muted">{tr(s.description, lang)}</span>
-                  </span>
-                  {hasExpo && <span className="h-3 w-3 shrink-0 rounded-full bg-accent shadow-glow" />}
-                  {n > 0 && <span className="num shrink-0 rounded-full bg-accent/10 px-2.5 py-1 text-[13px] text-accent">{n}</span>}
-                  {here === s.id && (
-                    <span className="absolute -top-2.5 left-16 flex items-center gap-1 rounded-full bg-success px-2 py-0.5 text-[11px] font-bold text-white shadow">
-                      <Navigation size={11} className="fill-current" /> {t("map.here")}
+                    <span className="flex items-center gap-2">
+                      <span className="truncate text-[16px] font-bold leading-tight">{s.name}</span>
+                      {isHere && (
+                        <span className="flex shrink-0 items-center gap-1 rounded-full bg-success px-2 py-0.5 text-[11px] font-bold text-white">
+                          <Navigation size={11} className="fill-current" /> {t("map.here")}
+                        </span>
+                      )}
                     </span>
-                  )}
-                </motion.button>
-              );
-            })}
-          </div>
-        </div>
+                    <span className="mt-0.5 line-clamp-1 block text-[13px] text-muted">{tr(s.description, lang)}</span>
+                    {(n > 0 || hasExpo) && (
+                      <span className="mt-1.5 flex flex-wrap gap-x-3 text-[12.5px] font-semibold">
+                        {n > 0 && (
+                          <span>
+                            {n} {t("map.worksN")}
+                          </span>
+                        )}
+                        {hasExpo && <span className="text-accent">{t("map.expoNow")}</span>}
+                      </span>
+                    )}
+                  </span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
 
         <p className="mt-8 flex items-center gap-2 text-[13px] text-muted">
           <Layers size={15} /> Mapa esquemático. Consulte a sinalização do museu.
@@ -81,6 +89,15 @@ export default function MapPage() {
         {sel && (
           <div>
             <p className="body-copy">{tr(sel.description, lang)}</p>
+            <button
+              onClick={() => {
+                setFloor(m.id, here === sel.id ? undefined : sel.id);
+                setParams({}, { replace: true });
+              }}
+              className={cn("tap mt-4 flex w-full items-center justify-center gap-2 rounded-full py-3 text-[15px] font-bold", here === sel.id ? "bg-ink/[0.06]" : "bg-success text-white")}
+            >
+              <Navigation size={16} /> {here === sel.id ? t("map.here") : t("map.imHere")}
+            </button>
             {selExpos.map((e) => (
               <div key={e.id} className="mt-4 rounded-2xl bg-accent/10 p-4">
                 <p className="eyebrow text-accent">{t("home.exhibitions")}</p>

@@ -20,7 +20,8 @@ export type EventType =
   | "people"
   | "pref"
   | "ad_view"
-  | "ad_click";
+  | "ad_click"
+  | "rating";
 
 export interface KoraEvent {
   museum: string;
@@ -99,6 +100,7 @@ export function resetSession(museum = "hub") {
     for (const k of Object.keys(sessionStorage)) {
       if (k.startsWith("kora-chat") || k.startsWith("kora-hunt") || k === "kora-sid") sessionStorage.removeItem(k);
     }
+    localStorage.removeItem("kora-visit");
   } catch {
     /* ignora */
   }

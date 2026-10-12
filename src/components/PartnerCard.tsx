@@ -9,6 +9,18 @@ import { tr } from "@/lib/utils";
 import { Sheet } from "./Sheet";
 
 const ROTATE_MS = 7000;
+
+/** Cupom único por visita (base do parceiro + código da sessão), para o parceiro saber de onde veio a venda. */
+function couponFor(p: Partner) {
+  let sid = "";
+  try {
+    sid = sessionStorage.getItem("kora-sid") ?? "";
+  } catch {
+    /* sem sessão */
+  }
+  const tail = (sid.replace(/[^a-z0-9]/gi, "").slice(-4) || Math.random().toString(36).slice(-4)).toUpperCase();
+  return `${p.coupon}-${tail}`;
+}
 const T = {
   ad: { pt: "Anúncio", en: "Sponsored", es: "Anuncio" },
   example: { pt: "Parceiro de exemplo", en: "Example partner", es: "Socio de ejemplo" },
@@ -100,9 +112,9 @@ export function PartnerCard({ museum, className }: { museum?: string; className?
           <div className="text-center">
             <p className="text-[15px] font-semibold">{tr(open.offer, lang)}</p>
             <div className="mx-auto mt-5 w-fit rounded-3xl bg-white p-4">
-              <QRCodeSVG value={`KORA:${open.id}:${open.coupon}`} size={150} level="M" />
+              <QRCodeSVG value={`KORA:${open.id}:${couponFor(open)}`} size={150} level="M" />
             </div>
-            <p className="num mt-4 text-[32px] tracking-[0.12em]">{open.coupon}</p>
+            <p className="num mt-4 text-[28px] tracking-[0.08em]">{couponFor(open)}</p>
             <p className="mt-1 text-[13px] text-muted">{tr(T.show, lang)}</p>
             <p className="mt-4 text-[11.5px] text-muted">{tr(T.example, lang)}</p>
           </div>

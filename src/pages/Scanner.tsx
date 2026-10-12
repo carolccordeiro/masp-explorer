@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Camera, ImageUp, Loader2, RefreshCw, ScanLine, ShieldCheck, Sparkles, Zap, ZapOff } from "lucide-react";
+import { Camera, ImageUp, Loader2, RefreshCw, ScanLine, ShieldCheck, Sparkles } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArtImage } from "@/components/ArtImage";
@@ -10,6 +10,7 @@ import { useSettings } from "@/context/Settings";
 import { loadArtIndex, museumMeta, type ArtIndexItem } from "@/data/museums";
 import { identifyArtwork, type IdentifyResult } from "@/lib/ai";
 import { track } from "@/lib/analytics";
+import { markScanned } from "@/lib/visit";
 import { confidence, loadEmbeddings, loadModel, nearest, type Match } from "@/lib/clip";
 import { cn } from "@/lib/utils";
 
@@ -115,6 +116,7 @@ export default function Scanner() {
             if (streak.current.n >= 2) {
               setResult({ kind: "match", best, others: all.slice(1, 4), frame: canvas.toDataURL("image/jpeg", 0.8) });
               track({ museum: best.museum, type: "scan_match", artwork_id: best.id, value: Math.round(conf * 100) });
+              markScanned(best.museum, best.id);
               navigator.vibrate?.(30);
             }
           } else {
@@ -129,6 +131,7 @@ export default function Scanner() {
         if (best && conf >= SURE) {
           setResult({ kind: "match", best, others: all.slice(1, 4), frame });
           track({ museum: best.museum, type: "scan_match", artwork_id: best.id, value: Math.round(conf * 100) });
+              markScanned(best.museum, best.id);
         } else setResult({ kind: "none", others: conf >= MAYBE ? all.slice(0, 3) : [], frame });
       } finally {
         busy.current = false;
@@ -236,7 +239,7 @@ export default function Scanner() {
             <div className="absolute inset-x-0 bottom-0 flex items-center gap-3 bg-gradient-to-t from-black/80 to-transparent p-5 text-[14px]">
               <Loader2 className="animate-spin" size={18} />
               <span>
-                {analyzing ? t("scan.analyzing") : t("scan.loadingModel")} {!analyzing && modelPct > 0 && modelPct < 100 ? `${modelPct}%` : ""}
+                {analyzing ? t("scan.analyzing") : modelPct > 0 && modelPct < 100 ? `${t("scan.downloading")} · ${modelPct}%` : t("scan.loadingModel")}
               </span>
             </div>
           )}
@@ -278,12 +281,13 @@ export default function Scanner() {
           </button>
           <button
             onClick={() => setAuto((a) => !a)}
-            className={cn("tap grid h-14 w-14 place-items-center rounded-full", auto ? "bg-accent text-accent-ink" : "bg-white/10")}
-            aria-label="Auto"
+            className="tap flex h-14 w-14 flex-col items-center justify-center gap-0.5 rounded-full bg-white/10 text-[11px] font-bold"
+            aria-label="Reconhecimento automático"
             aria-pressed={auto}
             title="Reconhecimento automático"
           >
-            {auto ? <Zap size={22} /> : <ZapOff size={22} />}
+            <span className={cn("h-2 w-2 rounded-full", auto ? "bg-success" : "bg-white/40")} />
+            Auto
           </button>
         </div>
         <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(e) => onFile(e.target.files?.[0])} />
@@ -333,6 +337,9 @@ export default function Scanner() {
             ) : (
               <>
                 <p className="text-[20px] font-extrabold">{t("scan.notFound")}</p>
+                <Link to={museum ? `/${museum.id}/acervo` : "/museus"} className="mt-1 inline-block text-[14px] font-semibold text-accent">
+                  {t("scan.searchName")}
+                </Link>
                 {result.others.length > 0 && (
                   <>
                     <p className="mb-2 mt-3 text-[13px] font-semibold text-muted">{t("scan.maybe")}</p>

@@ -116,3 +116,13 @@
 .leaflet-control-attribution { font-size: 10px; background: rgb(var(--surface) / 0.8) !important; color: rgb(var(--muted)); }
 .leaflet-control-attribution a { color: inherit; }
 .leaflet-control-zoom a { background: rgb(var(--surface)); color: rgb(var(--ink)); border-color: rgb(var(--line) / var(--line-alpha)) !important; }
+
+/* relatório do painel em PDF (imprimir > salvar como PDF) */
+@media print {
+  @page { size: A4; margin: 12mm; }
+  html, body { background: #fff !important; }
+  .no-print, nav, header button, .leaflet-control-container { display: none !important; }
+  header.sticky { position: static !important; box-shadow: none !important; }
+  .card { break-inside: avoid; box-shadow: none !important; }
+  main { padding-bottom: 0 !important; }
+}

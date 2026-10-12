@@ -112,7 +112,7 @@ def main():
         json.dump(d, open(os.path.join(gen, f"{m}.json"), "w"), ensure_ascii=False, separators=(",", ":"))
         for a in d["artworks"]:
             index.append({"id": a["id"], "museum": m, "title": a["title"]["pt"], "artist": a["artist"], "year": a.get("year"),
-                          "thumb": a["thumb"], "color": a["color"], "theme": a["theme"]})
+                          "thumb": a["thumb"], "color": a["color"], "theme": a["theme"], "space": a.get("space")})
         print(f"{m}: {len(d['artworks'])} obras")
     json.dump(index, open(os.path.join(gen, "index.json"), "w"), ensure_ascii=False, separators=(",", ":"))
     ids = [i["id"] for i in index]

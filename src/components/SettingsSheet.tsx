@@ -1,5 +1,7 @@
-import { Accessibility, Baby, BarChart3, LogOut, Contrast, Hand, Languages, Minus, MonitorSmartphone, Moon, Plus, Shield, Sun, SunMoon, Wind } from "lucide-react";
+import { Accessibility, Baby, BarChart3, Check, CloudDownload, LogOut, Contrast, Hand, Languages, Minus, MonitorSmartphone, Moon, Plus, Shield, Sun, SunMoon, Wind } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useMaybeMuseum } from "@/context/Museum";
 import { useSettings } from "@/context/Settings";
 import type { Lang } from "@/data/types";
 import { Sheet } from "./Sheet";
@@ -15,6 +17,46 @@ function Row({ icon, title, desc, children }: { icon: React.ReactNode; title: st
       </div>
       {children}
     </div>
+  );
+}
+
+/** Baixa as imagens do museu atual para o cache do app (funciona sem internet depois). */
+function OfflineRow() {
+  const museum = useMaybeMuseum();
+  const { t } = useSettings();
+  const [pct, setPct] = useState<number | null>(null);
+  if (!museum) return null;
+  const run = async () => {
+    const urls = museum.artworks.flatMap((a) => [a.image, a.thumb]);
+    let done = 0;
+    setPct(0);
+    const queue = [...urls];
+    const worker = async () => {
+      while (queue.length) {
+        const u = queue.shift()!;
+        try {
+          await fetch(u);
+        } catch {
+          /* segue */
+        }
+        done++;
+        setPct(Math.round((done / urls.length) * 100));
+      }
+    };
+    await Promise.all(Array.from({ length: 6 }, worker));
+  };
+  return (
+    <Row icon={<CloudDownload size={18} />} title={t("settings.offline")} desc={pct === 100 ? t("settings.offline.done") : t("settings.offline.desc")}>
+      {pct === null ? (
+        <button onClick={run} className="tap rounded-full bg-ink/[0.06] px-4 py-2 text-[13.5px] font-bold">
+          {t("settings.offline.btn")}
+        </button>
+      ) : pct < 100 ? (
+        <span className="num text-[14px] text-muted">{pct}%</span>
+      ) : (
+        <Check size={20} className="text-success" />
+      )}
+    </Row>
   );
 }
 
@@ -94,6 +136,7 @@ export function SettingsSheet({ open, onClose }: { open: boolean; onClose: () =>
           </span>
           <span className="text-[15px] font-semibold">{t("settings.privacy")}</span>
         </Link>
+        <OfflineRow />
         <Link to="/painel" onClick={onClose} className="flex items-center gap-3 py-3">
           <span className="grid h-9 w-9 place-items-center rounded-xl bg-ink/[0.06]">
             <BarChart3 size={18} />

@@ -83,7 +83,7 @@ export function analyze(events: Ev[], index: Map<string, ArtIndexItem>) {
   const visitors = sessions.length;
   const durations = sessions.filter((s) => s.n >= 2).map((s) => (s.end - s.start) / 60000);
   const avgMinutes = Math.round(median(durations));
-  const nonView = events.filter((e) => !["view", "session_start", "people", "pref", "scan", "ad_view", "ad_click"].includes(e.type));
+  const nonView = events.filter((e) => !["view", "session_start", "people", "pref", "scan", "ad_view", "ad_click", "rating"].includes(e.type));
   const perVisitor = visitors ? nonView.length / visitors : 0;
 
   // scanner
@@ -158,7 +158,23 @@ export function analyze(events: Ev[], index: Map<string, ArtIndexItem>) {
     .map(([id, v]) => ({ id, ...v, ctr: v.views ? (v.clicks / v.views) * 100 : 0 }))
     .sort((a, b) => b.views - a.views);
 
+  // temas das perguntas (só a categoria) e espaços mais visitados
+  const topics = top(countBy(events.filter((e) => e.type === "chat"), (e) => e.path ?? "outros"));
+  const spaces = top(
+    countBy(artEvents, (e) => {
+      const it = index.get(e.artwork_id!);
+      return it?.space ? `${it.museum}:${it.space}` : null;
+    }),
+    8,
+  );
+  // satisfação (1 a 5)
+  const ratings = events.filter((e) => e.type === "rating" && e.value != null).map((e) => e.value!);
+  const rating = ratings.length ? { avg: ratings.reduce((a, b) => a + b, 0) / ratings.length, n: ratings.length } : null;
+
   return {
+    topics,
+    spaces,
+    rating,
     ads,
     sessions,
     visitors,
@@ -306,7 +322,21 @@ export function generateDemo(index: ArtIndexItem[], museums: MuseumMeta[], now =
           const q = 1 + Math.floor(r() * 4);
           for (let i = 0; i < q; i++) {
             step(0.5, 3);
-            push("chat");
+            push("chat", {
+              path: pick<string>([
+                ["obras_artistas", 30],
+                ["o_que_ver", 18],
+                ["horarios", 12],
+                ["ingressos", 10],
+                ["exposicoes", 9],
+                ["comida", 6],
+                ["servicos", 5],
+                ["acessibilidade", 4],
+                ["criancas", family ? 8 : 2],
+                ["como_chegar", 3],
+                ["outros", 5],
+              ]),
+            });
           }
         }
         if (r() < (family ? 0.4 : 0.14)) {
@@ -316,6 +346,10 @@ export function generateDemo(index: ArtIndexItem[], museums: MuseumMeta[], now =
         if (r() < (family ? 0.22 : 0.05)) {
           step(5, 15);
           push("hunt_found", { value: 5 });
+        }
+        if (r() < 0.34) {
+          step(0.5, 2);
+          push("rating", { value: pick<number>([[5, 58], [4, 27], [3, 9], [2, 4], [1, 2]]) });
         }
       }
     }

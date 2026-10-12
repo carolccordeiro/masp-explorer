@@ -51,8 +51,12 @@ export const MUSEUMS: MuseumMeta[] = [
       en: "Brazilian modern and contemporary art under the marquee",
       es: "Arte moderno y contemporáneo brasileño bajo la marquesina",
     },
-    accent: "#E0251B",
+    // identidade do MAM: sigla preta com o "A" vermelho, sobre branco (estúdio CLDT, Helvetica)
+    accent: "#E30613",
     accentInk: "#FFFFFF",
+    brandBg: "#FFFFFF",
+    brandInk: "#111111",
+    brandMark: 1,
     cover: "/museums/mam/cover.webp",
     address: "Av. Pedro Álvares Cabral, s/nº, Parque Ibirapuera, Portão 3, São Paulo, SP",
     coords: [-23.5874, -46.6556],
@@ -81,9 +85,15 @@ export function loadMuseum(id: MuseumId): Promise<Museum> {
 }
 
 /** Índice leve de todas as obras da rede (scanner e "obras parecidas"). */
-export type ArtIndexItem = Pick<Artwork, "id" | "museum" | "artist" | "year" | "thumb" | "color" | "theme"> & { title: string };
+export type ArtIndexItem = Pick<Artwork, "id" | "museum" | "artist" | "year" | "thumb" | "color" | "theme"> & { title: string; space?: string | null };
 let indexPromise: Promise<ArtIndexItem[]> | null = null;
 export function loadArtIndex(): Promise<ArtIndexItem[]> {
   if (!indexPromise) indexPromise = import("./generated/index.json").then((m) => m.default as ArtIndexItem[]);
   return indexPromise;
 }
+
+/** Cores do bloco de marca de cada museu (cartão de escolha e topo do museu). */
+export const brandColors = (m: Pick<MuseumMeta, "accent" | "accentInk" | "brandBg" | "brandInk">) => ({
+  bg: m.brandBg ?? m.accent,
+  ink: m.brandInk ?? m.accentInk,
+});

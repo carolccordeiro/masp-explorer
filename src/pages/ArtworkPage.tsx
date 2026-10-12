@@ -12,6 +12,7 @@ import { track } from "@/lib/analytics";
 import { similarTo } from "@/lib/clip";
 import { useFavorites } from "@/lib/favorites";
 import { useSpeech } from "@/lib/speech";
+import { markViewed } from "@/lib/visit";
 import { cn, tr } from "@/lib/utils";
 
 function Similar({ id }: { id: string }) {
@@ -70,7 +71,10 @@ export default function ArtworkPage() {
   const art = m.artworks.find((a) => a.id === id);
 
   useEffect(() => {
-    if (art) track({ museum: m.id, type: "artwork_view", artwork_id: art.id });
+    if (art) {
+      track({ museum: m.id, type: "artwork_view", artwork_id: art.id });
+      markViewed(m.id, art.id);
+    }
     return () => stop();
   }, [art, m.id, stop]);
 

@@ -8,7 +8,7 @@ import { Header } from "@/components/Shell";
 import { Chip, IconButton } from "@/components/ui";
 import { useMuseum } from "@/context/Museum";
 import { useSettings } from "@/context/Settings";
-import { chatStream, instantAnswer, localAnswer, type ChatMsg } from "@/lib/ai";
+import { chatStream, instantAnswer, localAnswer, topicOf, type ChatMsg } from "@/lib/ai";
 import { track } from "@/lib/analytics";
 import { useListen, useSpeech } from "@/lib/speech";
 import { cn, normalize, tr } from "@/lib/utils";
@@ -58,7 +58,7 @@ export default function Assistant() {
       setInput("");
       stop();
       const history: UiMsg[] = [...msgs, { role: "user", content: q }];
-      track({ museum: m.id, type: "chat" });
+      track({ museum: m.id, type: "chat", path: topicOf(q, m) });
 
       const quick = instantAnswer(q, m, lang);
       if (quick) {
@@ -70,7 +70,11 @@ export default function Assistant() {
       setStreaming(true);
       const ctrl = new AbortController();
       abortRef.current = ctrl;
+      // sem nenhuma palavra em 15 s, cai para a resposta do acervo; resposta inteira no máximo em 45 s
       const timeout = setTimeout(() => ctrl.abort(), 45_000);
+      const slow = setTimeout(() => {
+        if (!acc.trim()) ctrl.abort();
+      }, 15_000);
       let acc = "";
       try {
         for await (const chunk of chatStream({
@@ -86,9 +90,10 @@ export default function Assistant() {
         if (!acc.trim()) throw new Error("vazio");
       } catch {
         // Se a IA falhar sem ter respondido nada, responde com o próprio acervo (plano B)
-        if (!acc.trim()) setMsgs((cur) => [...cur.slice(0, -1), { role: "assistant", content: localAnswer(q, m, lang), instant: true }]);
+        if (!acc.trim()) setMsgs((cur) => [...cur.slice(0, -1), { role: "assistant", content: `${t("chat.slow")}\n\n${localAnswer(q, m, lang).split("\n\n").slice(1).join("\n\n")}`, instant: true }]);
       } finally {
         clearTimeout(timeout);
+        clearTimeout(slow);
         setStreaming(false);
       }
     },

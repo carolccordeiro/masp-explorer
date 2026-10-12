@@ -9,7 +9,8 @@ import {
   Lightbulb,
   MessageSquareText,
   MousePointerClick,
-  Radio,
+  FileText,
+  Star,
   ScanLine,
   Users,
 } from "lucide-react";
@@ -20,7 +21,7 @@ import { ArtImage } from "@/components/ArtImage";
 import { KoraWordmark } from "@/components/KoraMark";
 import { Button, Page, Segmented, StatusDot } from "@/components/ui";
 import { useSettings } from "@/context/Settings";
-import { accentOn, loadArtIndex, MUSEUMS, museumMeta, type ArtIndexItem } from "@/data/museums";
+import { accentOn, loadArtIndex, loadMuseum, MUSEUMS, museumMeta, type ArtIndexItem } from "@/data/museums";
 import { PARTNERS } from "@/data/partners";
 import type { Theme } from "@/data/types";
 import type { StringKey } from "@/i18n/strings";
@@ -47,6 +48,19 @@ const TYPE_LABEL: Record<string, string> = {
   people: "Sensor de público",
   session_start: "Novo visitante",
   pref: "Preferência ajustada",
+};
+const TOPIC_LABEL: Record<string, string> = {
+  obras_artistas: "Obras e artistas",
+  o_que_ver: "O que ver / roteiro",
+  horarios: "Horários",
+  ingressos: "Ingressos e gratuidade",
+  exposicoes: "Exposições",
+  comida: "Café e restaurante",
+  servicos: "Banheiro e serviços",
+  acessibilidade: "Acessibilidade",
+  criancas: "Crianças e famílias",
+  como_chegar: "Como chegar",
+  outros: "Outros",
 };
 const DAYS = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 const DAYS_FULL = ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"];
@@ -82,7 +96,17 @@ function ago(iso: string) {
 const fmt = (n: number) => n.toLocaleString("pt-BR");
 const pct = (a: number, b: number) => (b ? Math.round((a / b) * 100) : 0);
 
-function Kpi({ icon, label, value, unit, hint, pulse }: { icon: ReactNode; label: string; value: ReactNode; unit?: string; hint?: string; pulse?: boolean }) {
+function Delta({ v }: { v: number | null | undefined }) {
+  if (v == null || !isFinite(v)) return null;
+  const up = v >= 0;
+  return (
+    <span className={cn("ml-2 rounded-full px-1.5 py-0.5 text-[11.5px] font-bold", up ? "bg-success/15 text-success" : "bg-danger/15 text-danger")}>
+      {up ? "▲" : "▼"} {Math.abs(v)}%
+    </span>
+  );
+}
+
+function Kpi({ icon, label, value, unit, hint, pulse, delta }: { icon: ReactNode; label: string; value: ReactNode; unit?: string; hint?: string; pulse?: boolean; delta?: number | null }) {
   return (
     <div className="card p-5">
       <p className="flex items-center gap-2 text-[12px] font-semibold text-muted">
@@ -93,6 +117,7 @@ function Kpi({ icon, label, value, unit, hint, pulse }: { icon: ReactNode; label
           {value}
         </motion.span>
         {unit && <span className="text-[15px] font-bold text-muted">{unit}</span>}
+        <Delta v={delta} />
       </p>
       {hint && <p className="mt-1.5 text-[12.5px] leading-snug text-muted">{hint}</p>}
     </div>
@@ -325,12 +350,23 @@ export default function Dashboard() {
 
   const base = source === "demo" ? demo : events;
 
-  const inPeriod = useMemo(() => {
+  const [inPeriod, prevPeriod] = useMemo(() => {
     const now = Date.now();
     const sp0 = new Date(now - 3 * 3600e3);
     const todayStart = Date.UTC(sp0.getUTCFullYear(), sp0.getUTCMonth(), sp0.getUTCDate()) + 3 * 3600e3;
     const start = period === "today" ? todayStart : now - (period === "7d" ? 7 : 30) * 864e5;
-    return base.filter((e) => new Date(e.created_at).getTime() >= start);
+    const len = period === "today" ? 864e5 : now - start;
+    // mesmo intervalo antes (ontem até a mesma hora, ou a semana/mês anterior)
+    const pStart = start - len;
+    const pEnd = period === "today" ? now - 864e5 : start;
+    const cur: Ev[] = [];
+    const prev: Ev[] = [];
+    for (const e of base) {
+      const ts = new Date(e.created_at).getTime();
+      if (ts >= start) cur.push(e);
+      else if (ts >= pStart && ts < pEnd) prev.push(e);
+    }
+    return [cur, prev];
   }, [base, period]);
 
   // filtra por museu pela sessão inteira (o visitante entra pela rede e depois escolhe o museu)
@@ -342,6 +378,29 @@ export default function Dashboard() {
   }, [inPeriod, museum, index]);
 
   const d = useMemo(() => analyze(filtered, index), [filtered, index]);
+  const p = useMemo(() => {
+    if (museum === "all") return analyze(prevPeriod, index);
+    const all = analyze(prevPeriod, index);
+    const ids = new Set(all.sessions.filter((s) => s.museum === museum).map((s) => s.id));
+    return analyze(prevPeriod.filter((e) => ids.has(e.session_id)), index);
+  }, [prevPeriod, museum, index]);
+  const delta = (a: number, b: number) => (b > 0 ? Math.round(((a - b) / b) * 100) : null);
+  const [spaceNames, setSpaceNames] = useState<Map<string, string>>(new Map());
+  useEffect(() => {
+    Promise.all(MUSEUMS.map((m) => loadMuseum(m.id)))
+      .then((ms) => setSpaceNames(new Map(ms.flatMap((m) => m.spaces.map((sp) => [`${m.id}:${sp.id}`, `${m.short} · ${sp.name}`] as [string, string])))))
+      .catch(() => undefined);
+  }, []);
+  // sem dados reais suficientes, abre na simulação (uma vez, sem brigar com a escolha da pessoa)
+  const autoDemo = useRef(false);
+  useEffect(() => {
+    if (autoDemo.current || source !== "live" || status === "loading") return;
+    autoDemo.current = true;
+    if (status === "offline") return setSource("demo");
+    const week = Date.now() - 7 * 864e5;
+    const sessions = new Set(events.filter((e) => new Date(e.created_at).getTime() >= week).map((e) => e.session_id));
+    if (sessions.size < 10) setSource("demo");
+  }, [status, source, events]);
   const network = useMemo(() => (museum === "all" ? compareMuseums(inPeriod, index, MUSEUMS) : []), [inPeriod, index, museum]);
   const lastPeople = (id: string) => base.find((e) => e.type === "people" && e.museum === id);
   const peopleEvents = museum === "all" ? MUSEUMS.map((m) => lastPeople(m.id)).filter((e): e is Ev => !!e) : [lastPeople(museum)].filter((e): e is Ev => !!e);
@@ -399,13 +458,18 @@ export default function Dashboard() {
             <p className="eyebrow">Inteligência de público</p>
             <h1 className="mt-1 text-[32px] font-extrabold leading-tight tracking-tight md:text-[40px]">{museum === "all" ? "Rede KORA" : museumMeta(museum)?.name}</h1>
           </div>
-          <Button variant="outline" size="sm" icon={<Download size={15} />} onClick={download}>
-            Exportar CSV
-          </Button>
+          <div className="no-print flex gap-2">
+            <Button variant="outline" size="sm" icon={<FileText size={15} />} onClick={() => print()}>
+              Relatório PDF
+            </Button>
+            <Button variant="outline" size="sm" icon={<Download size={15} />} onClick={download}>
+              Exportar CSV
+            </Button>
+          </div>
         </div>
 
         {/* filtros em uma linha */}
-        <div className="mt-5 flex flex-wrap items-center gap-2">
+        <div className="no-print mt-5 flex flex-wrap items-center gap-2">
           <Segmented value={museum} onChange={setMuseum} options={[{ value: "all", label: t("admin.all") }, ...MUSEUMS.map((m) => ({ value: m.id, label: m.short }))]} />
           <Segmented
             value={period}
@@ -458,9 +522,9 @@ export default function Dashboard() {
 
         {/* números principais */}
         <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
-          <Kpi icon={<Users size={14} />} label="Visitantes" value={fmt(d.visitors)} hint="sessões no app" pulse={source === "live" && status === "live"} />
-          <Kpi icon={<Clock size={14} />} label="Tempo de visita" value={d.avgMinutes || "–"} unit={d.avgMinutes ? "min" : undefined} hint="mediana por visitante" />
-          <Kpi icon={<MousePointerClick size={14} />} label="Interações" value={d.perVisitor ? d.perVisitor.toFixed(1).replace(".", ",") : "–"} hint="por visitante" />
+          <Kpi icon={<Users size={14} />} label="Visitantes" value={fmt(d.visitors)} delta={delta(d.visitors, p.visitors)} hint="sessões no app" pulse={source === "live" && status === "live"} />
+          <Kpi icon={<Clock size={14} />} label="Tempo de visita" delta={delta(d.avgMinutes, p.avgMinutes)} value={d.avgMinutes || "–"} unit={d.avgMinutes ? "min" : undefined} hint="mediana por visitante" />
+          <Kpi icon={<MousePointerClick size={14} />} label="Interações" delta={delta(d.perVisitor, p.perVisitor)} value={d.perVisitor ? d.perVisitor.toFixed(1).replace(".", ",") : "–"} hint="por visitante" />
           <Kpi icon={<ScanLine size={14} />} label="Scanner" value={d.scanRate ?? "–"} unit={d.scanRate != null ? "%" : undefined} hint={`${fmt(d.matches)} obras reconhecidas`} />
           <Kpi
             icon={<MessageSquareText size={14} />}
@@ -468,7 +532,13 @@ export default function Dashboard() {
             value={fmt(d.chats)}
             hint={d.visitors ? `${pct(d.sessions.filter((s) => s.types.has("chat")).length, d.visitors)}% dos visitantes perguntaram` : undefined}
           />
-          <Kpi icon={<Radio size={14} />} label="Pessoas agora" value={peopleNow ?? "–"} hint={peopleEvents[0] ? `sensor, ${ago(peopleEvents[0].created_at)} atrás` : "sensor desligado"} />
+          <Kpi
+            icon={<Star size={14} />}
+            label="Satisfação"
+            value={d.rating ? d.rating.avg.toFixed(1).replace(".", ",") : "–"}
+            unit={d.rating ? "de 5" : undefined}
+            hint={d.rating ? `${fmt(d.rating.n)} avaliações · ${peopleNow != null ? `${peopleNow} pessoas agora` : "sensor desligado"}` : "sem avaliações ainda"}
+          />
         </div>
 
         {/* quando */}
@@ -592,6 +662,32 @@ export default function Dashboard() {
               <div className="space-y-3">
                 {d.artists.map(([name, v]) => (
                   <BarRow key={name} label={name} value={v} max={d.artists[0][1]} />
+                ))}
+              </div>
+            ) : (
+              <Empty />
+            )}
+          </Card>
+        </div>
+
+        {/* o que perguntam e onde circulam */}
+        <div className="mt-3 grid gap-3 lg:grid-cols-2">
+          <Card title="O que o público pergunta" desc="Temas das perguntas à IA (só a categoria; o texto não é guardado)">
+            {d.topics.length ? (
+              <div className="space-y-3">
+                {d.topics.slice(0, 7).map(([k, v]) => (
+                  <BarRow key={k} label={TOPIC_LABEL[k] ?? k} value={v} max={d.topics[0][1]} total={d.topics.reduce((a, [, x]) => a + x, 0)} />
+                ))}
+              </div>
+            ) : (
+              <Empty />
+            )}
+          </Card>
+          <Card title="Espaços mais visitados" desc="Obras abertas ou escaneadas, por andar ou galeria">
+            {d.spaces.length ? (
+              <div className="space-y-3">
+                {d.spaces.map(([k, v]) => (
+                  <BarRow key={k} label={spaceNames.get(k) ?? k} value={v} max={d.spaces[0][1]} color={accent} />
                 ))}
               </div>
             ) : (

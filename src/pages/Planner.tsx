@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Baby, Clock, Heart, RotateCcw, Smartphone, Sparkles, Star, Trophy, User, Users, UsersRound } from "lucide-react";
+import { ArrowRight, Baby, Clock, Headphones, Heart, Square, RotateCcw, Smartphone, Sparkles, Star, Trophy, User, Users, UsersRound } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { useMemo, useState, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -13,6 +13,7 @@ import type { StringKey } from "@/i18n/strings";
 import { track } from "@/lib/analytics";
 import { useFavorites } from "@/lib/favorites";
 import { planRoute, type Profile, type Stop } from "@/lib/recommender";
+import { useSpeech } from "@/lib/speech";
 import { cn, tr } from "@/lib/utils";
 
 const TIMES = [30, 60, 90, 120];
@@ -21,6 +22,7 @@ export default function Planner() {
   const m = useMuseum();
   const { t, lang, family, set } = useSettings();
   const { favs } = useFavorites();
+  const { speak, stop, speaking } = useSpeech(lang);
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [minutes, setMinutes] = useState(60);
@@ -147,6 +149,25 @@ export default function Planner() {
                     {t("common.restart")}
                   </Button>
                 </div>
+
+                <Button
+                  className="mt-5"
+                  icon={speaking ? <Square size={16} /> : <Headphones size={18} />}
+                  onClick={() => {
+                    if (speaking) return stop();
+                    speak(
+                      stops
+                        .map((s, i) => {
+                          const sp = m.spaces.find((x) => x.id === s.art.space);
+                          return `${i + 1}. ${tr(s.art.title, lang)}, ${s.art.artist}${sp ? `. ${sp.name}` : ""}. ${family ? tr(s.art.kids, lang) : tr(s.art.description, lang)}`;
+                        })
+                        .join(" "),
+                    );
+                    track({ museum: m.id, type: "audio", path: "route" });
+                  }}
+                >
+                  {speaking ? t("common.stop") : t("plan.listen")}
+                </Button>
 
                 <ol className="relative mt-6 space-y-3 before:absolute before:bottom-6 before:left-[27px] before:top-6 before:w-0.5 before:bg-accent/25">
                   {stops.map((s, i) => (

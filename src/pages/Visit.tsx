@@ -42,7 +42,7 @@ export default function Visit() {
                 <li key={i} className="flex items-start justify-between gap-3 py-2.5">
                   <span className="font-semibold">{tr(h.days, lang)}</span>
                   <span className="text-right">
-                    <span className="num text-[17px]">{h.time}</span>
+                    <span className="num shrink-0 whitespace-nowrap text-[17px]">{h.time}</span>
                     {h.note && <span className="block text-[12.5px] text-muted">{tr(h.note, lang)}</span>}
                   </span>
                 </li>
@@ -55,7 +55,7 @@ export default function Visit() {
               {m.tickets.map((tk, i) => (
                 <li key={i} className="flex items-center justify-between gap-3 py-2.5">
                   <span className="font-semibold">{tr(tk.label, lang)}</span>
-                  <span className="num text-[20px]">{tk.price}</span>
+                  <span className="num shrink-0 whitespace-nowrap text-[20px]">{tk.price}</span>
                 </li>
               ))}
             </ul>

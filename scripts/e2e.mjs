@@ -49,12 +49,11 @@ await p.screenshot({ path: "/home/claude/shots/e2e-plan.png", fullPage: true });
 // 4. Painel
 await p.waitForTimeout(2500);
 await p.goto(base + "/painel");
-await p.fill("input[type=password]", "000");
 await p.keyboard.press("Enter");
-await p.waitForSelector("text=Ao vivo", { timeout: 20000 }).catch(() => {});
+await p.waitForSelector("text=Quando o público vem", { timeout: 20000 }).catch(() => {});
 await p.waitForTimeout(2000);
 const dash = await p.textContent("body");
-ok("painel ao vivo", dash.includes("Ao vivo"));
+ok("painel abre (dados reais ou simulação)", dash.includes("Quando o público vem") && (dash.includes("Ao vivo") || dash.includes("Simulação")));
 await p.screenshot({ path: "/home/claude/shots/e2e-dash.png", fullPage: true });
 
 ok("sem erros de página", errors.length === 0, errors.join(" | ").slice(0, 300));

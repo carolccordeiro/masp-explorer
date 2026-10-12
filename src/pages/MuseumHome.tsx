@@ -5,7 +5,11 @@ import { Link } from "react-router-dom";
 import { ArtworkCard } from "@/components/ArtworkCard";
 import { Header } from "@/components/Shell";
 import { PartnerCard } from "@/components/PartnerCard";
-import { Page, SectionTitle, StatusDot } from "@/components/ui";
+import { CrowdChip } from "@/components/CrowdChip";
+import { MuseumMark } from "@/components/MuseumMark";
+import { openLine } from "@/components/OpenLine";
+import { brandColors } from "@/data/museums";
+import { Page, SectionTitle, StatusDot, Switch } from "@/components/ui";
 import { useMuseum } from "@/context/Museum";
 import { useSettings } from "@/context/Settings";
 import type { Exhibition } from "@/data/types";
@@ -52,7 +56,7 @@ function Mini({ to, icon, title }: { to: string; icon: ReactNode; title: string 
 
 export default function MuseumHome() {
   const m = useMuseum();
-  const { t, lang, family } = useSettings();
+  const { t, lang, family, set } = useSettings();
   const st = openStatus(m);
   const base = `/${m.id}`;
   const exhibitions = m.exhibitions.filter((e) => exhibitionState(e) !== "past");
@@ -63,13 +67,13 @@ export default function MuseumHome() {
     <>
       <Header />
       <Page className="pt-2">
-        <motion.section initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="rounded-4xl bg-accent p-6 text-accent-ink md:p-10">
+        <motion.section initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className={cn("rounded-4xl p-6 md:p-10", m.brandBg && "border hairline")} style={{ backgroundColor: brandColors(m).bg, color: brandColors(m).ink }}>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="flex items-center gap-2 rounded-full bg-black/20 px-3 py-1.5 text-[12.5px] font-semibold">
+            <span className={cn("flex items-center gap-2 rounded-full px-3 py-1.5 text-[12.5px] font-semibold", m.brandBg ? "bg-black/[0.06]" : "bg-black/20")}>
               <StatusDot color={st.open ? "success" : "danger"} />
-              {st.open ? t("home.openNow") : t("home.closedNow")}
-              {st.today && <span className="opacity-75">{st.today[0]} às {st.today[1]}</span>}
+              {openLine(m, t, lang)}
             </span>
+            <CrowdChip museum={m.id} />
             {st.freeToday && (
               <span className="rounded-full bg-success px-3 py-1.5 text-[12.5px] font-bold text-white">
                 {t("home.freeToday")}
@@ -77,19 +81,11 @@ export default function MuseumHome() {
               </span>
             )}
           </div>
-          <p className="mt-6 text-[64px] font-extrabold leading-[0.85] tracking-[-0.05em] md:text-[110px]">{m.short}</p>
+          <MuseumMark m={m} className="mt-6 block text-[64px] font-extrabold leading-[0.85] tracking-[-0.05em] md:text-[110px]" />
           <h1 className="mt-4 max-w-2xl text-[22px] font-extrabold leading-[1.15] tracking-[-0.02em] md:text-[30px]">{tr(m.tagline, lang)}</h1>
         </motion.section>
 
         <PartnerCard museum={m.id} className="mt-4" />
-
-        {family && (
-          <Link to={`${base}/planejar`} className="tap mt-4 flex items-center gap-3 rounded-3xl bg-warning/15 p-4 text-[14px] font-semibold">
-            <Baby className="text-warning" />
-            <span className="flex-1">{t("home.family.on")}</span>
-            <ArrowRight size={16} />
-          </Link>
-        )}
 
         <section className="mt-6 grid gap-3 md:grid-cols-3">
           <Action primary to={`${base}/scanner`} icon={<ScanLine size={22} />} title={A("act.scan")} desc={A("act.scan.desc")} />
@@ -104,6 +100,17 @@ export default function MuseumHome() {
           <Mini to={`${base}/visite`} icon={<CalendarClock size={19} />} title={A("act.info")} />
           <Mini to="/rotas" icon={<Route size={19} />} title={A("act.routes")} />
         </nav>
+
+        <div className={cn("mt-4 flex w-full items-center gap-3 rounded-3xl p-4 transition-colors duration-150", family ? "bg-warning/15" : "border hairline")}>
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-warning/20 text-warning">
+            <Baby size={20} />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-[15.5px] font-bold">{family ? t("home.family.on") : t("home.family.cta")}</span>
+            <span className="block text-[13px] text-muted">{t("home.family.ctaDesc")}</span>
+          </span>
+          <Switch checked={family} onChange={(v) => set("family", v)} label={t("home.family.cta")} />
+        </div>
 
         {exhibitions.length > 0 && (
           <section className="mt-12">
