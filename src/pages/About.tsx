@@ -32,7 +32,7 @@ import { MUSEUMS } from "@/data/museums";
 import { tr } from "@/lib/utils";
 
 /** E-mail comercial exibido no botão de contato (configurável por variável de ambiente). */
-const CONTACT = (import.meta.env.VITE_CONTACT_EMAIL as string | undefined)?.trim();
+const CONTACT = ((import.meta.env.VITE_CONTACT_EMAIL as string | undefined) || "carolinafc.scs@gmail.com").trim();
 
 type T = Required<I18n>;
 type Card = { icon: ReactNode; title: T; text: T };
