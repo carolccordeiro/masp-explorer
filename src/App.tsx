@@ -30,6 +30,9 @@ const MamCourses = lazy(() => import("@/pages/MamCourses"));
 const About = lazy(() => import("@/pages/About"));
 const Rest = lazy(() => import("@/pages/Rest"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
+const VenueEvents = lazy(() => import("@/pages/VenueEvents"));
+const SponsorEvent = lazy(() => import("@/pages/SponsorEvent"));
+const EventsEditor = lazy(() => import("@/pages/EventsEditor"));
 
 function PageFallback() {
   return (
@@ -147,6 +150,9 @@ export default function App() {
             <Route path="quiz" element={<Quiz />} />
             <Route path="visite" element={<Visit />} />
             <Route path="visita" element={<MyVisit />} />
+            <Route path="eventos" element={<VenueEvents />} />
+            <Route path="eventos/gestao" element={<EventsEditor />} />
+            <Route path="patrocinar" element={<SponsorEvent />} />
             <Route path="historia" element={<OnlyFor museum="masp"><MaspHistory /></OnlyFor>} />
             <Route path="biblioteca" element={<OnlyFor museum="ims"><ImsLibrary /></OnlyFor>} />
             <Route path="cursos" element={<OnlyFor museum="mam"><MamCourses /></OnlyFor>} />

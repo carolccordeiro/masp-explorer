@@ -17,6 +17,8 @@ import type { Exhibition } from "@/data/types";
 import type { StringKey } from "@/i18n/strings";
 import { openStatus } from "@/lib/hours";
 import { cn, tr } from "@/lib/utils";
+import { EventCard, say, useEventReminders } from "@/components/EventCard";
+import { useVenueEvents } from "@/lib/events";
 
 export function exhibitionState(e: Exhibition, now = new Date()): "now" | "soon" | "past" {
   const today = now.toISOString().slice(0, 10);
@@ -64,6 +66,10 @@ export default function MuseumHome() {
   const highlights = m.artworks.slice(0, 4);
   const extra = EXTRAS[m.id];
   const A = (k: StringKey) => t(k);
+  const ev = useVenueEvents(m.id);
+  useEventReminders(ev.list, ev.mine);
+  const l = say(lang);
+  const nextEvents = (ev.list ?? []).slice(0, 3);
 
   return (
     <>
@@ -133,6 +139,24 @@ export default function MuseumHome() {
           </span>
           <Switch checked={family} onChange={(v) => set("family", v)} label={t("home.family.cta")} />
         </div>
+
+        {nextEvents.length > 0 && (
+          <section className="mt-12">
+            <SectionTitle
+              title={l("Próximos eventos", "Upcoming events", "Próximos eventos")}
+              action={
+                <Link to={`${base}/eventos`} className="text-[14px] font-semibold text-accent">
+                  {t("home.seeAll")}
+                </Link>
+              }
+            />
+            <div className="grid gap-3 md:grid-cols-3">
+              {nextEvents.map((e) => (
+                <EventCard key={e.id} e={e} place={m.name} going={ev.mine.includes(e.id)} onSignup={(nick, on) => ev.signup(e, nick, on)} compact />
+              ))}
+            </div>
+          </section>
+        )}
 
         {exhibitions.length > 0 && (
           <section className="mt-12">

@@ -15,6 +15,7 @@ import {
   ScanLine,
   Settings2,
   Sparkles,
+  Ticket,
 } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
@@ -177,6 +178,7 @@ export function BottomNav() {
         { to: `${base}/mapa`, icon: <Map size={20} />, label: "act.map", desc: "act.map.desc" },
         { to: `${base}/quiz`, icon: <HelpCircle size={20} />, label: "act.quiz", desc: "act.quiz.desc" },
         { to: `${base}/visite`, icon: <CalendarClock size={20} />, label: "act.info", desc: "act.info.desc" },
+        { to: `${base}/eventos`, icon: <Ticket size={20} />, label: "act.events", desc: "act.events.desc" },
         { to: "/rotas", icon: <Route size={20} />, label: "act.routes", desc: "act.routes.desc" },
         { to: "/museus", icon: <Building2 size={20} />, label: "nav.museums", desc: "hub.subtitle" },
       ]

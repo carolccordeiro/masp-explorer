@@ -21,7 +21,11 @@ export type EventType =
   | "pref"
   | "ad_view"
   | "ad_click"
-  | "rating";
+  | "rating"
+  | "event_signup"
+  | "event_cancel"
+  | "event_view"
+  | "sponsor_proposal";
 
 export interface KoraEvent {
   museum: string;
